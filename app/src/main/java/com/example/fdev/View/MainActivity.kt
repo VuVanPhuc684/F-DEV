@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
         SETTING,
         HELP,
         CONTACT,
-//        MAIL,
+        MAIL,
     }
 
     @Composable
@@ -42,9 +42,9 @@ class MainActivity : ComponentActivity() {
             composable(Router.CONTACT.name){
                 LayoutContact(navController = navController)
             }
-//            composable(Router.MAIL.name){
-//                LayoutMail(navController = navController)
-//            }
+            composable(Router.MAIL.name){
+                LayoutMail(navController = navController)
+            }
         }
 
 
