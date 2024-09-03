@@ -54,23 +54,23 @@ fun LayoutSetting(navController: NavHostController) {
     var Name by remember { mutableStateOf("") }
     var Email by remember { mutableStateOf("") }
     var PassWord by remember { mutableStateOf("") }
-    var notificationsEnabled by remember { mutableStateOf(false) } // Trạng thái bật/tắt thông báo
+    var promotionsEnabled by remember { mutableStateOf(false) }
+    var newProductsEnabled by remember { mutableStateOf(false) }
+    var contentUpdatesEnabled by remember { mutableStateOf(false) }
 
     val scrollState = rememberScrollState()
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(start = 16.dp, top = 50.dp, end = 16.dp, bottom = 16.dp)
             .verticalScroll(scrollState)
     ) {
-        Spacer(modifier = Modifier.height(20.dp))
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
-            // Nút quay lại
             Image(
                 painter = painter0,
                 contentDescription = "Back",
@@ -262,9 +262,9 @@ fun LayoutSetting(navController: NavHostController) {
                 modifier = Modifier.weight(1f)
             )
             Switch(
-                checked = notificationsEnabled,
+                checked = promotionsEnabled,
                 onCheckedChange = { isChecked ->
-                    notificationsEnabled = isChecked
+                    promotionsEnabled = isChecked
                 },
                 modifier = Modifier
                     .width(60.dp)
@@ -289,9 +289,9 @@ fun LayoutSetting(navController: NavHostController) {
                 modifier = Modifier.weight(1f)
             )
             Switch(
-                checked = notificationsEnabled,
+                checked = newProductsEnabled,
                 onCheckedChange = { isChecked ->
-                    notificationsEnabled = isChecked
+                    newProductsEnabled = isChecked
                 },
                 modifier = Modifier
                     .width(60.dp)
@@ -316,9 +316,9 @@ fun LayoutSetting(navController: NavHostController) {
                 modifier = Modifier.weight(1f)
             )
             Switch(
-                checked = notificationsEnabled,
+                checked = contentUpdatesEnabled,
                 onCheckedChange = { isChecked ->
-                    notificationsEnabled = isChecked
+                    contentUpdatesEnabled = isChecked
                 },
                 modifier = Modifier
                     .width(60.dp)
@@ -341,9 +341,12 @@ fun LayoutSetting(navController: NavHostController) {
                 .height(70.dp)
                 .background(color = Color(0xFFe7e7e7))
                 .padding(horizontal = 16.dp)
+                .clickable {
+                    navController.navigate("HELP")
+                }
         ) {
             Text(
-                text = "Cập nhật nội dung",
+                text = "FAQ",
                 style = TextStyle(
                     fontSize = 20.sp,
                     color = Color(0xFF909191),
@@ -357,7 +360,9 @@ fun LayoutSetting(navController: NavHostController) {
                     .width(30.dp)
                     .height(30.dp)
                     .clip(CircleShape)
+
             )
         }
     }
 }
+

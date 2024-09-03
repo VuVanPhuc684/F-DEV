@@ -21,6 +21,9 @@ class MainActivity : ComponentActivity() {
     enum class Router {
         WELCOME,
         SETTING,
+        HELP,
+        CONTACT,
+        MAIL,
     }
 
     @Composable
@@ -33,6 +36,15 @@ class MainActivity : ComponentActivity() {
             composable(Router.SETTING.name){
                 LayoutSetting(navController = navController)
             }
+//            composable(Router.HELP.name){
+//                LayoutHelp(navController = navController)
+//            }
+//            composable(Router.CONTACT.name){
+//                LayoutContact(navController = navController)
+//            }
+//            composable(Router.MAIL.name){
+//                LayoutMail(navController = navController)
+//            }
         }
 
 
