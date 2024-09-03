@@ -36,12 +36,12 @@ class MainActivity : ComponentActivity() {
             composable(Router.SETTING.name){
                 LayoutSetting(navController = navController)
             }
-//            composable(Router.HELP.name){
-//                LayoutHelp(navController = navController)
-//            }
-//            composable(Router.CONTACT.name){
-//                LayoutContact(navController = navController)
-//            }
+            composable(Router.HELP.name){
+                LayoutHelp(navController = navController)
+            }
+            composable(Router.CONTACT.name){
+                LayoutContact(navController = navController)
+            }
 //            composable(Router.MAIL.name){
 //                LayoutMail(navController = navController)
 //            }
