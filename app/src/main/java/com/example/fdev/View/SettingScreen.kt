@@ -38,7 +38,7 @@ import com.example.fdev.R
 
 @Composable
 @Preview(showBackground = true, showSystemUi = true)
-fun Setting() {
+fun SettingScreen() {
     LayoutSetting(navController = rememberNavController())
 }
 

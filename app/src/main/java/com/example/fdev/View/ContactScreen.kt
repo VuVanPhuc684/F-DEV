@@ -41,7 +41,7 @@ import com.example.fdev.R
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun Contact() {
+fun ContactScreen() {
     LayoutContact(navController = rememberNavController())
 }
 

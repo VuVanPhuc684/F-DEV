@@ -24,6 +24,7 @@ class MainActivity : ComponentActivity() {
         HELP,
         CONTACT,
         MAIL,
+        MYREVIEW,
     }
 
     @Composable
@@ -44,6 +45,9 @@ class MainActivity : ComponentActivity() {
             }
             composable(Router.MAIL.name){
                 LayoutMail(navController = navController)
+            }
+            composable(Router.MYREVIEW.name){
+                LayOutMyReview(navController = navController)
             }
         }
 

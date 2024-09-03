@@ -19,7 +19,7 @@ import kotlinx.coroutines.delay
 
 @Composable
 @Preview(showBackground = true, showSystemUi = true)
-fun Welcome() {
+fun WelcomeScreen() {
     LayoutWelcome(navController= rememberNavController() )
 }
 

@@ -38,7 +38,7 @@ import com.example.fdev.R
 
 @Composable
 @Preview(showBackground = true, showSystemUi = true)
-fun Help() {
+fun HelpScreen() {
     LayoutHelp(navController = rememberNavController())
 }
 
@@ -126,6 +126,10 @@ fun LayoutHelp(navController: NavHostController) {
                         color = Color(0xFFfafafa),
                         shape = RoundedCornerShape(12.dp)
                     )
+                    .clickable {
+                        Toast.makeText(context,"successfully moved to Myreview screen",Toast.LENGTH_SHORT).show()
+                        navController.navigate("MYREVIEW")
+                    }
             ) {
                 Image(
                     painter = painter1,
