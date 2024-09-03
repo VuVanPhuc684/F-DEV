@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
         SETTING,
         HELP,
         CONTACT,
-        MAIL,
+//        MAIL,
     }
 
     @Composable
