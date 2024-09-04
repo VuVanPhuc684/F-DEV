@@ -50,7 +50,5 @@ class MainActivity : ComponentActivity() {
                 LayOutMyReview(navController = navController)
             }
         }
-
-
     }
 }
