@@ -63,18 +63,16 @@ fun CongratsScreen(navController: NavController) {
 }
 
 @Composable
-fun btnSingUp (navController: NavController) {
+fun btnSingUp(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(30.dp, 70.dp),
-        verticalArrangement = Arrangement.Bottom,// căn giữa dọc
-        horizontalAlignment = Alignment.CenterHorizontally// căn giữa nagng
+        verticalArrangement = Arrangement.Bottom,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Button(
-            onClick = {
-                /* Su kien OnClick*/
-            },
+            onClick = {/* Su kien OnClick*/ },
             colors = ButtonDefaults.buttonColors(
                 Color.Black,
             ),
@@ -95,17 +93,14 @@ fun btnSingUp (navController: NavController) {
         Spacer(modifier = Modifier.height(15.dp))
 
         Button(
-            onClick = {
-                /* Su kien OnClick*/
-            },
+            onClick = {/* Su kien OnClick*/ },
             shape = RoundedCornerShape(8.dp),
             border = BorderStroke(1.dp, color = Color.Black),
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color.White,
                 contentColor = Color.Black
             ),
-
-            ) {
+        ) {
             Text(
                 text = "Quay Lại Trang Chủ",
                 textAlign = TextAlign.Center,

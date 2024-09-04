@@ -48,10 +48,10 @@ fun PaymentMethodScreen(navController: NavController) {
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
-                onClick = {  },
+                onClick = { },
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.add_icon), // Replace with your icon
+                    painter = painterResource(id = R.drawable.add_icon),
                     contentDescription = "Add Payment Method",
                     modifier = Modifier
                         .size(20.dp)
@@ -77,7 +77,7 @@ fun PaymentMethodScreen(navController: NavController) {
                     contentDescription = null,
                     modifier = Modifier
                         .size(25.dp)
-                        .clickable { navController.navigate("profileScreen") },
+                        .clickable { /* su kien onClick */ },
                     contentScale = ContentScale.FillBounds,
                 )
                 Text(
@@ -86,7 +86,7 @@ fun PaymentMethodScreen(navController: NavController) {
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Medium
                 )
-                Spacer(modifier = Modifier.width(25.dp)) // Adjust the spacer as needed
+                Spacer(modifier = Modifier.width(25.dp))
             }
 
             PaymentCard(
@@ -200,9 +200,9 @@ fun PaymentCard(cardNumber: String, cardHolderName: String, expiryDate: String) 
     }
 }
 
-@Preview (showBackground = true, showSystemUi = true)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun PreviewPaymentMethol () {
+fun PreviewPaymentMethol() {
     var navController = rememberNavController()
-    PaymentMethodScreen(navController )
+    PaymentMethodScreen(navController)
 }

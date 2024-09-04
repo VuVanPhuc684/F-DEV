@@ -31,19 +31,17 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.fdev.R
 import com.example.fdev.data.setingItem
-import com.example.fdev.model.profileItem
+import com.example.fdev.model.Profile
 
 
 @Composable
-fun ProfileScreen (navController: NavController) {
-
-
-    Column (
+fun ProfileScreen(navController: NavController) {
+    Column(
         modifier = Modifier
             .padding(20.dp)
             .fillMaxWidth(),
         verticalArrangement = Arrangement.Top,
-        horizontalAlignment =Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -55,7 +53,7 @@ fun ProfileScreen (navController: NavController) {
                 contentDescription = null,
                 modifier = Modifier
                     .size(25.dp)
-                    .clickable { /* handle search click */ },
+                    .clickable { /* su kien onClick */ },
                 contentScale = ContentScale.FillBounds
             )
             Text(
@@ -83,9 +81,7 @@ fun ProfileScreen (navController: NavController) {
             }
         }
     }
-
 }
-
 
 @Composable
 fun TopNotifi() {
@@ -131,7 +127,7 @@ fun TopNotifi() {
 }
 
 @Composable
-fun ItemSeting1(item: profileItem, navController: NavController) {
+fun ItemSeting1(item: Profile, navController: NavController) {
     Card(
         modifier = Modifier
             .padding(10.dp)
@@ -139,7 +135,7 @@ fun ItemSeting1(item: profileItem, navController: NavController) {
             .fillMaxWidth()
             .height(80.dp)
             .background(Color.LightGray)
-            .clickable { navController.navigate(item.funtion) } // Sử dụng route để điều hướng
+            .clickable { /* su kien onClick */ }
     ) {
         Row(
             modifier = Modifier
@@ -170,13 +166,15 @@ fun ItemSeting1(item: profileItem, navController: NavController) {
                 contentScale = ContentScale.FillBounds,
             )
         }
+
         Spacer(modifier = Modifier.height(15.dp))
+
     }
 }
 
-@Preview (showBackground = true, showSystemUi = true)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun PreviewProfile () {
+fun PreviewProfile() {
     var navController = rememberNavController()
     ProfileScreen(navController)
 }

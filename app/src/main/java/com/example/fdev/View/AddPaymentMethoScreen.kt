@@ -33,9 +33,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.fdev.R
+
 @Composable
-fun AddPaymentMethod () {
-    Column (
+fun AddPaymentMethod() {
+    Column(
         modifier = Modifier
             .padding(20.dp)
             .fillMaxWidth()
@@ -244,7 +245,7 @@ fun AddPaymentMethod () {
             }
         }
 
-        Spacer(modifier = Modifier.weight(1f)) // Thêm Spacer để đẩy Button xuống cuối màn hình
+        Spacer(modifier = Modifier.weight(1f))
 
         Button(
             onClick = {},

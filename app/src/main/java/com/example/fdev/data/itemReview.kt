@@ -1,8 +1,7 @@
 package com.example.fdev.data
 
 import com.example.fdev.R
-import com.example.fdev.View.Review
-
+import com.example.fdev.model.Review
 
 val itemReview = listOf(
     Review(

@@ -38,23 +38,15 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.fdev.R
 import com.example.fdev.data.itemReview
-
-data class Review(
-    val reviewerName: String,
-    val reviewDate: String,
-    val rating: Int,
-    val reviewText: String,
-    val reviewerImageRes: Int
-)
+import com.example.fdev.model.Review
 
 @Composable
-fun ReviewScreen (navController: NavController) {
-
-    Column (
+fun ReviewScreen(navController: NavController) {
+    Column(
         modifier = Modifier
             .padding(20.dp)
-            .fillMaxSize(), // Sử dụng fillMaxSize để Column chiếm hết kích thước
-        verticalArrangement = Arrangement.SpaceBetween, // Đảm bảo các thành phần được phân bố đều
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
@@ -91,7 +83,7 @@ fun ReviewScreen (navController: NavController) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = painterResource(id = R.drawable.avatar_test), // sử dụng hình ảnh mới
+                painter = painterResource(id = R.drawable.avatar_test),
                 contentDescription = null,
                 modifier = Modifier
                     .size(100.dp)
@@ -110,7 +102,7 @@ fun ReviewScreen (navController: NavController) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
-                        painter = painterResource(id = R.drawable.star1), // sử dụng biểu tượng ngôi sao mới
+                        painter = painterResource(id = R.drawable.star1),
                         contentDescription = null,
                         tint = Color.Yellow,
                         modifier = Modifier.size(24.dp)
@@ -130,7 +122,7 @@ fun ReviewScreen (navController: NavController) {
                     fontWeight = FontWeight.Bold
                 )
             }
-            Spacer(modifier = Modifier.size(80.dp)) // Để cân bằng căn chỉnh
+            Spacer(modifier = Modifier.size(80.dp))
         }
         Box(
             modifier = Modifier
@@ -144,9 +136,7 @@ fun ReviewScreen (navController: NavController) {
             }
         }
         Button(
-            onClick = {
-
-            },
+            onClick = { /* su kien onClick */ },
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color.Black,
             ),
@@ -170,7 +160,7 @@ fun ReviewScreen (navController: NavController) {
 
 
 @Composable
-fun ReviewScreen (itemReview : Review) {
+fun ReviewScreen(itemReview: Review) {
     Card(
         modifier = Modifier
             .padding(top = 20.dp, start = 10.dp, end = 10.dp)
@@ -178,7 +168,7 @@ fun ReviewScreen (itemReview : Review) {
             .fillMaxWidth()
             .height(200.dp)
             .background(Color.LightGray)
-            .clickable { /* handle item click */ }
+            .clickable { /* su kien onClick */ }
     ) {
         Column(
             modifier = Modifier
@@ -196,10 +186,10 @@ fun ReviewScreen (itemReview : Review) {
             )
             Row(
                 modifier = Modifier
-                    .fillMaxWidth() // đảm bảo Row chiếm hết chiều ngang
+                    .fillMaxWidth()
                     .padding(10.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween // Căn đều hai bên
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
                     text = itemReview.reviewerName,
