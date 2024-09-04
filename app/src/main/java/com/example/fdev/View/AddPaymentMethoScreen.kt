@@ -39,7 +39,7 @@ fun AddPaymentMethod () {
         modifier = Modifier
             .padding(20.dp)
             .fillMaxWidth()
-            .fillMaxHeight(), // Đảm bảo cột chiếm toàn bộ chiều cao màn hình
+            .fillMaxHeight(),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

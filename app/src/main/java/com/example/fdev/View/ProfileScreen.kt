@@ -30,23 +30,13 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.fdev.R
+import com.example.fdev.data.setingItem
+import com.example.fdev.model.profileItem
 
-data class profileItem (
-    val title : String,
-    val content : String,
-    val iconResId : Int,
-    val funtion : String
-)
 
 @Composable
 fun ProfileScreen (navController: NavController) {
-    val setingItem = listOf(
-        profileItem ("Đơn hàng của tôi", "Đã có 10 đơn hàng", R.drawable.right_black, "myOder"),
-        profileItem ("Địa chỉ giao hàng", "03 địa chỉ", R.drawable.right_black, "shippingAddress"),
-        profileItem ("Phương thức thanh toán", "Bạn có 02 thẻ", R.drawable.right_black, "paymentMethod"),
-        profileItem ("Đánh giá của tôi", "Có 5 bài đánh giá", R.drawable.right_black, "myReviews"),
-        profileItem ("Cài đặt", "Thông báo, Mật khẩu, FAQ, Liên hệ,...", R.drawable.right_black, "settings")
-    )
+
 
     Column (
         modifier = Modifier
