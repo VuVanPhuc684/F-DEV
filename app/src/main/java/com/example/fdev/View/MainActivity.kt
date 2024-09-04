@@ -8,6 +8,12 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.fdev.View.CartScreen
+import com.example.fdev.View.CheckoutScreen
+import com.example.fdev.View.FavoritesScreen
+import com.example.fdev.View.SearchScreen
+import com.example.fdev.View.NotificationScreen
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,6 +27,12 @@ class MainActivity : ComponentActivity() {
     enum class Router {
         WELCOME,
         SETTING,
+        CART,
+        CHECKOUT,
+        FAVORITES,
+        SEARCH,
+        NOTIFICATIONS
+
     }
 
     @Composable
@@ -33,6 +45,24 @@ class MainActivity : ComponentActivity() {
             composable(Router.SETTING.name){
                 LayoutSetting(navController = navController)
             }
+            composable(Router.CART.name) {
+                CartScreen(navController = navController)
+            }
+            composable(Router.CHECKOUT.name) {
+                CheckoutScreen(navController = navController)
+            }
+            composable(Router.FAVORITES.name) {
+                FavoritesScreen(navController = navController)
+            }
+            composable(Router.SEARCH.name) {
+                SearchScreen(navController = navController)
+            }
+            composable(Router.NOTIFICATIONS.name) {
+                NotificationScreen(navController = navController)
+            }
+
+
+
         }
 
 
