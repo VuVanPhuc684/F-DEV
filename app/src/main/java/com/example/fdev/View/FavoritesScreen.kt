@@ -79,33 +79,6 @@ fun FavoritesScreen(navController: NavHostController) {
                 )
             )
         },
-        bottomBar = {
-            NavigationBar(
-                containerColor = MaterialTheme.colorScheme.background,
-                contentColor = MaterialTheme.colorScheme.onBackground
-            ) {
-                NavigationBarItem(
-                    icon = { Icon(Icons.Default.Home, contentDescription = "Home") },
-                    selected = selectedIndex.value == 0,
-                    onClick = { selectedIndex.value = 0 }
-                )
-                NavigationBarItem(
-                    icon = { Icon(Icons.Default.Favorite, contentDescription = "Favorites") },
-                    selected = selectedIndex.value == 1,
-                    onClick = { selectedIndex.value = 1 }
-                )
-                NavigationBarItem(
-                    icon = { Icon(Icons.Default.Notifications, contentDescription = "Notifications") },
-                    selected = selectedIndex.value == 2,
-                    onClick = { selectedIndex.value = 2 }
-                )
-                NavigationBarItem(
-                    icon = { Icon(Icons.Default.Person, contentDescription = "Profile") },
-                    selected = selectedIndex.value == 3,
-                    onClick = { selectedIndex.value = 3 }
-                )
-            }
-        },
         floatingActionButton = {
             Button(
                 onClick = { /* Thêm tất cả vào giỏ hàng */ },

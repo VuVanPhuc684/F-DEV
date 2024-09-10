@@ -213,7 +213,9 @@ fun LayoutProductScreen(navController: NavHostController, item: Product?) {
                     )
                 }
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        navController.navigate("CART")
+                    },
                     shape = RoundedCornerShape(10.dp),
                     modifier = Modifier
                         .fillMaxWidth(0.85f)

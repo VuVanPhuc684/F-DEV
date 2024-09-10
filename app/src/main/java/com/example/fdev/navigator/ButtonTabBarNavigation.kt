@@ -22,8 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
+
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -31,17 +30,19 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.fdev.R
-import com.example.fdev.View.HomeScreen
-import com.example.fdev.View.LayoutFavouriteScreen
+import com.example.fdev.View.FavoritesScreen
 import com.example.fdev.View.LayoutHomeScreen
 import com.example.fdev.View.LayoutPersonScreen
 import com.example.fdev.View.LayoutSearchScreen
 import com.example.fdev.View.LayoutShoppingScreen
+import com.example.fdev.View.NotificationScreen
+import com.example.fdev.View.ProfileScreen
+import com.example.fdev.View.SearchScreen
 
 enum class ROUTER {
     home,
     favourite,
-    shopping,
+    Notification,
     search,
     person
 }
@@ -110,16 +111,16 @@ fun GetLayoutButtonBarNavigator(navHostController: NavHostController) {
 
                 // Shopping
                 NavigationBarItem(
-                    selected = isSelected === ROUTER.shopping.name,
+                    selected = isSelected === ROUTER.Notification.name,
                     onClick = {
-                        isSelected = ROUTER.shopping.name
-                        navController.navigate(ROUTER.shopping.name) {
+                        isSelected = ROUTER.Notification.name
+                        navController.navigate(ROUTER.Notification.name) {
                             popUpTo(0)
                         }
                     },
                     icon = {
                         Icon(
-                            painter = painterResource(id = R.drawable.shopping),
+                            painter = painterResource(id = R.drawable.notification),
                             contentDescription = null,
                             modifier = Modifier.size(25.dp, 25.dp)
                         )
@@ -198,15 +199,16 @@ fun GetLayoutButtonBarNavigator(navHostController: NavHostController) {
                 composable(ROUTER.home.name) {
                     LayoutHomeScreen(navHostController)
                 }
-                composable(ROUTER.favourite.name) { LayoutFavouriteScreen(navHostController) }
-                composable(ROUTER.shopping.name) {
-                    LayoutShoppingScreen(navController)
+                composable(ROUTER.favourite.name) {
+                    FavoritesScreen(navHostController) }
+                composable(ROUTER.Notification.name) {
+                    NotificationScreen(navController)
                 }
                 composable(ROUTER.search.name) {
-                    LayoutSearchScreen(navHostController)
+                    SearchScreen(navHostController)
                 }
                 composable(ROUTER.person.name) {
-                    LayoutPersonScreen(navHostController)
+                    ProfileScreen(navHostController)
                 }
             }
         }

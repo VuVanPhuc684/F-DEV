@@ -40,7 +40,13 @@ class MainActivity : ComponentActivity() {
         CHECKOUT,
         FAVORITES,
         SEARCH,
-        NOTIFICATIONS
+        NOTIFICATIONS,
+        CONGRATSSCREEN,
+        PAYMENTMETHODSCREEN,
+        ADDPAYMENTMETHOD,
+
+
+
 
     }
 
@@ -97,7 +103,15 @@ class MainActivity : ComponentActivity() {
             composable(Router.NOTIFICATIONS.name) {
                 NotificationScreen(navController = navController)
             }
-
+            composable(Router.CONGRATSSCREEN.name) {
+                CongratsScreen(navController = navController)
+            }
+            composable(Router.PAYMENTMETHODSCREEN.name) {
+                PaymentMethodScreen(navController = navController)
+            }
+            composable(Router.ADDPAYMENTMETHOD.name) {
+                AddPaymentMethod(navController = navController)
+            }
         }
     }
 }

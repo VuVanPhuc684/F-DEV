@@ -32,7 +32,9 @@ fun CheckoutScreen(navController: NavHostController) {
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        IconButton(onClick = { /* Handle back navigation */ }) {
+                        IconButton(onClick = {
+                            navController.popBackStack()
+                        }) {
                             Icon(
                                 imageVector = Icons.Default.ArrowBack,
                                 contentDescription = "Back"
@@ -68,7 +70,7 @@ fun CheckoutScreen(navController: NavHostController) {
             // Payment Method Section
             SectionHeader("Payment")
             PaymentMethodCard()
-            AddPaymentMethodButton()
+            AddPaymentMethodButton(navController = navController)
 
             // Note Section
             Text(
@@ -90,7 +92,9 @@ fun CheckoutScreen(navController: NavHostController) {
             // Submit Order Button
             Spacer(modifier = Modifier.height(16.dp))
             Button(
-                onClick = { /* Handle submit order */ },
+                onClick = {
+                    navController.navigate("CONGRATSSCREEN")
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(60.dp), // Increased height for better visual impact
@@ -186,9 +190,11 @@ fun PaymentMethodCard() {
 }
 
 @Composable
-fun AddPaymentMethodButton() {
+fun AddPaymentMethodButton(navController: NavHostController) {
     Button(
-        onClick = { /* Add payment method */ },
+        onClick = {
+            navController.navigate("PAYMENTMETHODSCREEN")
+        },
         modifier = Modifier
             .fillMaxWidth()
             .height(50.dp), // Adjusted height for visual consistency

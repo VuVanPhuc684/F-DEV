@@ -53,7 +53,9 @@ fun CartScreen(navController: NavHostController) {
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        IconButton(onClick = { /* Handle back navigation */ }) {
+                        IconButton(onClick = {
+                            navController.popBackStack()
+                        }) {
                             Icon(
                                 imageVector = Icons.Default.ArrowBack,
                                 contentDescription = "Back"
@@ -131,7 +133,9 @@ fun CartScreen(navController: NavHostController) {
                 }
                 Spacer(modifier = Modifier.height(16.dp))
                 Button(
-                    onClick = { /* Handle checkout */ },
+                    onClick = {
+                        navController.navigate("CHECKOUT")
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(56.dp),
