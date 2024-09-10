@@ -25,7 +25,11 @@ class MainActivity : ComponentActivity() {
         HOME,
         LOGIN,
         REGISTER,
-        PRODUCT
+        PRODUCT,
+        HELP,
+        CONTACT,
+        MAIL,
+        MYREVIEW,
     }
 
     @Composable
@@ -53,8 +57,18 @@ class MainActivity : ComponentActivity() {
                 LayoutProductScreen(navController = navController, null)
             }
 
+            composable(Router.HELP.name){
+                LayoutHelp(navController = navController)
+            }
+            composable(Router.CONTACT.name){
+                LayoutContact(navController = navController)
+            }
+            composable(Router.MAIL.name){
+                LayoutMail(navController = navController)
+            }
+            composable(Router.MYREVIEW.name){
+                LayOutMyReview(navController = navController)
+            }
         }
-
-
     }
 }
