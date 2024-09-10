@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.fdev.navigator.GetLayoutButtonBarNavigator
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,6 +22,10 @@ class MainActivity : ComponentActivity() {
     enum class Router {
         WELCOME,
         SETTING,
+        HOME,
+        LOGIN,
+        REGISTER,
+        PRODUCT
     }
 
     @Composable
@@ -33,6 +38,21 @@ class MainActivity : ComponentActivity() {
             composable(Router.SETTING.name){
                 LayoutSetting(navController = navController)
             }
+            composable(Router.HOME.name) {
+                GetLayoutButtonBarNavigator(
+                    navController
+                )
+            }
+            composable(Router.LOGIN.name) {
+                LayoutLoginScreen(navController = navController)
+            }
+            composable(Router.REGISTER.name) {
+                LayoutRegisterScreen(navController = navController)
+            }
+            composable(Router.PRODUCT.name) {
+                LayoutProductScreen(navController = navController, null)
+            }
+
         }
 
 
