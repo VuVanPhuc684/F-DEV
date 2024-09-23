@@ -45,9 +45,6 @@ class MainActivity : ComponentActivity() {
         PAYMENTMETHODSCREEN,
         ADDPAYMENTMETHOD,
 
-
-
-
     }
 
     @Composable
