@@ -23,6 +23,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -57,10 +58,11 @@ fun ProfileScreen(navController: NavController) {
                 contentScale = ContentScale.FillBounds
             )
             Text(
-                text = "Hồ Sơ",
+                text = "PROFILE",
                 modifier = Modifier.align(Alignment.CenterVertically),
                 fontSize = 24.sp,
-                fontWeight = FontWeight.Medium
+                fontWeight = FontWeight.Medium,
+                fontFamily = FontFamily.Serif,
             )
             Image(
                 painterResource(id = R.drawable.log_out),
@@ -125,7 +127,6 @@ fun TopNotifi() {
         }
     }
 }
-
 @Composable
 fun ItemSeting1(item: Profile, navController: NavController) {
     Card(
@@ -135,7 +136,9 @@ fun ItemSeting1(item: Profile, navController: NavController) {
             .fillMaxWidth()
             .height(80.dp)
             .background(Color.LightGray)
-            .clickable { /* su kien onClick */ }
+            .clickable {
+                navController.navigate(item.route)  // Điều hướng theo route của từng item
+            }
     ) {
         Row(
             modifier = Modifier
@@ -156,23 +159,19 @@ fun ItemSeting1(item: Profile, navController: NavController) {
                     fontWeight = FontWeight.Medium
                 )
                 Text(
-                    text = item.content
-                )
+                    text = item.content)
             }
             Image(
                 painterResource(id = item.iconResId),
                 contentDescription = null,
-                modifier = Modifier.size(25.dp).clickable {
-                    navController.navigate("SETTING")
-                },
+                modifier = Modifier.size(25.dp),
                 contentScale = ContentScale.FillBounds,
             )
         }
-
         Spacer(modifier = Modifier.height(15.dp))
-
     }
 }
+
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable

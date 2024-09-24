@@ -44,6 +44,8 @@ class MainActivity : ComponentActivity() {
         CONGRATSSCREEN,
         PAYMENTMETHODSCREEN,
         ADDPAYMENTMETHOD,
+        REVIEW,
+        LANGUAGE,
 
     }
 
@@ -108,6 +110,9 @@ class MainActivity : ComponentActivity() {
             }
             composable(Router.ADDPAYMENTMETHOD.name) {
                 AddPaymentMethod(navController = navController)
+            }
+            composable(Router.REVIEW.name) {
+                ReviewScreen(navController = navController)
             }
         }
     }
