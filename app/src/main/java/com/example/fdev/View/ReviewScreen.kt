@@ -37,7 +37,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.fdev.R
-import com.example.fdev.data.itemReview
+import com.example.fdev.ViewModel.data.itemReview
 import com.example.fdev.model.Review
 
 @Composable

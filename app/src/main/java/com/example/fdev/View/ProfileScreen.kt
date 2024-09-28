@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.fdev.R
-import com.example.fdev.data.setingItem
+import com.example.fdev.ViewModel.data.setingItem
 import com.example.fdev.model.Profile
 
 

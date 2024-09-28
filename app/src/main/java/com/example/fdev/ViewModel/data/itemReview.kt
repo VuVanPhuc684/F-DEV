@@ -1,4 +1,4 @@
-package com.example.fdev.data
+package com.example.fdev.ViewModel.data
 
 import com.example.fdev.R
 import com.example.fdev.model.Review
