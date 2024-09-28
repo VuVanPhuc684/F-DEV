@@ -1,5 +1,7 @@
 package com.example.fdev.View
 
+import android.content.Intent
+import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -57,7 +59,6 @@ fun LayoutContact(navController: NavHostController) {
 
     val context = LocalContext.current
 
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -91,10 +92,12 @@ fun LayoutContact(navController: NavHostController) {
                 ),
             )
         }
-        Row (
-            modifier = Modifier.fillMaxWidth().padding(top = 30.dp),
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 30.dp),
             horizontalArrangement = Arrangement.Center
-        ){
+        ) {
             Image(
                 painter = painter1,
                 contentDescription = null,
@@ -105,6 +108,8 @@ fun LayoutContact(navController: NavHostController) {
             )
         }
         Spacer(modifier = Modifier.height(50.dp))
+
+        // Box chứa số điện thoại và chức năng gọi
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -123,6 +128,12 @@ fun LayoutContact(navController: NavHostController) {
                         color = Color(0xFFfafafa),
                         shape = RoundedCornerShape(12.dp)
                     )
+                    .clickable {
+                        // Thực hiện gọi điện khi người dùng nhấn vào
+                        val intent = Intent(Intent.ACTION_DIAL)
+                        intent.data = Uri.parse("tel:0981139895")
+                        context.startActivity(intent)
+                    }
             ) {
                 Image(
                     painter = painter2,
@@ -143,7 +154,10 @@ fun LayoutContact(navController: NavHostController) {
                 )
             }
         }
+
         Spacer(modifier = Modifier.height(50.dp))
+
+        // Box chứa email
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -163,7 +177,7 @@ fun LayoutContact(navController: NavHostController) {
                         shape = RoundedCornerShape(12.dp)
                     )
                     .clickable {
-                        Toast.makeText(context,"Transferred to contact form successfully", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Transferred to contact form successfully", Toast.LENGTH_SHORT).show()
                         navController.navigate("MAIL")
                     }
             ) {
@@ -186,7 +200,10 @@ fun LayoutContact(navController: NavHostController) {
                 )
             }
         }
+
         Spacer(modifier = Modifier.height(50.dp))
+
+        // Box chứa địa chỉ
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -216,7 +233,7 @@ fun LayoutContact(navController: NavHostController) {
                         .clip(CircleShape)
                 )
                 Text(
-                    text = " Trịnh Văn Bô,Bắc Từ Liêm ,Hà Nội ",
+                    text = " Trịnh Văn Bô, Bắc Từ Liêm, Hà Nội ",
                     style = TextStyle(
                         fontSize = 20.sp,
                         color = Color(0xFF909191),
@@ -227,4 +244,3 @@ fun LayoutContact(navController: NavHostController) {
         }
     }
 }
-
