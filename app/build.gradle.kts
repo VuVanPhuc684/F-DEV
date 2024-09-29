@@ -68,6 +68,11 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    // Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+
+    // Gson Converter for Retrofit
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     //Declare library here
     implementation ("androidx.navigation:navigation-compose:2.7.1")
 }

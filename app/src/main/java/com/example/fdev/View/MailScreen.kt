@@ -30,7 +30,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
@@ -42,28 +41,29 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.fdev.R
+import com.example.fdev.ViewModel.ContactViewModel
+import com.example.fdev.model.ContactMailRequest
 
 @Composable
 @Preview(showBackground = true, showSystemUi = true)
 fun MailScreen() {
-    LayoutMail(navController= rememberNavController() )
+    LayoutMail(navController = rememberNavController())
 }
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LayoutMail(navController: NavHostController) {
+fun LayoutMail(navController: NavHostController, contactViewModel: ContactViewModel = viewModel()) {
 
     val painter0: Painter = painterResource(id = R.drawable.back)
     val painter1: Painter = painterResource(id = R.drawable.user)
 
-    var Name by remember { mutableStateOf("") }
-    var Email by remember { mutableStateOf("") }
-    var NoiDung by remember { mutableStateOf("") }
-
+    var name by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var noiDung by remember { mutableStateOf("") }
 
     val scrollState = rememberScrollState()
     val context = LocalContext.current
@@ -74,6 +74,7 @@ fun LayoutMail(navController: NavHostController) {
             .padding(start = 16.dp, top = 50.dp, end = 16.dp, bottom = 16.dp)
             .verticalScroll(scrollState)
     ) {
+        // Tiêu đề và ảnh
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
@@ -111,117 +112,110 @@ fun LayoutMail(navController: NavHostController) {
             )
         }
         Spacer(modifier = Modifier.height(20.dp))
-        Column(
+
+        // Nhập tên
+        OutlinedTextField(
+            value = name,
+            onValueChange = { name = it },
+            label = { Text("Tên") },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 4.dp)
-        ) {
-            OutlinedTextField(
-                value = Name,
-                onValueChange = { Name = it },
-                label = { Text("Tên") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color.White, RoundedCornerShape(size = 8.dp))
-                    .border(
-                        width = 1.dp,
-                        color = Color(0xFF909191),
-                        shape = RoundedCornerShape(size = 8.dp)
-                    ),
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = Color.Transparent,
-                    unfocusedBorderColor = Color.Transparent,
-                    focusedLabelColor = Color.Black,
-                    unfocusedLabelColor = Color.Gray,
-                ),
-                shape = RoundedCornerShape(size = 8.dp),
-                textStyle = TextStyle(
-                    fontFamily = FontFamily.Serif
-                )
+                .background(Color.White, RoundedCornerShape(size = 8.dp))
+                .border(1.dp, Color(0xFF909191), RoundedCornerShape(size = 8.dp)),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = Color.Transparent,
+                unfocusedBorderColor = Color.Transparent,
+                focusedLabelColor = Color.Black,
+                unfocusedLabelColor = Color.Gray,
+            ),
+            shape = RoundedCornerShape(8.dp),
+            textStyle = TextStyle(
+                fontFamily = FontFamily.Serif
             )
-        }
+        )
         Spacer(modifier = Modifier.height(20.dp))
-        Column(
+
+        // Nhập email
+        OutlinedTextField(
+            value = email,
+            onValueChange = { email = it },
+            label = { Text("Email") },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 4.dp)
-        ) {
-            OutlinedTextField(
-                value = Email,
-                onValueChange = { Email = it },
-                label = { Text("Email") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color.White, RoundedCornerShape(size = 8.dp))
-                    .border(
-                        width = 1.dp,
-                        color = Color(0xFF909191),
-                        shape = RoundedCornerShape(size = 8.dp)
-                    ),
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = Color.Transparent,
-                    unfocusedBorderColor = Color.Transparent,
-                    focusedLabelColor = Color.Black,
-                    unfocusedLabelColor = Color.Gray,
-                ),
-                shape = RoundedCornerShape(size = 8.dp),
-                textStyle = TextStyle(
-                    fontFamily = FontFamily.Serif
-                )
+                .background(Color.White, RoundedCornerShape(size = 8.dp))
+                .border(1.dp, Color(0xFF909191), RoundedCornerShape(size = 8.dp)),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = Color.Transparent,
+                unfocusedBorderColor = Color.Transparent,
+                focusedLabelColor = Color.Black,
+                unfocusedLabelColor = Color.Gray,
+            ),
+            shape = RoundedCornerShape(8.dp),
+            textStyle = TextStyle(
+                fontFamily = FontFamily.Serif
             )
-        }
+        )
         Spacer(modifier = Modifier.height(20.dp))
-        Column(
+
+        // Nhập nội dung
+        OutlinedTextField(
+            value = noiDung,
+            onValueChange = { noiDung = it },
+            label = { Text("Nội dung yêu cầu") },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 4.dp)
-        ) {
-            OutlinedTextField(
-                value = NoiDung,
-                onValueChange = { NoiDung = it },
-                label = { Text("Nội dung yêu cầu ") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp)
-                    .background(Color.White, RoundedCornerShape(size = 8.dp))
-                    .border(
-                        width = 1.dp,
-                        color = Color(0xFF909191),
-                        shape = RoundedCornerShape(size = 8.dp)
-                    ),
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = Color.Transparent,
-                    unfocusedBorderColor = Color.Transparent,
-                    focusedLabelColor = Color.Black,
-                    unfocusedLabelColor = Color.Gray,
-                ),
-                shape = RoundedCornerShape(size = 8.dp),
-                textStyle = TextStyle(
-                    fontFamily = FontFamily.Serif
-                )
+                .height(200.dp)
+                .background(Color.White, RoundedCornerShape(size = 8.dp))
+                .border(1.dp, Color(0xFF909191), RoundedCornerShape(size = 8.dp)),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = Color.Transparent,
+                unfocusedBorderColor = Color.Transparent,
+                focusedLabelColor = Color.Black,
+                unfocusedLabelColor = Color.Gray,
+            ),
+            shape = RoundedCornerShape(8.dp),
+            textStyle = TextStyle(
+                fontFamily = FontFamily.Serif
             )
-        }
+        )
         Spacer(modifier = Modifier.height(20.dp))
+
+        // Nút gửi
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp)
                 .clip(RoundedCornerShape(25.dp))
-                .shadow(elevation = 8.dp, shape = RoundedCornerShape(25.dp))
                 .background(color = Color(0xFFe7e7e7))
                 .clickable {
-                    Toast.makeText(context,"sent successfully", Toast.LENGTH_SHORT).show()
+                    // Kiểm tra nếu các trường không trống
+                    if (name.isBlank() || email.isBlank() || noiDung.isBlank()) {
+                        Toast.makeText(context, "Vui lòng nhập đầy đủ thông tin!", Toast.LENGTH_SHORT).show()
+                        return@clickable
+                    }
+
+                    // Tạo request body
+                    val contactMailRequest = ContactMailRequest(
+                        name = name,
+                        email = email,
+                        content = noiDung
+                    )
+
+                    // Gửi yêu cầu sử dụng ViewModel
+                    contactViewModel.sendContactMail(
+                        contactMailRequest,
+                        onSuccess = {
+                            Toast.makeText(context, "Gửi thành công!", Toast.LENGTH_SHORT).show()
+                        },
+                        onFailure = { errorMessage ->
+                            Toast.makeText(context, "Thất bại: $errorMessage", Toast.LENGTH_SHORT).show()
+                        }
+                    )
                 },
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = "Gửi",
-                color = Color.Black,
-                fontSize = 18.sp
-            )
+            Text(text = "Gửi", color = Color.Black, fontSize = 18.sp)
         }
-
     }
 }
-
