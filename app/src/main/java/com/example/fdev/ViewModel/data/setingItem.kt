@@ -10,5 +10,4 @@ val setingItem = listOf(
     Profile("Đánh giá của tôi", "Có 5 bài đánh giá", R.drawable.right_black, Router.REVIEW.name),
     Profile("Cài đặt", "Thông báo, Mật khẩu, FAQ, Liên hệ,...", R.drawable.right_black, Router.SETTING.name),
     Profile("Ngôn Ngữ", "Thay đổi ngôn ngữ", R.drawable.right_black, Router.LANGUAGE.name),
-    Profile("HELP", "Giúp đỡ", R.drawable.right_black, Router.HELP.name)
 )
