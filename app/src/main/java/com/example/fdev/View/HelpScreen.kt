@@ -447,6 +447,10 @@ fun LayoutHelp(navController: NavHostController) {
                         color = Color(0xFFfafafa),
                         shape = RoundedCornerShape(12.dp)
                     )
+                    .clickable {
+                        Toast.makeText(context,"successfully transferred to account screen",Toast.LENGTH_SHORT).show()
+                        navController.navigate("ACCOUNTS")
+                    }
             ) {
                 Image(
                     painter = painter2,

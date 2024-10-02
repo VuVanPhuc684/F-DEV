@@ -47,7 +47,7 @@ class MainActivity : ComponentActivity() {
         ADDPAYMENTMETHOD,
         REVIEW,
         LANGUAGE,
-
+        ACCOUNTS,
     }
 
     @Composable
@@ -115,6 +115,10 @@ class MainActivity : ComponentActivity() {
             composable(Router.REVIEW.name) {
                 ReviewScreen(navController = navController)
             }
+            composable(Router.ACCOUNTS.name) {
+                LayoutAccounts(navController = navController)
+            }
+
         }
     }
 }
