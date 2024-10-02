@@ -1,5 +1,6 @@
 package com.example.fdev.View
 
+import RetrofitService
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -71,7 +72,7 @@ class MainActivity : ComponentActivity() {
                 LayoutRegisterScreen(navController = navController)
             }
             composable(Router.PRODUCT.name) {
-                LayoutProductScreen(navController = navController, null)
+                LayoutProductScreen(navController = navController)
             }
 
             composable(Router.HELP.name){
@@ -97,7 +98,7 @@ class MainActivity : ComponentActivity() {
                 FavoritesScreen(navController = navController)
             }
             composable(Router.SEARCH.name) {
-                SearchScreen(navController = navController)
+                SearchScreen(navController = navController,retrofitService = RetrofitService())
             }
             composable(Router.NOTIFICATIONS.name) {
                 NotificationScreen(navController = navController)

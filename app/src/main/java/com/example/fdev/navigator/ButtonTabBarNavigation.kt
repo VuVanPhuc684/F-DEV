@@ -1,5 +1,6 @@
 package com.example.fdev.navigator
 
+import RetrofitService
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -33,7 +34,6 @@ import com.example.fdev.R
 import com.example.fdev.View.FavoritesScreen
 import com.example.fdev.View.LayoutHomeScreen
 import com.example.fdev.View.LayoutPersonScreen
-import com.example.fdev.View.LayoutSearchScreen
 import com.example.fdev.View.LayoutShoppingScreen
 import com.example.fdev.View.NotificationScreen
 import com.example.fdev.View.ProfileScreen
@@ -197,7 +197,7 @@ fun GetLayoutButtonBarNavigator(navHostController: NavHostController) {
                 startDestination = isSelected
             ) {
                 composable(ROUTER.home.name) {
-                    LayoutHomeScreen(navHostController)
+                    LayoutHomeScreen(navHostController,retrofitService = RetrofitService())
                 }
                 composable(ROUTER.favourite.name) {
                     FavoritesScreen(navHostController) }
@@ -205,7 +205,7 @@ fun GetLayoutButtonBarNavigator(navHostController: NavHostController) {
                     NotificationScreen(navController)
                 }
                 composable(ROUTER.search.name) {
-                    SearchScreen(navHostController)
+                    SearchScreen(navHostController,retrofitService = RetrofitService())
                 }
                 composable(ROUTER.person.name) {
                     ProfileScreen(navHostController)
