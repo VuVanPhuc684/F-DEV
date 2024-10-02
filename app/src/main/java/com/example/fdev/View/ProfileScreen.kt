@@ -14,9 +14,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,9 +38,10 @@ import com.example.fdev.R
 import com.example.fdev.ViewModel.data.setingItem
 import com.example.fdev.model.Profile
 
-
 @Composable
 fun ProfileScreen(navController: NavController) {
+    var showLogoutDialog = remember { mutableStateOf(false) } // Trạng thái hiển thị hộp thoại
+
     Column(
         modifier = Modifier
             .padding(20.dp)
@@ -69,7 +74,7 @@ fun ProfileScreen(navController: NavController) {
                 contentDescription = null,
                 modifier = Modifier
                     .size(25.dp)
-                    .clickable { },
+                    .clickable { showLogoutDialog.value = true }, // Hiển thị hộp thoại khi ấn vào
                 contentScale = ContentScale.FillBounds
             )
         }
@@ -81,6 +86,19 @@ fun ProfileScreen(navController: NavController) {
             items(setingItem.size) { index ->
                 ItemSeting1(setingItem[index], navController)
             }
+        }
+
+        // Hiển thị hộp thoại đăng xuất
+        if (showLogoutDialog.value) {
+            LogoutConfirmationDialog(
+                onConfirm = {
+                    showLogoutDialog.value = false
+                    navController.navigate("LOGIN") // Điều hướng đến màn hình LayoutLoginScreen
+                },
+                onDismiss = {
+                    showLogoutDialog.value = false // Ẩn hộp thoại nếu ấn hủy
+                }
+            )
         }
     }
 }
@@ -127,6 +145,7 @@ fun TopNotifi() {
         }
     }
 }
+
 @Composable
 fun ItemSeting1(item: Profile, navController: NavController) {
     Card(
@@ -172,6 +191,28 @@ fun ItemSeting1(item: Profile, navController: NavController) {
     }
 }
 
+@Composable
+fun LogoutConfirmationDialog(onConfirm: () -> Unit, onDismiss: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = { onDismiss() },
+        title = {
+            Text(text = "Xác nhận đăng xuất")
+        },
+        text = {
+            Text("Bạn có chắc muốn đăng xuất không?")
+        },
+        confirmButton = {
+            TextButton(onClick = { onConfirm() }) {
+                Text("Có")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = { onDismiss() }) {
+                Text("Không")
+            }
+        }
+    )
+}
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
