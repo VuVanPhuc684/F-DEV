@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -38,11 +39,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.rememberImagePainter
 import com.example.fdev.R
+import com.example.fdev.model.Product
 
 @Composable
-fun LayoutProductScreen(navController: NavHostController, item: Product?) {
+fun LayoutProductScreen(navController: NavHostController) {
     val scrollState = rememberScrollState()
+    val product = navController.previousBackStackEntry?.savedStateHandle?.get<Product>("product")
 
     Column(
         modifier = Modifier
@@ -56,19 +60,22 @@ fun LayoutProductScreen(navController: NavHostController, item: Product?) {
                 .padding(top = 30.dp),
             contentAlignment = Alignment.TopCenter
         ) {
-            item?.let { painterResource(id = R.drawable.a_1) }?.let {
+            // Sử dụng đúng biến `product` thay vì `item`
+            product?.let {
                 Image(
-                    painter = it,
+                    painter = rememberImagePainter(data = it.image),
                     contentDescription = null,
                     modifier = Modifier
                         .padding(start = 65.dp)
                         .fillMaxSize()
+                        .width(200.dp)
                         .clip(
                             shape = RoundedCornerShape(bottomStart = 50.dp)
                         ),
                     contentScale = ContentScale.Crop
                 )
             }
+
             IconButton(
                 onClick = {
                     navController.popBackStack()
@@ -86,11 +93,11 @@ fun LayoutProductScreen(navController: NavHostController, item: Product?) {
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.icon_back),
-                    //imageVector = Icons.Default.KeyboardArrowLeft,
                     contentDescription = null,
                     modifier = Modifier.size(15.dp, 15.dp)
                 )
             }
+
             Column(
                 modifier = Modifier
                     .padding(end = 260.dp, top = 120.dp)
@@ -121,18 +128,15 @@ fun LayoutProductScreen(navController: NavHostController, item: Product?) {
                     outerColor = Color(0xffE4CBAD),
                     innerColor = Color(0xffE4CBAD)
                 )
-
             }
-
         }
-
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(start = 15.dp, top = 20.dp)
         ) {
-            item?.let {
+            product?.let {
                 Text(
                     text = it.name,
                     fontWeight = FontWeight(500),
@@ -140,6 +144,7 @@ fun LayoutProductScreen(navController: NavHostController, item: Product?) {
                     fontSize = 24.sp,
                 )
             }
+
             Row(
                 modifier = Modifier
                     .padding(top = 10.dp)
@@ -147,17 +152,18 @@ fun LayoutProductScreen(navController: NavHostController, item: Product?) {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                item?.let {
+                product?.let {
                     Text(
-                        text = "$${it.price}",
+                        text = "${it.price}",
                         fontFamily = FontFamily.Serif,
                         fontSize = 30.sp,
                         fontWeight = FontWeight(700),
                     )
                 }
             }
+
             Row(
-                modifier = Modifier.padding(top = 50.dp),
+                modifier = Modifier.padding(top = 25.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
@@ -180,6 +186,7 @@ fun LayoutProductScreen(navController: NavHostController, item: Product?) {
                     modifier = Modifier.padding(start = 10.dp)
                 )
             }
+
             Text(
                 text = "Minimal Stand is made of by natural wood. The design that is " +
                         "very simple and minimal. This is truly one of the best furniture's in any family for now. With 3 different colors, you can easily select the best match for your home. ",
@@ -190,10 +197,11 @@ fun LayoutProductScreen(navController: NavHostController, item: Product?) {
                 lineHeight = 22.sp,
                 fontFamily = FontFamily.Serif
             )
+
             Row(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = 60.dp),
+                    .padding(top = 50.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 IconButton(
@@ -212,6 +220,7 @@ fun LayoutProductScreen(navController: NavHostController, item: Product?) {
                         modifier = Modifier.size(20.dp)
                     )
                 }
+
                 Button(
                     onClick = {
                         navController.navigate("CART")
@@ -269,5 +278,5 @@ fun CustomRadioButton(
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun ProductScreen() {
-    LayoutProductScreen(navController = rememberNavController(), null)
+    LayoutProductScreen(navController = rememberNavController())
 }
