@@ -1,3 +1,4 @@
+
 package com.example.fdev.View
 
 import android.widget.Toast
@@ -180,17 +181,24 @@ fun LayoutLoginScreen(navController: NavHostController) {
                         ) {
                             Button(
                                 onClick = {
-                                    auth.signInWithEmailAndPassword(email, password)
-                                        .addOnCompleteListener { task ->
-                                            if (task.isSuccessful) {
-                                                val user = auth.currentUser
-                                                val name = user?.displayName
-                                                Toast.makeText(context, "Welcome, $name!", Toast.LENGTH_LONG).show()
-                                                navController.navigate("HOME")
-                                            } else {
-                                                Toast.makeText(context, "Login Failed: ${task.exception?.message}", Toast.LENGTH_LONG).show()
+                                    // Kiểm tra xem email hoặc mật khẩu có rỗng hay không
+                                    if (email.isBlank()) {
+                                        Toast.makeText(context, "Email không được để trống", Toast.LENGTH_LONG).show()
+                                    } else if (password.isBlank()) {
+                                        Toast.makeText(context, "Mật khẩu không được để trống", Toast.LENGTH_LONG).show()
+                                    } else {
+                                        auth.signInWithEmailAndPassword(email, password)
+                                            .addOnCompleteListener { task ->
+                                                if (task.isSuccessful) {
+                                                    val user = auth.currentUser
+                                                    val name = user?.displayName
+                                                    Toast.makeText(context, "Chào mừng, $name!", Toast.LENGTH_LONG).show()
+                                                    navController.navigate("HOME")
+                                                } else {
+                                                    Toast.makeText(context, "Đăng nhập thất bại: ${task.exception?.message}", Toast.LENGTH_LONG).show()
+                                                }
                                             }
-                                        }
+                                    }
                                 },
                                 modifier = Modifier.size(290.dp, 50.dp),
                                 colors = ButtonDefaults.buttonColors(
@@ -199,7 +207,7 @@ fun LayoutLoginScreen(navController: NavHostController) {
                                 shape = RoundedCornerShape(8.dp)
                             ) {
                                 Text(
-                                    text = "Log in",
+                                    text = "Đăng nhập",
                                     fontFamily = FontFamily.Serif,
                                     fontWeight = FontWeight(600)
                                 )

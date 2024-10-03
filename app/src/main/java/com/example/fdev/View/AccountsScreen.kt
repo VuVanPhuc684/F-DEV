@@ -146,8 +146,7 @@ fun LayoutAccounts(navController: NavHostController) {
                         shape = RoundedCornerShape(12.dp)
                     )
                     .clickable {
-                        auth.signOut()  // Đăng xuất người dùng
-                        Toast.makeText(context, "Logout successful", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context,"Logout successful",Toast.LENGTH_SHORT).show()
                         navController.navigate("LOGIN")
                     }
             ) {
@@ -161,7 +160,7 @@ fun LayoutAccounts(navController: NavHostController) {
                         .clip(CircleShape)
                 )
                 Text(
-                    text = displayName,  // Hiển thị tên người dùng từ Firebase
+                    text = " Đăng xuất tài khoản",
                     style = TextStyle(
                         fontSize = 20.sp,
                         color = Color.Black,

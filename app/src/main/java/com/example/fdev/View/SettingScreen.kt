@@ -115,14 +115,6 @@ fun LayoutSetting(navController: NavHostController) {
                     color = Color(0xFF909191)
                 )
             )
-            Image(
-                painter = painter2,
-                contentDescription = null,
-                modifier = Modifier
-                    .width(30.dp)
-                    .height(30.dp)
-                    .clip(CircleShape)
-            )
         }
         Spacer(modifier = Modifier.height(20.dp))
         Column(
@@ -236,6 +228,7 @@ fun LayoutSetting(navController: NavHostController) {
                 )
             )
         }
+
         Spacer(modifier = Modifier.height(20.dp))
         Text(
             text = "Thông báo",
