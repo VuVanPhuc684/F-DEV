@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.google.gms.google.services)
 
 }
 
@@ -9,7 +10,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.fdev"
+        applicationId = "com.example.imtatechFDEV"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -62,6 +63,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.firebase.auth)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -74,8 +76,14 @@ dependencies {
 
     // Gson Converter for Retrofit
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
     //Declare library here
     implementation ("androidx.navigation:navigation-compose:2.7.1")
-
     implementation ("io.coil-kt:coil-compose:2.4.0")
+
+    //firebase
+    implementation(platform("com.google.firebase:firebase-bom:33.3.0"))
+    implementation("com.google.firebase:firebase-analytics")
+    // firebase authen
+    implementation("com.google.firebase:firebase-auth")
 }
