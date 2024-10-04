@@ -10,11 +10,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.fdev.navigator.GetLayoutButtonBarNavigator
-import com.example.fdev.View.CartScreen
-import com.example.fdev.View.CheckoutScreen
-import com.example.fdev.View.FavoritesScreen
-import com.example.fdev.View.SearchScreen
-import com.example.fdev.View.NotificationScreen
 
 
 class MainActivity : ComponentActivity() {
@@ -122,3 +117,4 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+

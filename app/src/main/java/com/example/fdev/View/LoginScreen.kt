@@ -1,32 +1,14 @@
+
 package com.example.fdev.View
 
-import android.content.Intent
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -41,25 +23,19 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.fdev.R
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun LayoutLoginScreen(navController: NavHostController) {
-    val content = LocalContext.current
+    val context = LocalContext.current
+    val auth = FirebaseAuth.getInstance()
 
-    var isShowPass by remember {
-        mutableStateOf(false)
-    }
-    var email by remember {
-        mutableStateOf("")
-    }
-    var password by remember {
-        mutableStateOf("")
-    }
-
+    var isShowPass by remember { mutableStateOf(false) }
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -81,8 +57,8 @@ fun LayoutLoginScreen(navController: NavHostController) {
                         .background(color = Color(0xffBDBDBD))
                 ) {}
                 Image(
-                    painter = painterResource(id = R.drawable.design), contentDescription
-                    = "logo",
+                    painter = painterResource(id = R.drawable.design),
+                    contentDescription = "logo",
                     modifier = Modifier
                         .padding(start = 30.dp, end = 30.dp)
                         .size(50.dp, 50.dp)
@@ -99,7 +75,7 @@ fun LayoutLoginScreen(navController: NavHostController) {
                 modifier = Modifier.fillMaxSize()
             ) {
                 Column(
-                    modifier = Modifier.padding( top = 70.dp, start = 10.dp, bottom = 15.dp)
+                    modifier = Modifier.padding(top = 70.dp, start = 10.dp, bottom = 15.dp)
                 ) {
                     Text(
                         text = "Hello !",
@@ -135,7 +111,7 @@ fun LayoutLoginScreen(navController: NavHostController) {
                                 start = 20.dp, end = 20.dp, top = 30.dp, bottom = 30.dp
                             )
                     ) {
-                        Column{
+                        Column {
                             Text(
                                 text = "Email",
                                 color = Color(0xff909090),
@@ -145,9 +121,7 @@ fun LayoutLoginScreen(navController: NavHostController) {
                             )
                             TextField(
                                 value = email,
-                                onValueChange = {
-                                    email = it
-                                },
+                                onValueChange = { email = it },
                                 modifier = Modifier.fillMaxWidth(),
                                 colors = TextFieldDefaults.colors(
                                     focusedContainerColor = Color.Transparent,
@@ -161,11 +135,10 @@ fun LayoutLoginScreen(navController: NavHostController) {
                                 ),
                             )
                         }
-                        Spacer(modifier = Modifier.height(30.dp))
+                        Spacer(modifier = Modifier.height(20.dp))
                         Column {
                             Text(
-                                text = "Passwor" +
-                                        "d",
+                                text = "Password",
                                 color = Color(0xff909090),
                                 fontSize = 15.sp,
                                 fontFamily = FontFamily.Serif,
@@ -173,9 +146,7 @@ fun LayoutLoginScreen(navController: NavHostController) {
                             )
                             TextField(
                                 value = password,
-                                onValueChange = {
-                                    password = it
-                                },
+                                onValueChange = { password = it },
                                 modifier = Modifier.fillMaxWidth(),
                                 colors = TextFieldDefaults.colors(
                                     focusedContainerColor = Color.Transparent,
@@ -190,18 +161,17 @@ fun LayoutLoginScreen(navController: NavHostController) {
                                     }) {
                                         Icon(
                                             painter = painterResource(
-                                                id = if (isShowPass) R.drawable.an else R
-                                                    .drawable.show
+                                                id = if (isShowPass) R.drawable.an else R.drawable.show
                                             ),
                                             contentDescription = null,
                                             modifier = Modifier.size(20.dp, 20.dp)
                                         )
                                     }
                                 },
+                                visualTransformation = if (isShowPass) VisualTransformation.None else PasswordVisualTransformation(),
                                 textStyle = TextStyle(
                                     fontFamily = FontFamily.Serif
                                 ),
-                                visualTransformation = if (isShowPass) VisualTransformation.None else PasswordVisualTransformation()
                             )
                         }
                         Spacer(modifier = Modifier.height(15.dp))
@@ -209,44 +179,53 @@ fun LayoutLoginScreen(navController: NavHostController) {
                             modifier = Modifier.fillMaxSize(),
                             horizontalAlignment = Alignment.CenterHorizontally,
                         ) {
-                            Text(
-                                text = "Forgot Password",
-                                fontFamily = FontFamily.Serif,
-                                fontSize = 15.sp,
-                                fontWeight = FontWeight(600),
-                                color = Color(0xff303030),
-                                modifier = Modifier.padding(top = 15.dp, bottom = 15.dp)
-                            )
                             Button(
                                 onClick = {
-                                   navController.navigate("REGISTER")
+                                    // Kiểm tra xem email hoặc mật khẩu có rỗng hay không
+                                    if (email.isBlank()) {
+                                        Toast.makeText(context, "Email không được để trống", Toast.LENGTH_LONG).show()
+                                    } else if (password.isBlank()) {
+                                        Toast.makeText(context, "Mật khẩu không được để trống", Toast.LENGTH_LONG).show()
+                                    } else {
+                                        auth.signInWithEmailAndPassword(email, password)
+                                            .addOnCompleteListener { task ->
+                                                if (task.isSuccessful) {
+                                                    val user = auth.currentUser
+                                                    val name = user?.displayName
+                                                    Toast.makeText(context, "Chào mừng, $name!", Toast.LENGTH_LONG).show()
+                                                    navController.navigate("HOME")
+                                                } else {
+                                                    Toast.makeText(context, "Đăng nhập thất bại: ${task.exception?.message}", Toast.LENGTH_LONG).show()
+                                                }
+                                            }
+                                    }
                                 },
                                 modifier = Modifier.size(290.dp, 50.dp),
                                 colors = ButtonDefaults.buttonColors(
                                     containerColor = Color(0xff242424)
                                 ),
                                 shape = RoundedCornerShape(8.dp)
-
                             ) {
                                 Text(
-                                    text = "Log in",
+                                    text = "Đăng nhập",
                                     fontFamily = FontFamily.Serif,
                                     fontWeight = FontWeight(600)
                                 )
                             }
                             Text(
                                 text = "SIGN UP",
-                                modifier = Modifier.padding(top = 20.dp).selectable(
-                                    selected = true,
-                                    onClick = {
-                                        navController.navigate("signup")
-                                    }
-                                ),
+                                modifier = Modifier
+                                    .padding(top = 20.dp)
+                                    .selectable(
+                                        selected = true,
+                                        onClick = {
+                                            navController.navigate("REGISTER")
+                                        }
+                                    ),
                                 fontSize = 18.sp,
                                 fontFamily = FontFamily.Serif,
                                 color = Color(0xff303030)
                             )
-
                         }
                     }
                 }
