@@ -41,9 +41,8 @@ import com.example.fdev.R
 
 @Composable
 fun PaymentMethodScreen(navController: NavController) {
-    var checkBox by remember {
-        mutableStateOf(false)
-    }
+    // Khai báo biến selectedCheckBox ở đây
+    var selectedCheckBox by remember { mutableStateOf(-1) } // Lưu trữ trạng thái của checkbox được chọn
 
     Scaffold(
         floatingActionButton = {
@@ -75,7 +74,7 @@ fun PaymentMethodScreen(navController: NavController) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
-                    painterResource(id = R.drawable.left_black),
+                    painter = painterResource(id = R.drawable.left_black),
                     contentDescription = "back",
                     modifier = Modifier
                         .size(25.dp)
@@ -103,9 +102,12 @@ fun PaymentMethodScreen(navController: NavController) {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Start
             ) {
+                // Checkbox đầu tiên
                 Checkbox(
-                    checked = checkBox,
-                    onCheckedChange = { checkBox = it },
+                    checked = selectedCheckBox == 0, // Kiểm tra xem checkbox đầu tiên có được chọn không
+                    onCheckedChange = {
+                        if (it) selectedCheckBox = 0 // Khi được chọn, đặt giá trị thành 0
+                    },
                     modifier = Modifier.padding(start = 10.dp)
                 )
                 Text(
@@ -124,9 +126,12 @@ fun PaymentMethodScreen(navController: NavController) {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Start
             ) {
+                // Checkbox thứ hai
                 Checkbox(
-                    checked = checkBox,
-                    onCheckedChange = { checkBox = it },
+                    checked = selectedCheckBox == 1, // Kiểm tra xem checkbox thứ hai có được chọn không
+                    onCheckedChange = {
+                        if (it) selectedCheckBox = 1 // Khi được chọn, đặt giá trị thành 1
+                    },
                     modifier = Modifier.padding(start = 10.dp)
                 )
                 Text(
