@@ -5,6 +5,7 @@ import java.io.Serializable
 
 // Data class cho response từ server
 data class ProductResponse(
+    @SerializedName("id") val id: String,
     @SerializedName("userId") val userId: String,
     @SerializedName("name") val name: String,
     @SerializedName("price") val price: String,
@@ -15,41 +16,44 @@ data class ProductResponse(
 
 // Data class cho request body gửi lên server
 data class ProductRequest(
+    val id: String,
     val userId: String,
     val name: String,
     val price: String,
     val description: String,
-    val image : String,
+    val image: String,
     val type: String,
 )
 
 // Data class cho đối tượng Product
-
 data class Product(
+    val id: String,
     val userId: String,
     val name: String,
     val price: String,
     val description: String,
-    val image : String,
+    val image: String,
     val type: String,
-): Serializable
-
+) : Serializable
 
 // Chuyển từ ProductResponse sang Product
 fun ProductResponse.toProduct(): Product {
+    require(id.isNotEmpty()) { "Product ID cannot be empty" }
     return Product(
+        id = this.id,
         userId = this.userId,
         name = this.name,
         price = this.price,
         description = this.description,
         image = this.image,
-        type = this.type
+        type = this.type,
     )
 }
 
 // Form data cho UI để tương tác với người dùng
 data class ProductFormData(
-    var userId : String = "",
+    var id: String = "",
+    var userId: String = "",
     var name: String = "",
     var price: String = "",
     var description: String = "",
@@ -60,18 +64,7 @@ data class ProductFormData(
 // Chuyển từ FormData thành Request để gửi lên server
 fun ProductFormData.toProductRequest(): ProductRequest {
     return ProductRequest(
-        userId = this.userId,
-        name = this.name,
-        price = this.price,
-        description = this.description,
-        image =  this.image,
-        type = this.type
-    )
-}
-
-// Chuyển đổi từ Product sang FormData
-fun Product?.toProductFormData() = this?.let {
-    ProductFormData(
+        id = this.id,
         userId = this.userId,
         name = this.name,
         price = this.price,
@@ -81,3 +74,15 @@ fun Product?.toProductFormData() = this?.let {
     )
 }
 
+// Chuyển đổi từ Product sang FormData
+fun Product?.toProductFormData() = this?.let {
+    ProductFormData(
+        id = this.id,
+        userId = this.userId,
+        name = this.name,
+        price = this.price,
+        description = this.description,
+        image = this.image,
+        type = this.type
+    )
+}
