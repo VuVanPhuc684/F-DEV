@@ -233,7 +233,7 @@ fun ItemProduct(navController: NavHostController, model: Product) {
             color = Color(0xff606060)
         )
         Text(
-            text = model.price,
+            text = model.price.toString(),
             modifier = Modifier.padding(top = 5.dp),
             fontSize = 15.sp,
             fontFamily = FontFamily.Serif,

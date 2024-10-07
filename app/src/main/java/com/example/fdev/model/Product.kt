@@ -5,10 +5,9 @@ import java.io.Serializable
 
 // Data class cho response từ server
 data class ProductResponse(
-    @SerializedName("id") val id: String,
-    @SerializedName("userId") val userId: String,
+    @SerializedName("_id") val id: String,
     @SerializedName("name") val name: String,
-    @SerializedName("price") val price: String,
+    @SerializedName("price") val price: Number,
     @SerializedName("description") val description: String,
     @SerializedName("image") val image: String,
     @SerializedName("type") val type: String,
@@ -17,9 +16,8 @@ data class ProductResponse(
 // Data class cho request body gửi lên server
 data class ProductRequest(
     val id: String,
-    val userId: String,
     val name: String,
-    val price: String,
+    val price: Number,
     val description: String,
     val image: String,
     val type: String,
@@ -28,9 +26,8 @@ data class ProductRequest(
 // Data class cho đối tượng Product
 data class Product(
     val id: String,
-    val userId: String,
     val name: String,
-    val price: String,
+    val price: Number,
     val description: String,
     val image: String,
     val type: String,
@@ -41,7 +38,6 @@ fun ProductResponse.toProduct(): Product {
     require(id.isNotEmpty()) { "Product ID cannot be empty" }
     return Product(
         id = this.id,
-        userId = this.userId,
         name = this.name,
         price = this.price,
         description = this.description,
@@ -53,9 +49,8 @@ fun ProductResponse.toProduct(): Product {
 // Form data cho UI để tương tác với người dùng
 data class ProductFormData(
     var id: String = "",
-    var userId: String = "",
     var name: String = "",
-    var price: String = "",
+    var price: Number = 0,
     var description: String = "",
     var image: String = "",
     var type: String = "",
@@ -65,7 +60,6 @@ data class ProductFormData(
 fun ProductFormData.toProductRequest(): ProductRequest {
     return ProductRequest(
         id = this.id,
-        userId = this.userId,
         name = this.name,
         price = this.price,
         description = this.description,
@@ -78,7 +72,6 @@ fun ProductFormData.toProductRequest(): ProductRequest {
 fun Product?.toProductFormData() = this?.let {
     ProductFormData(
         id = this.id,
-        userId = this.userId,
         name = this.name,
         price = this.price,
         description = this.description,

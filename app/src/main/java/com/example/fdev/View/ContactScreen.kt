@@ -40,13 +40,13 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.fdev.R
+import com.google.firebase.auth.FirebaseAuth
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun ContactScreen() {
     LayoutContact(navController = rememberNavController())
 }
-
 @Composable
 fun LayoutContact(navController: NavHostController) {
 
@@ -58,6 +58,10 @@ fun LayoutContact(navController: NavHostController) {
     val scrollState = rememberScrollState()
 
     val context = LocalContext.current
+
+    val auth = FirebaseAuth.getInstance()
+    val currentUser = auth.currentUser
+    val email = currentUser?.email ?: "Unknown Email"  // Fetching user's email from Firebase
 
     Column(
         modifier = Modifier
@@ -109,7 +113,7 @@ fun LayoutContact(navController: NavHostController) {
         }
         Spacer(modifier = Modifier.height(50.dp))
 
-        // Box chứa số điện thoại và chức năng gọi
+        // Box for phone number
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -129,7 +133,6 @@ fun LayoutContact(navController: NavHostController) {
                         shape = RoundedCornerShape(12.dp)
                     )
                     .clickable {
-                        // Thực hiện gọi điện khi người dùng nhấn vào
                         val intent = Intent(Intent.ACTION_DIAL)
                         intent.data = Uri.parse("tel:0981139895")
                         context.startActivity(intent)
@@ -157,7 +160,7 @@ fun LayoutContact(navController: NavHostController) {
 
         Spacer(modifier = Modifier.height(50.dp))
 
-        // Box chứa email
+        // Box for email
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -177,7 +180,7 @@ fun LayoutContact(navController: NavHostController) {
                         shape = RoundedCornerShape(12.dp)
                     )
                     .clickable {
-                        Toast.makeText(context, "Transferred to contact form successfully", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context,"Opening email",Toast.LENGTH_SHORT).show()
                         navController.navigate("MAIL")
                     }
             ) {
@@ -191,7 +194,7 @@ fun LayoutContact(navController: NavHostController) {
                         .clip(CircleShape)
                 )
                 Text(
-                    text = "phucvvph34858@fpt.edu.vn",
+                    text = email,  // Show user's email from Firebase
                     style = TextStyle(
                         fontSize = 20.sp,
                         color = Color(0xFF909191),
@@ -203,7 +206,7 @@ fun LayoutContact(navController: NavHostController) {
 
         Spacer(modifier = Modifier.height(50.dp))
 
-        // Box chứa địa chỉ
+        // Box for address
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -244,3 +247,4 @@ fun LayoutContact(navController: NavHostController) {
         }
     }
 }
+

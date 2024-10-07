@@ -319,3 +319,4 @@ fun LayoutRegisterScreen(navController: NavHostController) {
 fun RegisterScreen() {
     LayoutRegisterScreen(navController = rememberNavController())
 }
+

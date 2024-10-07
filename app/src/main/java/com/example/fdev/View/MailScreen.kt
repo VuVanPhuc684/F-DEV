@@ -47,6 +47,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.fdev.R
 import com.example.fdev.ViewModel.ContactViewModel
 import com.example.fdev.model.ContactMailRequest
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 @Preview(showBackground = true, showSystemUi = true)
@@ -61,8 +62,13 @@ fun LayoutMail(navController: NavHostController, contactViewModel: ContactViewMo
     val painter0: Painter = painterResource(id = R.drawable.back)
     val painter1: Painter = painterResource(id = R.drawable.user)
 
-    var name by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
+    // Firebase Authentication instance to get the current user
+    val auth = FirebaseAuth.getInstance()
+    val currentUser = auth.currentUser
+
+    // Auto-fill user's name and email from Firebase
+    var name by remember { mutableStateOf(currentUser?.displayName ?: "") }
+    var email by remember { mutableStateOf(currentUser?.email ?: "") }
     var noiDung by remember { mutableStateOf("") }
 
     val scrollState = rememberScrollState()
@@ -113,7 +119,7 @@ fun LayoutMail(navController: NavHostController, contactViewModel: ContactViewMo
         }
         Spacer(modifier = Modifier.height(20.dp))
 
-        // Nhập tên
+        // Tên (pre-filled from Firebase)
         OutlinedTextField(
             value = name,
             onValueChange = { name = it },
@@ -135,7 +141,7 @@ fun LayoutMail(navController: NavHostController, contactViewModel: ContactViewMo
         )
         Spacer(modifier = Modifier.height(20.dp))
 
-        // Nhập email
+        // Email (pre-filled from Firebase)
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },
@@ -153,11 +159,12 @@ fun LayoutMail(navController: NavHostController, contactViewModel: ContactViewMo
             shape = RoundedCornerShape(8.dp),
             textStyle = TextStyle(
                 fontFamily = FontFamily.Serif
-            )
+            ),
+            enabled = false  // Disable this field so users cannot edit the email
         )
         Spacer(modifier = Modifier.height(20.dp))
 
-        // Nhập nội dung
+        // Nội dung yêu cầu (this is where the user will input their message)
         OutlinedTextField(
             value = noiDung,
             onValueChange = { noiDung = it },
@@ -188,9 +195,9 @@ fun LayoutMail(navController: NavHostController, contactViewModel: ContactViewMo
                 .clip(RoundedCornerShape(25.dp))
                 .background(color = Color(0xFFe7e7e7))
                 .clickable {
-                    // Kiểm tra nếu các trường không trống
-                    if (name.isBlank() || email.isBlank() || noiDung.isBlank()) {
-                        Toast.makeText(context, "Vui lòng nhập đầy đủ thông tin!", Toast.LENGTH_SHORT).show()
+                    // Check if content is entered
+                    if (noiDung.isBlank()) {
+                        Toast.makeText(context, "Vui lòng nhập nội dung phản hồi!", Toast.LENGTH_SHORT).show()
                         return@clickable
                     }
 
