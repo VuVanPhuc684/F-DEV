@@ -9,8 +9,9 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.fdev.ViewModel.CartViewModel
+import com.example.fdev.ViewModel.NetWork.ApiService
 import com.example.fdev.navigator.GetLayoutButtonBarNavigator
-
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,17 +49,19 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun GetlayoutNavigation() {
         val navController = rememberNavController()
+        val retrofitService = RetrofitService() // Khởi tạo RetrofitService
+        val apiService: ApiService = retrofitService.fdevApiService // Lấy ApiService
+        val cartViewModel = CartViewModel(apiService) // Khởi tạo CartViewModel
+
         NavHost(navController = navController, startDestination = Router.WELCOME.name) {
             composable(Router.WELCOME.name) {
                 LayoutWelcome(navController = navController)
             }
-            composable(Router.SETTING.name){
+            composable(Router.SETTING.name) {
                 LayoutSetting(navController = navController)
             }
             composable(Router.HOME.name) {
-                GetLayoutButtonBarNavigator(
-                    navController
-                )
+                GetLayoutButtonBarNavigator(navController)
             }
             composable(Router.LOGIN.name) {
                 LayoutLoginScreen(navController = navController)
@@ -67,24 +70,23 @@ class MainActivity : ComponentActivity() {
                 LayoutRegisterScreen(navController = navController)
             }
             composable(Router.PRODUCT.name) {
-                LayoutProductScreen(navController = navController)
+                // Truyền cartViewModel vào LayoutProductScreen
+                LayoutProductScreen(navController = navController, cartViewModel = cartViewModel)
             }
-
-            composable(Router.HELP.name){
+            composable(Router.HELP.name) {
                 LayoutHelp(navController = navController)
             }
-            composable(Router.CONTACT.name){
+            composable(Router.CONTACT.name) {
                 LayoutContact(navController = navController)
             }
-            composable(Router.MAIL.name){
+            composable(Router.MAIL.name) {
                 LayoutMail(navController = navController)
             }
-            composable(Router.MYREVIEW.name){
+            composable(Router.MYREVIEW.name) {
                 LayOutMyReview(navController = navController)
             }
-
             composable(Router.CART.name) {
-                CartScreen(navController = navController)
+                CartScreen(navController = navController, cartViewModel = cartViewModel) // Nếu bạn muốn sử dụng cartViewModel ở đây
             }
             composable(Router.CHECKOUT.name) {
                 CheckoutScreen(navController = navController)
@@ -93,7 +95,7 @@ class MainActivity : ComponentActivity() {
                 FavoritesScreen(navController = navController)
             }
             composable(Router.SEARCH.name) {
-                SearchScreen(navController = navController,retrofitService = RetrofitService())
+                SearchScreen(navController = navController, retrofitService = retrofitService)
             }
             composable(Router.NOTIFICATIONS.name) {
                 NotificationScreen(navController = navController)
@@ -113,8 +115,6 @@ class MainActivity : ComponentActivity() {
             composable(Router.ACCOUNTS.name) {
                 LayoutAccounts(navController = navController)
             }
-
         }
     }
 }
-

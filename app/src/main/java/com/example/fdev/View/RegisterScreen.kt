@@ -56,10 +56,10 @@ fun LayoutRegisterScreen(navController: NavHostController) {
                     modifier = Modifier
                         .weight(1f)
                         .height(1.dp)
-                        .background(color = Color(0xffBDBDBD))
+                        .background(color = Color(0xFFd86d42))
                 ) {}
                 Image(
-                    painter = painterResource(id = R.drawable.design),
+                    painter = painterResource(id = R.drawable.loogo),
                     contentDescription = "logo",
                     modifier = Modifier
                         .padding(start = 30.dp, end = 30.dp)
@@ -70,7 +70,7 @@ fun LayoutRegisterScreen(navController: NavHostController) {
                     modifier = Modifier
                         .weight(1f)
                         .height(1.dp)
-                        .background(color = Color(0xffBDBDBD))
+                        .background(color = Color(0xFFd86d42))
                 ) {}
             }
             Column(modifier = Modifier.fillMaxSize()) {
@@ -82,7 +82,7 @@ fun LayoutRegisterScreen(navController: NavHostController) {
                     Text(
                         text = "WELCOME",
                         fontFamily = FontFamily.Serif,
-                        color = Color(0xff303030),
+                        color = Color(0xFFd86d42),
                         fontWeight = FontWeight(700),
                         fontSize = 35.sp
                     )
@@ -111,7 +111,7 @@ fun LayoutRegisterScreen(navController: NavHostController) {
                         Column {
                             Text(
                                 text = "Name",
-                                color = Color(0xff909090),
+                                color = Color(0xFFd86d42),
                                 fontSize = 15.sp,
                                 fontFamily = FontFamily.Serif,
                                 modifier = Modifier.padding(bottom = 3.dp)
@@ -125,7 +125,7 @@ fun LayoutRegisterScreen(navController: NavHostController) {
                                     unfocusedContainerColor = Color.Transparent,
                                     unfocusedIndicatorColor = Color(0xffE0E0E0),
                                     focusedIndicatorColor = Color(0xffE0E0E0),
-                                    cursorColor = Color.Black
+                                    cursorColor = Color(0xFFd86d42)
                                 ),
                                 textStyle = TextStyle(
                                     fontFamily = FontFamily.Serif
@@ -137,7 +137,7 @@ fun LayoutRegisterScreen(navController: NavHostController) {
                         Column {
                             Text(
                                 text = "Email",
-                                color = Color(0xff909090),
+                                color = Color(0xFFd86d42),
                                 fontSize = 15.sp,
                                 fontFamily = FontFamily.Serif,
                                 modifier = Modifier.padding(bottom = 3.dp)
@@ -151,7 +151,7 @@ fun LayoutRegisterScreen(navController: NavHostController) {
                                     unfocusedContainerColor = Color.Transparent,
                                     unfocusedIndicatorColor = Color(0xffE0E0E0),
                                     focusedIndicatorColor = Color(0xffE0E0E0),
-                                    cursorColor = Color.Black
+                                    cursorColor = Color(0xFFd86d42)
                                 ),
                                 textStyle = TextStyle(
                                     fontFamily = FontFamily.Serif
@@ -162,7 +162,7 @@ fun LayoutRegisterScreen(navController: NavHostController) {
                         Column {
                             Text(
                                 text = "Password",
-                                color = Color(0xff909090),
+                                color = Color(0xFFd86d42),
                                 fontSize = 15.sp,
                                 fontFamily = FontFamily.Serif,
                                 modifier = Modifier.padding(bottom = 3.dp)
@@ -176,7 +176,7 @@ fun LayoutRegisterScreen(navController: NavHostController) {
                                     unfocusedContainerColor = Color.Transparent,
                                     unfocusedIndicatorColor = Color(0xffE0E0E0),
                                     focusedIndicatorColor = Color(0xffE0E0E0),
-                                    cursorColor = Color.Black
+                                    cursorColor = Color(0xFFd86d42)
                                 ),
                                 trailingIcon = {
                                     IconButton(onClick = {
@@ -201,7 +201,7 @@ fun LayoutRegisterScreen(navController: NavHostController) {
                         Column {
                             Text(
                                 text = "Confirm Password",
-                                color = Color(0xff909090),
+                                color = Color(0xFFd86d42),
                                 fontSize = 15.sp,
                                 fontFamily = FontFamily.Serif,
                                 modifier = Modifier.padding(bottom = 3.dp)
@@ -215,7 +215,7 @@ fun LayoutRegisterScreen(navController: NavHostController) {
                                     unfocusedContainerColor = Color.Transparent,
                                     unfocusedIndicatorColor = Color(0xffE0E0E0),
                                     focusedIndicatorColor = Color(0xffE0E0E0),
-                                    cursorColor = Color.Black
+                                    cursorColor = Color(0xFFd86d42)
                                 ),
                                 trailingIcon = {
                                     IconButton(onClick = {
@@ -272,7 +272,7 @@ fun LayoutRegisterScreen(navController: NavHostController) {
                                 },
                                 modifier = Modifier.size(290.dp, 50.dp),
                                 colors = ButtonDefaults.buttonColors(
-                                    containerColor = Color(0xff242424)
+                                    containerColor = Color(0xFFd86d42)
                                 ),
                                 shape = RoundedCornerShape(8.dp)
                             ) {
@@ -302,7 +302,7 @@ fun LayoutRegisterScreen(navController: NavHostController) {
                                         ),
                                     fontSize = 14.sp,
                                     fontFamily = FontFamily.Serif,
-                                    color = Color(0xff303030),
+                                    color = Color(0xFFd86d42),
                                     fontWeight = FontWeight.ExtraBold
                                 )
                             }

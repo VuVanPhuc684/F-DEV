@@ -12,7 +12,6 @@ data class ProductResponse(
     @SerializedName("image") val image: String,
     @SerializedName("type") val type: String,
 )
-
 // Data class cho request body gửi lên server
 data class ProductRequest(
     val id: String,

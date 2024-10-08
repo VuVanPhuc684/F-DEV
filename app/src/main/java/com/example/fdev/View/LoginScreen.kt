@@ -54,10 +54,10 @@ fun LayoutLoginScreen(navController: NavHostController) {
                     modifier = Modifier
                         .weight(1f)
                         .height(1.dp)
-                        .background(color = Color(0xffBDBDBD))
+                        .background(color = Color(0xFFd86d42))
                 ) {}
                 Image(
-                    painter = painterResource(id = R.drawable.design),
+                    painter = painterResource(id = R.drawable.loogo),
                     contentDescription = "logo",
                     modifier = Modifier
                         .padding(start = 30.dp, end = 30.dp)
@@ -68,7 +68,7 @@ fun LayoutLoginScreen(navController: NavHostController) {
                     modifier = Modifier
                         .weight(1f)
                         .height(1.dp)
-                        .background(color = Color(0xffBDBDBD))
+                        .background(color = Color(0xFFd86d42))
                 ) {}
             }
             Column(
@@ -80,14 +80,14 @@ fun LayoutLoginScreen(navController: NavHostController) {
                     Text(
                         text = "Hello !",
                         fontFamily = FontFamily.Serif,
-                        color = Color(0xff909090),
+                        color = Color(0xFFC9AB9F),
                         fontWeight = FontWeight(500),
                         fontSize = 35.sp
                     )
                     Text(
                         text = "WELCOME BACK",
                         fontFamily = FontFamily.Serif,
-                        color = Color(0xff303030),
+                        color = Color(0xFFd86d42),
                         fontWeight = FontWeight(700),
                         fontSize = 35.sp
                     )
@@ -114,7 +114,7 @@ fun LayoutLoginScreen(navController: NavHostController) {
                         Column {
                             Text(
                                 text = "Email",
-                                color = Color(0xff909090),
+                                color = Color(0xFFd86d42),
                                 fontSize = 15.sp,
                                 fontFamily = FontFamily.Serif,
                                 modifier = Modifier.padding(bottom = 3.dp)
@@ -128,7 +128,7 @@ fun LayoutLoginScreen(navController: NavHostController) {
                                     unfocusedContainerColor = Color.Transparent,
                                     unfocusedIndicatorColor = Color(0xffE0E0E0),
                                     focusedIndicatorColor = Color(0xffE0E0E0),
-                                    cursorColor = Color.Black
+                                    cursorColor = Color(0xFFd86d42)
                                 ),
                                 textStyle = TextStyle(
                                     fontFamily = FontFamily.Serif
@@ -139,7 +139,7 @@ fun LayoutLoginScreen(navController: NavHostController) {
                         Column {
                             Text(
                                 text = "Password",
-                                color = Color(0xff909090),
+                                color = Color(0xFFd86d42),
                                 fontSize = 15.sp,
                                 fontFamily = FontFamily.Serif,
                                 modifier = Modifier.padding(bottom = 3.dp)
@@ -153,7 +153,7 @@ fun LayoutLoginScreen(navController: NavHostController) {
                                     unfocusedContainerColor = Color.Transparent,
                                     unfocusedIndicatorColor = Color(0xffE0E0E0),
                                     focusedIndicatorColor = Color(0xffE0E0E0),
-                                    cursorColor = Color.Black
+                                    cursorColor = Color(0xFFd86d42)
                                 ),
                                 trailingIcon = {
                                     IconButton(onClick = {
@@ -202,12 +202,12 @@ fun LayoutLoginScreen(navController: NavHostController) {
                                 },
                                 modifier = Modifier.size(290.dp, 50.dp),
                                 colors = ButtonDefaults.buttonColors(
-                                    containerColor = Color(0xff242424)
+                                    containerColor = Color(0xFFd86d42)
                                 ),
                                 shape = RoundedCornerShape(8.dp)
                             ) {
                                 Text(
-                                    text = "Đăng nhập",
+                                    text = "Login",
                                     fontFamily = FontFamily.Serif,
                                     fontWeight = FontWeight(600)
                                 )
@@ -224,7 +224,7 @@ fun LayoutLoginScreen(navController: NavHostController) {
                                     ),
                                 fontSize = 18.sp,
                                 fontFamily = FontFamily.Serif,
-                                color = Color(0xff303030)
+                                color = Color(0xFFd86d42)
                             )
                         }
                     }

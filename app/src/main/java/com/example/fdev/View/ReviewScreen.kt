@@ -138,7 +138,7 @@ fun ReviewScreen(navController: NavController) {
         Button(
             onClick = { /* su kien onClick */ },
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color.Black,
+                containerColor = Color(0xFFd86d42),
             ),
             modifier = Modifier
                 .fillMaxWidth()
