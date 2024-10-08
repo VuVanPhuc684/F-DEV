@@ -60,7 +60,7 @@ fun LayoutProductScreen(navController: NavHostController) {
                 .padding(top = 30.dp),
             contentAlignment = Alignment.TopCenter
         ) {
-            // Sử dụng đúng biến `product` thay vì `item`
+            // Sử dụng đúng biến product thay vì item
             product?.let {
                 Image(
                     painter = rememberImagePainter(data = it.image),
@@ -78,7 +78,7 @@ fun LayoutProductScreen(navController: NavHostController) {
 
             IconButton(
                 onClick = {
-                    navController.popBackStack()
+                    navController.navigate("HOME")
                 },
                 modifier = Modifier
                     .padding(end = 260.dp, top = 20.dp)
@@ -134,7 +134,7 @@ fun LayoutProductScreen(navController: NavHostController) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(start = 15.dp, top = 20.dp)
+                .padding(start = 10.dp, top = 20.dp, end = 8.dp)
         ) {
             product?.let {
                 Text(
@@ -162,30 +162,56 @@ fun LayoutProductScreen(navController: NavHostController) {
                 }
             }
 
-            Row(
-                modifier = Modifier.padding(top = 25.dp),
-                verticalAlignment = Alignment.CenterVertically
+            Column(
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.sta),
-                    contentDescription = null,
-                    modifier = Modifier.size(20.dp)
-                )
-                Text(
-                    text = "4.5",
-                    fontSize = 18.sp,
-                    fontFamily = FontFamily.Serif,
-                    fontWeight = FontWeight(700),
-                    modifier = Modifier.padding(start = 7.dp)
-                )
-                Text(
-                    text = "(50 reviews)",
-                    fontSize = 14.sp,
-                    fontFamily = FontFamily.Serif,
-                    color = Color(0xff808080),
-                    modifier = Modifier.padding(start = 10.dp)
-                )
+                Row(
+                    modifier = Modifier
+                        .padding(top = 25.dp)
+                        .fillMaxWidth(),  // Đảm bảo Row chiếm hết chiều rộng
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.sta),
+                        contentDescription = null,
+                        modifier = Modifier.size(20.dp)
+                    )
+                    Text(
+                        text = "4.5",
+                        fontSize = 18.sp,
+                        fontFamily = FontFamily.Serif,
+                        fontWeight = FontWeight(700),
+                        modifier = Modifier.padding(start = 7.dp)
+                    )
+                    Text(
+                        text = "(50 reviews)",
+                        fontSize = 14.sp,
+                        fontFamily = FontFamily.Serif,
+                        color = Color(0xff808080),
+                        modifier = Modifier.padding(start = 10.dp)
+                    )
+
+                    Spacer(modifier = Modifier.weight(1f))
+
+                    Text(
+                        text = "Xem đánh giá",
+                        fontSize = 17.sp,
+                        modifier = Modifier
+                            .padding(end = 1.dp)
+                            .clickable { navController.navigate("REVIEW") }
+                    )
+                    Image(
+                        painterResource(id = R.drawable.right_black),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(20.dp)
+                            .padding(end = 10.dp)
+                            .clickable {navController.navigate("REVIEW") },
+                        contentScale = ContentScale.FillBounds,
+                    )
+                }
             }
+
 
             Text(
                 text = "Minimal Stand is made of by natural wood. The design that is " +

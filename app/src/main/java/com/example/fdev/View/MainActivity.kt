@@ -43,6 +43,7 @@ class MainActivity : ComponentActivity() {
         REVIEW,
         LANGUAGE,
         ACCOUNTS,
+        WRITEREVIEW
     }
 
     @Composable
@@ -69,7 +70,6 @@ class MainActivity : ComponentActivity() {
             composable(Router.PRODUCT.name) {
                 LayoutProductScreen(navController = navController)
             }
-
             composable(Router.HELP.name){
                 LayoutHelp(navController = navController)
             }
@@ -80,9 +80,8 @@ class MainActivity : ComponentActivity() {
                 LayoutMail(navController = navController)
             }
             composable(Router.MYREVIEW.name){
-                LayOutMyReview(navController = navController)
+                MyReviewScreen(navController = navController)
             }
-
             composable(Router.CART.name) {
                 CartScreen(navController = navController)
             }
@@ -113,7 +112,9 @@ class MainActivity : ComponentActivity() {
             composable(Router.ACCOUNTS.name) {
                 LayoutAccounts(navController = navController)
             }
-
+            composable(Router.WRITEREVIEW.name) {
+                WriteReviewScreen(navController = navController)
+            }
         }
     }
 }
