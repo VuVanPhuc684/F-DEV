@@ -1,5 +1,6 @@
 package com.example.fdev.View
 
+import CartScreen
 import RetrofitService
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -86,7 +87,7 @@ class MainActivity : ComponentActivity() {
                 LayOutMyReview(navController = navController)
             }
             composable(Router.CART.name) {
-                CartScreen(navController = navController, cartViewModel = cartViewModel) // Nếu bạn muốn sử dụng cartViewModel ở đây
+                CartScreen(navController = navController, cartViewModel = cartViewModel)
             }
             composable(Router.CHECKOUT.name) {
                 CheckoutScreen(navController = navController)

@@ -1,5 +1,4 @@
 package com.example.fdev.ViewModel
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,14 +18,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
-
 data class CartItem(
     val product: String,
     val name: String,
     val price: Double,
     val image: String
 )
-
 @Composable
 fun CartItemRow(item: CartItem, onRemoveItem: () -> Unit) {
     Row(
@@ -44,9 +41,7 @@ fun CartItemRow(item: CartItem, onRemoveItem: () -> Unit) {
                 .clip(RoundedCornerShape(12.dp)),
             contentScale = ContentScale.Crop
         )
-
         Spacer(modifier = Modifier.width(16.dp))
-
         // Hiển thị tên và giá sản phẩm
         Column(
             modifier = Modifier.weight(1f)
@@ -66,7 +61,6 @@ fun CartItemRow(item: CartItem, onRemoveItem: () -> Unit) {
                 )
             )
         }
-
         // Nút xóa sản phẩm khỏi giỏ hàng
         IconButton(
             onClick = onRemoveItem,
