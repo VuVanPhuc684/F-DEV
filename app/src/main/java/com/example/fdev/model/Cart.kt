@@ -24,3 +24,4 @@ data class CartProduct(
     val name: String,
     val image: String
 )
+

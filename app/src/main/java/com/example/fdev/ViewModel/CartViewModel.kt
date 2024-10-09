@@ -1,5 +1,3 @@
-package com.example.fdev.ViewModel
-
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -16,23 +14,23 @@ class CartViewModel(private val apiService: ApiService) : ViewModel() {
     private val _cartItems = MutableStateFlow<List<CartItem>>(emptyList())
     val cartItems: StateFlow<List<CartItem>> = _cartItems
 
-    // Lấy danh sách sản phẩm trong giỏ hàng theo tên người dùng
+    // Hàm lấy giỏ hàng từ MongoDB qua API
     fun getCartItems() {
         val currentUser = FirebaseAuth.getInstance().currentUser
-        val userName = currentUser?.displayName ?: "" // Lấy tên người dùng từ Firebase
+        val userName = currentUser?.displayName ?: ""  // Lấy tên người dùng từ Firebase
 
         if (userName.isNotBlank()) {
             viewModelScope.launch {
                 try {
-                    val response = apiService.getCart(userName) // Gọi API với tên người dùng
+                    val response = apiService.getCart(userName)
                     if (response.isSuccessful) {
                         response.body()?.let { cartResponse ->
-                            _cartItems.value = cartResponse.data.products.map { cartProduct ->
+                            _cartItems.value = cartResponse.data.products.mapNotNull { cartProduct ->
                                 CartItem(
-                                    product = cartProduct.product.id,
-                                    name = cartProduct.name,
-                                    price = cartProduct.price,
-                                    image = cartProduct.image
+                                    product = cartProduct.product.id ?: "",  // ID sản phẩm
+                                    name = cartProduct.name ?: "Unknown Product",  // Tên sản phẩm
+                                    price = cartProduct.price ?: 0.0,  // Giá sản phẩm
+                                    image = cartProduct.image ?: ""  // Ảnh sản phẩm
                                 )
                             }
                         }
@@ -43,22 +41,26 @@ class CartViewModel(private val apiService: ApiService) : ViewModel() {
                     Log.e("CartViewModel", "API call failed: ${e.message}", e)
                 }
             }
-        } else {
-            Log.e("CartViewModel", "User name is empty.")
         }
     }
 
-    // Thêm sản phẩm vào giỏ hàng
-    fun addToCart(product: Product, userName: String, quantity: Int = 1) {
+    // Thêm sản phẩm vào giỏ hàng và cập nhật UI
+    fun addToCart(product: Product, quantity: Int = 1) {
         val currentUser = FirebaseAuth.getInstance().currentUser
-        val userName = currentUser?.displayName ?: "" // Lấy tên người dùng từ Firebase
+        val userName = currentUser?.displayName ?: ""
+
         if (userName.isNotBlank()) {
             viewModelScope.launch {
                 try {
-                    val request = AddToCartRequest(userName, product.id, quantity) // Sử dụng userName
+                    val request = AddToCartRequest(userName, product.id, quantity)
                     val response = apiService.addToCart(request)
                     if (response.isSuccessful) {
-                        getCartItems() // Cập nhật lại giỏ hàng sau khi thêm
+                        _cartItems.value = _cartItems.value + CartItem(
+                            product = product.id,
+                            name = product.name,
+                            price = product.price,
+                            image = product.image
+                        )
                     } else {
                         Log.e("CartViewModel", "Error adding to cart: ${response.code()} - ${response.message()}")
                     }
@@ -69,26 +71,30 @@ class CartViewModel(private val apiService: ApiService) : ViewModel() {
         }
     }
 
-    // Xóa sản phẩm khỏi giỏ hàng
+    // Xóa sản phẩm khỏi giỏ hàng và cập nhật UI
     fun removeFromCart(productId: String) {
         val currentUser = FirebaseAuth.getInstance().currentUser
-        val userName = currentUser?.displayName ?: "" // Lấy tên người dùng từ Firebase
-        viewModelScope.launch {
-            try {
-                val response = apiService.removeFromCart(userName, productId) // Sử dụng userName
-                if (response.isSuccessful) {
-                    getCartItems() // Cập nhật lại giỏ hàng sau khi xóa
-                } else {
-                    Log.e("CartViewModel", "Error removing from cart: ${response.code()} - ${response.message()}")
+        val userName = currentUser?.displayName ?: ""
+
+        if (userName.isNotBlank()) {
+            viewModelScope.launch {
+                try {
+                    val response = apiService.removeFromCart(userName, productId)
+                    if (response.isSuccessful) {
+                        _cartItems.value = _cartItems.value.filter { it.product != productId }
+                    } else {
+                        Log.e("CartViewModel", "Error removing from cart: ${response.code()} - ${response.message()}")
+                    }
+                } catch (e: Exception) {
+                    Log.e("CartViewModel", "API call failed: ${e.message}", e)
                 }
-            } catch (e: Exception) {
-                Log.e("CartViewModel", "API call failed: ${e.message}", e)
             }
         }
     }
 
-    // Hàm tính tổng giá trị giỏ hàng
+    // Tính tổng giá trị giỏ hàng
     fun getTotalPrice(): Double {
-        return _cartItems.value.sumOf { it.price }
+        return _cartItems.value.sumOf { it.price.toDouble() }
     }
 }
+
