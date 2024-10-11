@@ -46,7 +46,8 @@ interface ApiService {
     // Xóa sản phẩm khỏi giỏ hàng
     @DELETE("/cart/remove-from-cart")
     suspend fun removeFromCart(
-        @Query("userName") userName: String, // Thay userEmail thành userName
+        @Query("userName") userName: String,
         @Query("productId") productId: String
     ): Response<CartResponse>
+
 }

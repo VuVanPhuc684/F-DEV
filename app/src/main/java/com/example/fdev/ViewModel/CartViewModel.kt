@@ -97,4 +97,3 @@ class CartViewModel(private val apiService: ApiService) : ViewModel() {
         return _cartItems.value.sumOf { it.price.toDouble() }
     }
 }
-

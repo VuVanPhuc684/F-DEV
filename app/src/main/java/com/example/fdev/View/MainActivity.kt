@@ -14,46 +14,25 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.fdev.ViewModel.NetWork.ApiService
 import com.example.fdev.navigator.GetLayoutButtonBarNavigator
+import com.example.fdev.R
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            GetlayoutNavigation()
+            MainNavigation()
         }
     }
 
-    enum class Router {
-        WELCOME,
-        SETTING,
-        HOME,
-        LOGIN,
-        REGISTER,
-        PRODUCT,
-        HELP,
-        CONTACT,
-        MAIL,
-        MYREVIEW,
-        CART,
-        CHECKOUT,
-        FAVORITES,
-        SEARCH,
-        NOTIFICATIONS,
-        CONGRATSSCREEN,
-        PAYMENTMETHODSCREEN,
-        ADDPAYMENTMETHOD,
-        REVIEW,
-        LANGUAGE,
-        ACCOUNTS,
-    }
-
     @Composable
-    fun GetlayoutNavigation() {
+    fun MainNavigation() {
         val navController = rememberNavController()
-        val retrofitService = RetrofitService() // Khởi tạo RetrofitService
-        val apiService: ApiService = retrofitService.fdevApiService // Lấy ApiService
-        val cartViewModel = CartViewModel(apiService) // Khởi tạo CartViewModel
+        val retrofitService = RetrofitService() // Initialize RetrofitService
+        val apiService: ApiService = retrofitService.fdevApiService // Get ApiService
+        val cartViewModel = CartViewModel(apiService) // Initialize CartViewModel
+        val userEmail = FirebaseAuth.getInstance().currentUser?.email // Assuming FirebaseAuth is used
 
         NavHost(navController = navController, startDestination = Router.WELCOME.name) {
             composable(Router.WELCOME.name) {
@@ -63,7 +42,7 @@ class MainActivity : ComponentActivity() {
                 LayoutSetting(navController = navController)
             }
             composable(Router.HOME.name) {
-                GetLayoutButtonBarNavigator(navController)
+                GetLayoutButtonBarNavigator(navController, userEmail)
             }
             composable(Router.LOGIN.name) {
                 LayoutLoginScreen(navController = navController)
@@ -72,7 +51,6 @@ class MainActivity : ComponentActivity() {
                 LayoutRegisterScreen(navController = navController)
             }
             composable(Router.PRODUCT.name) {
-                // Truyền cartViewModel vào LayoutProductScreen
                 LayoutProductScreen(navController = navController, cartViewModel = cartViewModel)
             }
             composable(Router.HELP.name) {
@@ -118,5 +96,29 @@ class MainActivity : ComponentActivity() {
                 LayoutAccounts(navController = navController)
             }
         }
+    }
+
+    enum class Router {
+        WELCOME,
+        SETTING,
+        HOME,
+        LOGIN,
+        REGISTER,
+        PRODUCT,
+        HELP,
+        CONTACT,
+        MAIL,
+        MYREVIEW,
+        CART,
+        CHECKOUT,
+        FAVORITES,
+        SEARCH,
+        NOTIFICATIONS,
+        CONGRATSSCREEN,
+        PAYMENTMETHODSCREEN,
+        ADDPAYMENTMETHOD,
+        REVIEW,
+        LANGUAGE,
+        ACCOUNTS,
     }
 }
