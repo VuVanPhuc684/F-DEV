@@ -12,6 +12,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -53,7 +55,7 @@ fun LayoutAccounts(navController: NavHostController) {
     val auth = FirebaseAuth.getInstance()
     val currentUser = auth.currentUser
     val displayName = currentUser?.displayName ?: "Unknown User"  // Nếu không có tên thì hiện "Unknown User"
-
+    var showLogoutDialog = remember { mutableStateOf(false) }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -127,6 +129,17 @@ fun LayoutAccounts(navController: NavHostController) {
             }
         }
         Spacer(modifier = Modifier.height(20.dp))
+        if (showLogoutDialog.value) {
+            LogoutConfirmationDialog(
+                onConfirm = {
+                    showLogoutDialog.value = false
+                    navController.navigate("LOGIN") // Điều hướng đến màn hình LayoutLoginScreen
+                },
+                onDismiss = {
+                    showLogoutDialog.value = false // Ẩn hộp thoại nếu ấn hủy
+                }
+            )
+        }
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -146,8 +159,7 @@ fun LayoutAccounts(navController: NavHostController) {
                         shape = RoundedCornerShape(12.dp)
                     )
                     .clickable {
-                        Toast.makeText(context,"Logout successful",Toast.LENGTH_SHORT).show()
-                        navController.navigate("LOGIN")
+                        showLogoutDialog.value = true
                     }
             ) {
                 Image(
