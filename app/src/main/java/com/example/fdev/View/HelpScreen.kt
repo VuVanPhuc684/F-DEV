@@ -157,45 +157,6 @@ fun LayoutHelp(navController: NavHostController) {
                 .padding(horizontal = 16.dp)
                 .shadow(elevation = 8.dp, shape = RoundedCornerShape(12.dp))
                 .clip(RoundedCornerShape(12.dp))
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(70.dp)
-                    .background(color = Color(0xFFfafafa))
-                    .border(
-                        width = 1.dp,
-                        color = Color(0xFFfafafa),
-                        shape = RoundedCornerShape(12.dp)
-                    )
-            ) {
-                Image(
-                    painter = painter2,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .width(50.dp)
-                        .height(50.dp)
-                        .padding(5.dp)
-                        .clip(CircleShape)
-                )
-                Text(
-                    text = " Tài Khoản",
-                    style = TextStyle(
-                        fontSize = 20.sp,
-                        color = Color(0xFF909191),
-                    ),
-                    modifier = Modifier.weight(1f)
-                )
-            }
-        }
-        Spacer(modifier = Modifier.height(20.dp))
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-                .shadow(elevation = 8.dp, shape = RoundedCornerShape(12.dp))
-                .clip(RoundedCornerShape(12.dp))
 
         ) {
             Row(
@@ -260,49 +221,6 @@ fun LayoutHelp(navController: NavHostController) {
                 )
                 Text(
                     text = " Lưu trữ phương tiện ",
-                    style = TextStyle(
-                        fontSize = 20.sp,
-                        color = Color(0xFF909191),
-                    ),
-                    modifier = Modifier.weight(1f)
-                )
-            }
-        }
-        Spacer(modifier = Modifier.height(20.dp))
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-                .shadow(elevation = 8.dp, shape = RoundedCornerShape(12.dp))
-                .clip(RoundedCornerShape(12.dp))
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(70.dp)
-                    .background(color = Color(0xFFfafafa))
-                    .border(
-                        width = 1.dp,
-                        color = Color(0xFFfafafa),
-                        shape = RoundedCornerShape(12.dp)
-                    )
-                    .clickable {
-                        Toast.makeText(context,"successfully moved to help screen",Toast.LENGTH_SHORT).show()
-                        navController.navigate("CONTACT")
-                    }
-            ) {
-                Image(
-                    painter = painter5,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .width(50.dp)
-                        .height(50.dp)
-                        .padding(5.dp)
-                        .clip(CircleShape)
-                )
-                Text(
-                    text = " Liên hệ ngay",
                     style = TextStyle(
                         fontSize = 20.sp,
                         color = Color(0xFF909191),
@@ -459,6 +377,92 @@ fun LayoutHelp(navController: NavHostController) {
                 )
                 Text(
                     text = "Khắc phụ sự cố & FAQ",
+                    style = TextStyle(
+                        fontSize = 20.sp,
+                        color = Color(0xFF909191),
+                    ),
+                    modifier = Modifier.weight(1f)
+                )
+            }
+        }
+        Spacer(modifier = Modifier.height(20.dp))
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .shadow(elevation = 8.dp, shape = RoundedCornerShape(12.dp))
+                .clip(RoundedCornerShape(12.dp))
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(70.dp)
+                    .background(color = Color(0xFFfafafa))
+                    .border(
+                        width = 1.dp,
+                        color = Color(0xFFfafafa),
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                    .clickable {
+                        Toast.makeText(context,"successfully moved to help screen",Toast.LENGTH_SHORT).show()
+                        navController.navigate("CONTACT")
+                    }
+            ) {
+                Image(
+                    painter = painter5,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .width(50.dp)
+                        .height(50.dp)
+                        .padding(5.dp)
+                        .clip(CircleShape)
+                )
+                Text(
+                    text = " Liên hệ ngay",
+                    style = TextStyle(
+                        fontSize = 20.sp,
+                        color = Color(0xFF909191),
+                    ),
+                    modifier = Modifier.weight(1f)
+                )
+            }
+        }
+        Spacer(modifier = Modifier.height(20.dp))
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .shadow(elevation = 8.dp, shape = RoundedCornerShape(12.dp))
+                .clip(RoundedCornerShape(12.dp))
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(70.dp)
+                    .background(color = Color(0xFFfafafa))
+                    .border(
+                        width = 1.dp,
+                        color = Color(0xFFfafafa),
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                    .clickable {
+                        Toast.makeText(context,"successfully transferred to account screen",Toast.LENGTH_SHORT).show()
+                        navController.navigate("ACCOUNTS")
+                    }
+            ) {
+                Image(
+                    painter = painter2,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .width(50.dp)
+                        .height(50.dp)
+                        .padding(5.dp)
+                        .clip(CircleShape)
+                )
+                Text(
+                    text = " Tài Khoản",
                     style = TextStyle(
                         fontSize = 20.sp,
                         color = Color(0xFF909191),
