@@ -42,7 +42,7 @@ class MainActivity : ComponentActivity() {
                 LayoutSetting(navController = navController)
             }
             composable(Router.HOME.name) {
-                GetLayoutButtonBarNavigator(navController, userEmail)
+                GetLayoutButtonBarNavigator(navController)
             }
             composable(Router.LOGIN.name) {
                 LayoutLoginScreen(navController = navController)

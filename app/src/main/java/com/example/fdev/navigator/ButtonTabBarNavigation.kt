@@ -14,11 +14,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -47,81 +44,117 @@ enum class ROUTER {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GetLayoutButtonBarNavigator(navHostController: NavHostController, userEmail: String?) {
-    var isSelected by rememberSaveable {
-        mutableStateOf(ROUTER.home.name)
-    }
+fun GetLayoutButtonBarNavigator(navHostController: NavHostController) {
+    var isSelected by rememberSaveable { mutableStateOf(ROUTER.home.name) }
     val navController = rememberNavController()
+    val auth = FirebaseAuth.getInstance()
 
-    val isAdmin = userEmail == "adminfdev@gmail.com" // Check if the user is admin
+    val user = auth.currentUser
+    val isAdmin = user?.displayName == "AdminFdev"
 
     Scaffold(
         bottomBar = {
             BottomAppBar(
                 containerColor = Color.White,
             ) {
+                // Home - luôn hiển thị
                 NavigationBarItem(
-                    selected = isSelected === ROUTER.home.name,
+                    selected = isSelected == ROUTER.home.name,
                     onClick = {
                         isSelected = ROUTER.home.name
-                        navController.navigate(ROUTER.home.name) { popUpTo(0) }
+                        navController.navigate(ROUTER.home.name) {
+                            popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                        }
                     },
-                    icon = { Icon(painter = painterResource(id = R.drawable.home_anh), contentDescription = null, modifier = Modifier.size(25.dp, 25.dp)) },
-                    colors = NavigationBarItemDefaults.colors(selectedIconColor = Color(0xFF059BEE), unselectedIconColor = Color.Black, indicatorColor = Color(0xFFFFFFFF)),
+                    icon = { Icon(painter = painterResource(id = R.drawable.home_anh), contentDescription = null, modifier = Modifier.size(25.dp)) },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = Color(0xFF059BEE),
+                        unselectedIconColor = Color.Black,
+                        indicatorColor = Color.White
+                    )
                 )
 
-                if (!isAdmin) {
-                    // These items are visible only for non-admin users
+                // Nếu là admin
+                if (isAdmin) {
                     NavigationBarItem(
-                        selected = isSelected === ROUTER.ADDPRODUCT.name,
+                        selected = isSelected == ROUTER.ADDPRODUCT.name,
                         onClick = {
                             isSelected = ROUTER.ADDPRODUCT.name
-                            navController.navigate(ROUTER.ADDPRODUCT.name) { popUpTo(0) }
+                            navController.navigate(ROUTER.ADDPRODUCT.name) {
+                                popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                            }
                         },
-                        icon = { Icon(painter = painterResource(id = R.drawable.add_icon), contentDescription = null, modifier = Modifier.size(20.dp, 20.dp)) },
-                        colors = NavigationBarItemDefaults.colors(selectedIconColor = Color(0xFF059BEE), unselectedIconColor = Color.Black, indicatorColor = Color(0xFFFFFFFF)),
+                        icon = { Icon(painter = painterResource(id = R.drawable.add_icon), contentDescription = null, modifier = Modifier.size(20.dp)) },
+                        colors = NavigationBarItemDefaults.colors(
+                            selectedIconColor = Color(0xFF059BEE),
+                            unselectedIconColor = Color.Black,
+                            indicatorColor = Color.White
+                        )
                     )
                 } else {
-                    // This item is visible only for admin users
+                    // Nếu không phải admin (người dùng thông thường)
                     NavigationBarItem(
-                        selected = isSelected === ROUTER.favourite.name,
+                        selected = isSelected == ROUTER.favourite.name,
                         onClick = {
                             isSelected = ROUTER.favourite.name
-                            navController.navigate(ROUTER.favourite.name) { popUpTo(0) }
+                            navController.navigate(ROUTER.favourite.name) {
+                                popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                            }
                         },
-                        icon = { Icon(painter = painterResource(id = R.drawable.favourite), contentDescription = null, modifier = Modifier.size(25.dp, 25.dp)) },
-                        colors = NavigationBarItemDefaults.colors(selectedIconColor = Color(0xFF059BEE), unselectedIconColor = Color.Black, indicatorColor = Color(0xFFFFFFFF)),
+                        icon = { Icon(painter = painterResource(id = R.drawable.favourite), contentDescription = null, modifier = Modifier.size(25.dp)) },
+                        colors = NavigationBarItemDefaults.colors(
+                            selectedIconColor = Color(0xFF059BEE),
+                            unselectedIconColor = Color.Black,
+                            indicatorColor = Color.White
+                        )
                     )
                     NavigationBarItem(
-                        selected = isSelected === ROUTER.Notification.name,
+                        selected = isSelected == ROUTER.Notification.name,
                         onClick = {
                             isSelected = ROUTER.Notification.name
-                            navController.navigate(ROUTER.Notification.name) { popUpTo(0) }
+                            navController.navigate(ROUTER.Notification.name) {
+                                popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                            }
                         },
-                        icon = { Icon(painter = painterResource(id = R.drawable.notification), contentDescription = null, modifier = Modifier.size(25.dp, 25.dp)) },
-                        colors = NavigationBarItemDefaults.colors(selectedIconColor = Color(0xFF059BEE), unselectedIconColor = Color.Black, indicatorColor = Color(0xFFFFFFFF)),
+                        icon = { Icon(painter = painterResource(id = R.drawable.notification), contentDescription = null, modifier = Modifier.size(25.dp)) },
+                        colors = NavigationBarItemDefaults.colors(
+                            selectedIconColor = Color(0xFF059BEE),
+                            unselectedIconColor = Color.Black,
+                            indicatorColor = Color.White
+                        )
                     )
                 }
 
-                // Always show Search and Person
+                // Các mục luôn hiển thị: Search và Person
                 NavigationBarItem(
-                    selected = isSelected === ROUTER.search.name,
+                    selected = isSelected == ROUTER.search.name,
                     onClick = {
                         isSelected = ROUTER.search.name
-                        navController.navigate(ROUTER.search.name) { popUpTo(0) }
+                        navController.navigate(ROUTER.search.name) {
+                            popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                        }
                     },
-                    icon = { Icon(painter = painterResource(id = R.drawable.search_anh), contentDescription = null, modifier = Modifier.size(25.dp, 25.dp)) },
-                    colors = NavigationBarItemDefaults.colors(selectedIconColor = Color(0xFF059BEE), unselectedIconColor = Color.Black, indicatorColor = Color(0xFFFFFFFF)),
+                    icon = { Icon(painter = painterResource(id = R.drawable.search_anh), contentDescription = null, modifier = Modifier.size(25.dp)) },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = Color(0xFF059BEE),
+                        unselectedIconColor = Color.Black,
+                        indicatorColor = Color.White
+                    )
                 )
-
                 NavigationBarItem(
-                    selected = isSelected === ROUTER.person.name,
+                    selected = isSelected == ROUTER.person.name,
                     onClick = {
                         isSelected = ROUTER.person.name
-                        navController.navigate(ROUTER.person.name) { popUpTo(0) }
+                        navController.navigate(ROUTER.person.name) {
+                            popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                        }
                     },
-                    icon = { Icon(painter = painterResource(id = R.drawable.person), contentDescription = null, modifier = Modifier.size(25.dp, 25.dp)) },
-                    colors = NavigationBarItemDefaults.colors(selectedIconColor = Color(0xFF059BEE), unselectedIconColor = Color.Black, indicatorColor = Color(0xFFFFFFFF)),
+                    icon = { Icon(painter = painterResource(id = R.drawable.person), contentDescription = null, modifier = Modifier.size(25.dp)) },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = Color(0xFF059BEE),
+                        unselectedIconColor = Color.Black,
+                        indicatorColor = Color.White
+                    )
                 )
             }
         }
@@ -129,26 +162,38 @@ fun GetLayoutButtonBarNavigator(navHostController: NavHostController, userEmail:
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = Color.White)
+                .background(Color.White)
                 .padding(it)
         ) {
             Spacer(modifier = Modifier.height(1.dp))
+
+            // NavHost để quản lý các màn hình
             NavHost(
                 navController = navController,
                 startDestination = isSelected
             ) {
-                composable(ROUTER.home.name) { LayoutHomeScreen(navHostController, RetrofitService()) }
+                composable(ROUTER.home.name) {
+                    LayoutHomeScreen(navHostController, RetrofitService())
+                }
                 if (isAdmin) {
-                    composable(ROUTER.ADDPRODUCT.name) { LayoutAddProduct(navHostController, RetrofitService()) }
+                    composable(ROUTER.ADDPRODUCT.name) {
+                        LayoutAddProduct(navHostController, RetrofitService())
+                    }
+                } else {
+                    composable(ROUTER.favourite.name) {
+                        FavoritesScreen(navHostController)
+                    }
+                    composable(ROUTER.Notification.name) {
+                        NotificationScreen(navHostController)
+                    }
                 }
-                if (!isAdmin) {
-                    composable(ROUTER.favourite.name) { FavoritesScreen(navHostController) }
-                    composable(ROUTER.Notification.name) { NotificationScreen(navController) }
+                composable(ROUTER.search.name) {
+                    SearchScreen(navHostController, RetrofitService())
                 }
-                composable(ROUTER.search.name) { SearchScreen(navHostController, RetrofitService()) }
-                composable(ROUTER.person.name) { ProfileScreen(navHostController) }
+                composable(ROUTER.person.name) {
+                    ProfileScreen(navHostController)
+                }
             }
         }
     }
 }
-// edit
