@@ -14,12 +14,18 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.*
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -28,6 +34,8 @@ import com.example.fdev.R
 import com.example.fdev.View.FavoritesScreen
 import com.example.fdev.View.LayoutAddProduct
 import com.example.fdev.View.LayoutHomeScreen
+import com.example.fdev.View.LayoutPersonScreen
+import com.example.fdev.View.LayoutShoppingScreen
 import com.example.fdev.View.NotificationScreen
 import com.example.fdev.View.ProfileScreen
 import com.example.fdev.View.SearchScreen
@@ -52,6 +60,8 @@ fun GetLayoutButtonBarNavigator(navHostController: NavHostController) {
     val user = auth.currentUser
     val isAdmin = user?.displayName == "AdminFdev"
 
+
+
     Scaffold(
         bottomBar = {
             BottomAppBar(
@@ -74,56 +84,54 @@ fun GetLayoutButtonBarNavigator(navHostController: NavHostController) {
                     )
                 )
 
-                // Nếu là admin
-                if (isAdmin) {
+                // Favourite (chỉ hiển thị nếu không phải là admin)
+
                     NavigationBarItem(
-                        selected = isSelected == ROUTER.ADDPRODUCT.name,
-                        onClick = {
-                            isSelected = ROUTER.ADDPRODUCT.name
-                            navController.navigate(ROUTER.ADDPRODUCT.name) {
-                                popUpTo(navController.graph.startDestinationId) { inclusive = true }
-                            }
-                        },
-                        icon = { Icon(painter = painterResource(id = R.drawable.add_icon), contentDescription = null, modifier = Modifier.size(20.dp)) },
-                        colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = Color(0xFF059BEE),
-                            unselectedIconColor = Color.Black,
-                            indicatorColor = Color.White
-                        )
-                    )
-                } else {
-                    // Nếu không phải admin (người dùng thông thường)
-                    NavigationBarItem(
-                        selected = isSelected == ROUTER.favourite.name,
+                        selected = isSelected === ROUTER.favourite.name,
                         onClick = {
                             isSelected = ROUTER.favourite.name
                             navController.navigate(ROUTER.favourite.name) {
-                                popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                                popUpTo(0)
                             }
                         },
-                        icon = { Icon(painter = painterResource(id = R.drawable.favourite), contentDescription = null, modifier = Modifier.size(25.dp)) },
+                        icon = {
+                            Icon(
+                                painter = painterResource(id = R.drawable.favourite),
+                                contentDescription = null,
+                                modifier = Modifier.size(20.dp, 20.dp)
+                            )
+                        },
                         colors = NavigationBarItemDefaults.colors(
                             selectedIconColor = Color(0xFF059BEE),
                             unselectedIconColor = Color.Black,
-                            indicatorColor = Color.White
-                        )
+                            indicatorColor = Color(0xFFFFFFFF)
+                        ),
                     )
-                    NavigationBarItem(
-                        selected = isSelected == ROUTER.Notification.name,
-                        onClick = {
-                            isSelected = ROUTER.Notification.name
-                            navController.navigate(ROUTER.Notification.name) {
-                                popUpTo(navController.graph.startDestinationId) { inclusive = true }
-                            }
-                        },
-                        icon = { Icon(painter = painterResource(id = R.drawable.notification), contentDescription = null, modifier = Modifier.size(25.dp)) },
-                        colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = Color(0xFF059BEE),
-                            unselectedIconColor = Color.Black,
-                            indicatorColor = Color.White
+
+
+                // Shopping
+                NavigationBarItem(
+                    selected = isSelected === ROUTER.Notification.name,
+                    onClick = {
+                        isSelected = ROUTER.Notification.name
+                        navController.navigate(ROUTER.Notification.name) {
+                            popUpTo(0)
+                        }
+                    },
+                    icon = {
+                        Icon(
+                            painter = painterResource(id = R.drawable.notification),
+                            contentDescription = null,
+                            modifier = Modifier.size(25.dp, 25.dp)
                         )
-                    )
-                }
+                    },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = Color(0xFF059BEE),
+                        unselectedIconColor = Color.Black,
+                        indicatorColor = Color(0xFFFFFFFF),
+
+                        ),
+                )
 
                 // Các mục luôn hiển thị: Search và Person
                 NavigationBarItem(
@@ -141,6 +149,8 @@ fun GetLayoutButtonBarNavigator(navHostController: NavHostController) {
                         indicatorColor = Color.White
                     )
                 )
+
+                // Person
                 NavigationBarItem(
                     selected = isSelected == ROUTER.person.name,
                     onClick = {
@@ -175,17 +185,12 @@ fun GetLayoutButtonBarNavigator(navHostController: NavHostController) {
                 composable(ROUTER.home.name) {
                     LayoutHomeScreen(navHostController, RetrofitService())
                 }
-                if (isAdmin) {
-                    composable(ROUTER.ADDPRODUCT.name) {
-                        LayoutAddProduct(navHostController, RetrofitService())
-                    }
-                } else {
-                    composable(ROUTER.favourite.name) {
-                        FavoritesScreen(navHostController)
-                    }
-                    composable(ROUTER.Notification.name) {
-                        NotificationScreen(navHostController)
-                    }
+
+                composable(ROUTER.favourite.name) {
+                    FavoritesScreen(navController)
+                }
+                composable(ROUTER.Notification.name) {
+                    NotificationScreen(navController)
                 }
                 composable(ROUTER.search.name) {
                     SearchScreen(navHostController, RetrofitService())
