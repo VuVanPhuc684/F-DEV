@@ -188,7 +188,7 @@ fun GetLayoutButtonBarNavigator(navHostController: NavHostController) {
                     }
                 }
                 composable(ROUTER.search.name) {
-                    SearchScreen(navHostController, RetrofitService())
+                    SearchScreen(navHostController)
                 }
                 composable(ROUTER.person.name) {
                     ProfileScreen(navHostController)

@@ -65,7 +65,7 @@ fun LayoutHomeScreen(navController: NavHostController, retrofitService: Retrofit
     )
 
     // Sử dụng ProductViewModel và lấy sản phẩm từ API
-    val productViewModel: ProductViewModel = remember { ProductViewModel(retrofitService) }
+    val productViewModel: ProductViewModel = remember { ProductViewModel() }
     val products by productViewModel.productList
 
     // Gọi API khi màn hình vừa được hiển thị

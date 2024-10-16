@@ -175,6 +175,25 @@ fun LayoutProductScreen(navController: NavHostController, cartViewModel: CartVie
                     color = Color(0xff808080),
                     modifier = Modifier.padding(start = 10.dp)
                 )
+                Spacer(modifier = Modifier.weight(1f))
+                Text(
+                    text = "Xem đánh giá",
+                    fontSize = 17.sp,
+                    modifier = Modifier
+                        .padding(end = 1.dp)
+                        .clickable { navController.currentBackStackEntry?.savedStateHandle?.set("product", product)
+                            navController.navigate("REVIEW") }
+                )
+                Image(
+                    painterResource(id = R.drawable.right_black),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(20.dp)
+                        .padding(end = 10.dp)
+                        .clickable {navController.navigate("REVIEW") },
+                    contentScale = ContentScale.FillBounds,
+                )
+
             }
 
             // Product description

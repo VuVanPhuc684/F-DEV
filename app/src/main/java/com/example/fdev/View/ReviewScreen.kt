@@ -1,25 +1,15 @@
 package com.example.fdev.View
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -36,12 +26,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.rememberImagePainter
 import com.example.fdev.R
 import com.example.fdev.ViewModel.data.itemReview
+import com.example.fdev.model.Product
 import com.example.fdev.model.Review
 
 @Composable
 fun ReviewScreen(navController: NavController) {
+    val product = navController.previousBackStackEntry?.savedStateHandle?.get<Product>("product")
+    Log.e("","&"+product)
     Column(
         modifier = Modifier
             .padding(20.dp)
@@ -49,6 +43,7 @@ fun ReviewScreen(navController: NavController) {
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        // Hàng tiêu đề với nút quay lại
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -59,7 +54,7 @@ fun ReviewScreen(navController: NavController) {
                 contentDescription = null,
                 modifier = Modifier
                     .size(25.dp)
-                    .clickable { },
+                    .clickable { navController.popBackStack() },
                 contentScale = ContentScale.FillBounds,
             )
             Text(
@@ -68,13 +63,10 @@ fun ReviewScreen(navController: NavController) {
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Medium
             )
-            Text(
-                text = "",
-                modifier = Modifier.align(Alignment.CenterVertically),
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Medium
-            )
+            Spacer(modifier = Modifier.width(25.dp))
         }
+
+        // Hiển thị ảnh, tên, giá từ đối tượng Product
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -82,48 +74,34 @@ fun ReviewScreen(navController: NavController) {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.avatar_test),
-                contentDescription = null,
-                modifier = Modifier
-                    .size(100.dp)
-                    .clip(RoundedCornerShape(15.dp)),
-                contentScale = ContentScale.Crop
-            )
-            Column(
-                horizontalAlignment = Alignment.Start
-            ) {
-                Text(
-                    text = "Minimal Stand",
-                    fontSize = 20.sp,
-                    color = Color.Gray
+            product?.let {
+                Image(
+                    painter = rememberImagePainter(data = it.image),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(100.dp)
+                        .clip(RoundedCornerShape(15.dp)),
+                    contentScale = ContentScale.Crop
                 )
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
+                Column(
+                    horizontalAlignment = Alignment.Start
                 ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.star1),
-                        contentDescription = null,
-                        tint = Color.Yellow,
-                        modifier = Modifier.size(24.dp)
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = "4.5",
+                        text = it.name,
                         fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier
-                            .padding(10.dp)
+                        color = Color.Gray
+                    )
+                    Text(
+                        text = "$${it.price}",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold
                     )
                 }
-                Text(
-                    text = "10 reviews",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold
-                )
+                Spacer(modifier = Modifier.size(80.dp))
             }
-            Spacer(modifier = Modifier.size(80.dp))
         }
+
+        // Hiển thị danh sách đánh giá
         Box(
             modifier = Modifier
                 .weight(1f)
@@ -131,10 +109,12 @@ fun ReviewScreen(navController: NavController) {
         ) {
             LazyColumn {
                 items(itemReview.size) { index ->
-                    ReviewScreen(itemReview[index])
+                    ReviewItem(itemReview[index])
                 }
             }
         }
+
+        // Nút để viết đánh giá
         Button(
             onClick = { /* su kien onClick */ },
             colors = ButtonDefaults.buttonColors(
@@ -146,7 +126,7 @@ fun ReviewScreen(navController: NavController) {
             shape = RoundedCornerShape(8.dp)
         ) {
             Text(
-                text = "Write a review",
+                text = "Viết đánh giá",
                 textAlign = TextAlign.Center,
                 fontSize = 20.sp,
                 fontFamily = FontFamily.Default,
@@ -158,9 +138,8 @@ fun ReviewScreen(navController: NavController) {
     }
 }
 
-
 @Composable
-fun ReviewScreen(itemReview: Review) {
+fun ReviewItem(itemReview: Review) {
     Card(
         modifier = Modifier
             .padding(top = 20.dp, start = 10.dp, end = 10.dp)
@@ -215,10 +194,9 @@ fun ReviewScreen(itemReview: Review) {
     }
 }
 
-
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun PreviewReview() {
-    val navController = rememberNavController()
-    ReviewScreen(navController)
+    ReviewScreen(navController= rememberNavController())
 }
+

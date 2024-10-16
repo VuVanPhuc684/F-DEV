@@ -62,9 +62,6 @@ class MainActivity : ComponentActivity() {
             composable(Router.MAIL.name) {
                 LayoutMail(navController = navController)
             }
-            composable(Router.MYREVIEW.name) {
-                LayOutMyReview(navController = navController)
-            }
             composable(Router.CART.name) {
                 CartScreen(navController = navController, cartViewModel = cartViewModel)
             }
@@ -75,7 +72,7 @@ class MainActivity : ComponentActivity() {
                 FavoritesScreen(navController = navController)
             }
             composable(Router.SEARCH.name) {
-                SearchScreen(navController = navController, retrofitService = retrofitService)
+                SearchScreen(navController = navController)
             }
             composable(Router.NOTIFICATIONS.name) {
                 NotificationScreen(navController = navController)
@@ -108,7 +105,6 @@ class MainActivity : ComponentActivity() {
         HELP,
         CONTACT,
         MAIL,
-        MYREVIEW,
         CART,
         CHECKOUT,
         FAVORITES,

@@ -45,7 +45,7 @@ fun AccountsScreen() {
 fun LayoutAccounts(navController: NavHostController) {
 
     val painter0: Painter = painterResource(id = R.drawable.back)
-    val painter1: Painter = painterResource(id = R.drawable.user)
+    val painter1: Painter = painterResource(id = R.drawable.admin)
     val painter2: Painter = painterResource(id = R.drawable.log_out)
 
     val scrollState = rememberScrollState()
