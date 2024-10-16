@@ -69,7 +69,9 @@ fun ProfileScreen(navController: NavController) {
                 contentDescription = null,
                 modifier = Modifier
                     .size(25.dp)
-                    .clickable { },
+                    .clickable {
+                               navController.navigate("LOGIN")
+                    },
                 contentScale = ContentScale.FillBounds
             )
         }

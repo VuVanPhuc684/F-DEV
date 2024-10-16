@@ -90,4 +90,5 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     // firebase authen
     implementation("com.google.firebase:firebase-auth")
+
 }

@@ -1,6 +1,7 @@
 
 package com.example.fdev.View
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -23,6 +24,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.fdev.R
@@ -32,10 +34,12 @@ import com.google.firebase.auth.FirebaseAuth
 fun LayoutLoginScreen(navController: NavHostController) {
     val context = LocalContext.current
     val auth = FirebaseAuth.getInstance()
-
     var isShowPass by remember { mutableStateOf(false) }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+
+
+
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -187,18 +191,20 @@ fun LayoutLoginScreen(navController: NavHostController) {
                                     } else if (password.isBlank()) {
                                         Toast.makeText(context, "Mật khẩu không được để trống", Toast.LENGTH_LONG).show()
                                     } else {
-                                        auth.signInWithEmailAndPassword(email, password)
-                                            .addOnCompleteListener { task ->
-                                                if (task.isSuccessful) {
-                                                    val user = auth.currentUser
-                                                    val name = user?.displayName
-                                                    Toast.makeText(context, "Chào mừng, $name!", Toast.LENGTH_LONG).show()
-                                                    navController.navigate("HOME")
-                                                } else {
-                                                    Toast.makeText(context, "Đăng nhập thất bại: ${task.exception?.message}", Toast.LENGTH_LONG).show()
+
+                                            // Nếu không phải admin, tiến hành đăng nhập với Firebase
+                                            auth.signInWithEmailAndPassword(email, password)
+                                                .addOnCompleteListener { task ->
+                                                    if (task.isSuccessful) {
+                                                        val user = auth.currentUser
+                                                        val name = user?.displayName ?: "Người dùng"
+                                                        Toast.makeText(context, "Chào mừng, $name!", Toast.LENGTH_LONG).show()
+                                                        navController.navigate("HOME") // Điều hướng đến màn hình của User
+                                                    } else {
+                                                        Toast.makeText(context, "Đăng nhập thất bại: ${task.exception?.message}", Toast.LENGTH_LONG).show()
+                                                    }
                                                 }
-                                            }
-                                    }
+                                        }
                                 },
                                 modifier = Modifier.size(290.dp, 50.dp),
                                 colors = ButtonDefaults.buttonColors(

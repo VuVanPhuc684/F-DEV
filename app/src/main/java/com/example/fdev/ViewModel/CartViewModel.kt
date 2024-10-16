@@ -1,4 +1,6 @@
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fdev.ViewModel.NetWork.ApiService
@@ -9,8 +11,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import com.google.firebase.auth.FirebaseAuth
 
-class CartViewModel(private val apiService: ApiService) : ViewModel() {
-
+class CartViewModel() : ViewModel() {
+    private val apiService = RetrofitService().fdevApiService
     private val _cartItems = MutableStateFlow<List<CartItem>>(emptyList())
     val cartItems: StateFlow<List<CartItem>> = _cartItems
 
@@ -71,17 +73,22 @@ class CartViewModel(private val apiService: ApiService) : ViewModel() {
         }
     }
 
+
+
     // Xóa sản phẩm khỏi giỏ hàng và cập nhật UI
-    fun removeFromCart(productId: String) {
+    // Xóa sản phẩm khỏi giỏ hàng và cập nhật UI
+    fun removeFromCart(productName: String): Boolean {
         val currentUser = FirebaseAuth.getInstance().currentUser
         val userName = currentUser?.displayName ?: ""
 
         if (userName.isNotBlank()) {
+            var isRemoved = false  // Biến để kiểm tra xem sản phẩm có được xóa hay không
             viewModelScope.launch {
                 try {
-                    val response = apiService.removeFromCart(userName, productId)
+                    val response = apiService.removeFromCart(userName, productName)
                     if (response.isSuccessful) {
-                        _cartItems.value = _cartItems.value.filter { it.product != productId }
+                        _cartItems.value = _cartItems.value.filter { it.name != productName }
+                        isRemoved = true  // Đánh dấu là xóa thành công
                     } else {
                         Log.e("CartViewModel", "Error removing from cart: ${response.code()} - ${response.message()}")
                     }
@@ -89,10 +96,19 @@ class CartViewModel(private val apiService: ApiService) : ViewModel() {
                     Log.e("CartViewModel", "API call failed: ${e.message}", e)
                 }
             }
+            return isRemoved
         }
+        return false
+    }
+    // Tính tổng giá trị giỏ hàng
+
+    private val _totalPrice = MutableLiveData<Double>()
+    val totalPrice: LiveData<Double> = _totalPrice
+
+    fun updateTotalPrice(newPrice: Double) {
+        _totalPrice.value = newPrice
     }
 
-    // Tính tổng giá trị giỏ hàng
     fun getTotalPrice(): Double {
         return _cartItems.value.sumOf { it.price.toDouble() }
     }

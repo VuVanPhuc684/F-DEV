@@ -3,7 +3,7 @@ package com.example.fdev.model
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
-// Data class cho response từ server
+// Data class cho phản hồi sản phẩm
 data class ProductResponse(
     @SerializedName("_id") val id: String,
     @SerializedName("name") val name: String,
@@ -12,6 +12,7 @@ data class ProductResponse(
     @SerializedName("image") val image: String,
     @SerializedName("type") val type: String,
 )
+
 // Data class cho request body gửi lên server
 data class ProductRequest(
     val id: String,

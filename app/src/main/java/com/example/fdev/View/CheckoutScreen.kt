@@ -1,5 +1,6 @@
 package com.example.fdev.View
 
+import CartViewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -26,6 +27,7 @@ import android.util.Log
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.fdev.R
 import com.example.fdev.ViewModel.NetWork.PaymentData
 import com.example.fdev.ViewModel.NetWork.PaymentResponse
@@ -36,8 +38,9 @@ import retrofit2.Response
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CheckoutScreen(navController: NavHostController) {
+fun CheckoutScreen(navController: NavHostController,totalPrice: String) {
     var paymentMethods by remember { mutableStateOf(listOf<PaymentData>()) }
+
 
     // API Call to fetch payment methods
     LaunchedEffect(Unit) {
@@ -139,7 +142,7 @@ fun CheckoutScreen(navController: NavHostController) {
             )
 
             // Order Summary Section
-            OrderSummary(total = 95.00, vat = 5.00)
+            OrderSummary(totalPrice = totalPrice)
 
             // Submit Order Button
             Spacer(modifier = Modifier.height(16.dp))
@@ -335,28 +338,14 @@ fun AddPaymentMethodButton(navController: NavHostController) {
 }
 
 @Composable
-fun OrderSummary(total: Double, vat: Double) {
+fun OrderSummary(totalPrice: String) {
     Surface(
         shape = RoundedCornerShape(12.dp),
         color = Color(0xFFF5F5F5),
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text("Order:", style = MaterialTheme.typography.bodySmall)
-                Text("$${total}", style = MaterialTheme.typography.bodySmall)
-            }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text("Vat:", style = MaterialTheme.typography.bodySmall)
-                Text("$${vat}", style = MaterialTheme.typography.bodySmall)
-            }
-            Spacer(modifier = Modifier.height(8.dp))
+
             Divider(color = Color.Gray, thickness = 1.dp)
             Spacer(modifier = Modifier.height(8.dp))
             Row(
@@ -364,7 +353,7 @@ fun OrderSummary(total: Double, vat: Double) {
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text("Total:", style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold))
-                Text("$${total + vat}", style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold))
+                Text("$$totalPrice", style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold))
             }
         }
     }
@@ -373,5 +362,5 @@ fun OrderSummary(total: Double, vat: Double) {
 @Preview(showBackground = true)
 @Composable
 fun CheckoutScreenPreview() {
-    CheckoutScreen(navController = rememberNavController())
+    CheckoutScreen(navController = rememberNavController(), totalPrice = "100.00")
 }

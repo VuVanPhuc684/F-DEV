@@ -1,6 +1,7 @@
 package com.example.fdev.navigator
 
 import RetrofitService
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -55,6 +56,8 @@ fun GetLayoutButtonBarNavigator(navHostController: NavHostController) {
     }
     val navController = rememberNavController()
 
+
+
     Scaffold(
         bottomBar = {
             BottomAppBar(
@@ -85,29 +88,30 @@ fun GetLayoutButtonBarNavigator(navHostController: NavHostController) {
                         ),
                 )
 
-                // Favourite
-                NavigationBarItem(
-                    selected = isSelected === ROUTER.favourite.name,
-                    onClick = {
-                        isSelected = ROUTER.favourite.name
-                        navController.navigate(ROUTER.favourite.name) {
-                            popUpTo(0)
-                        }
-                    },
-                    icon = {
-                        Icon(
-                            painter = painterResource(id = R.drawable.favourite),
-                            contentDescription = null,
-                            modifier = Modifier.size(20.dp, 20.dp)
-                        )
-                    },
-                    colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = Color(0xFF059BEE),
-                        unselectedIconColor = Color.Black,
-                        indicatorColor = Color(0xFFFFFFFF)
+                // Favourite (chỉ hiển thị nếu không phải là admin)
 
-                    ),
-                )
+                    NavigationBarItem(
+                        selected = isSelected === ROUTER.favourite.name,
+                        onClick = {
+                            isSelected = ROUTER.favourite.name
+                            navController.navigate(ROUTER.favourite.name) {
+                                popUpTo(0)
+                            }
+                        },
+                        icon = {
+                            Icon(
+                                painter = painterResource(id = R.drawable.favourite),
+                                contentDescription = null,
+                                modifier = Modifier.size(20.dp, 20.dp)
+                            )
+                        },
+                        colors = NavigationBarItemDefaults.colors(
+                            selectedIconColor = Color(0xFF059BEE),
+                            unselectedIconColor = Color.Black,
+                            indicatorColor = Color(0xFFFFFFFF)
+                        ),
+                    )
+
 
                 // Shopping
                 NavigationBarItem(
@@ -199,8 +203,10 @@ fun GetLayoutButtonBarNavigator(navHostController: NavHostController) {
                 composable(ROUTER.home.name) {
                     LayoutHomeScreen(navHostController,retrofitService = RetrofitService())
                 }
+
                 composable(ROUTER.favourite.name) {
-                    FavoritesScreen(navHostController) }
+                    FavoritesScreen(navController)
+                }
                 composable(ROUTER.Notification.name) {
                     NotificationScreen(navController)
                 }
