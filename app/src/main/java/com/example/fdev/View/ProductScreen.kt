@@ -212,23 +212,23 @@ fun LayoutProductScreen(navController: NavHostController) {
                 }
             }
 
-
-            Text(
-                text = "Minimal Stand is made of by natural wood. The design that is " +
-                        "very simple and minimal. This is truly one of the best furniture's in any family for now. With 3 different colors, you can easily select the best match for your home. ",
-                modifier = Modifier.padding(top = 20.dp),
-                textAlign = TextAlign.Justify,
-                fontSize = 17.sp,
-                color = Color(0xff606060),
-                lineHeight = 22.sp,
-                fontFamily = FontFamily.Serif
-            )
+            product?.let {
+                Text(
+                    text = "${it.description}",
+                    modifier = Modifier.padding(top = 20.dp),
+                    textAlign = TextAlign.Justify,
+                    fontSize = 17.sp,
+                    color = Color(0xff606060),
+                    lineHeight = 22.sp,
+                    fontFamily = FontFamily.Serif
+                )
+            }
 
             Row(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(top = 50.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 IconButton(
                     onClick = { /*TODO*/ },

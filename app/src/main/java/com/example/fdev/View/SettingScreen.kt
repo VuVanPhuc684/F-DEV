@@ -1,5 +1,6 @@
 package com.example.fdev.View
 
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -35,6 +36,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.fdev.R
+import com.google.firebase.auth.FirebaseAuth
+
 
 @Composable
 @Preview(showBackground = true, showSystemUi = true)
@@ -42,17 +45,21 @@ fun SettingScreen() {
     LayoutSetting(navController = rememberNavController())
 }
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LayoutSetting(navController: NavHostController) {
 
     val painter0: Painter = painterResource(id = R.drawable.back)
-    val painter1: Painter = painterResource(id = R.drawable.user)
+    val painter1: Painter = painterResource(id = R.drawable.admin)
     val painter2: Painter = painterResource(id = R.drawable.edit)
     val painter3: Painter = painterResource(id = R.drawable.next)
 
-    var Name by remember { mutableStateOf("") }
-    var Email by remember { mutableStateOf("") }
+    val auth = FirebaseAuth.getInstance()
+    val currentUser = auth.currentUser
+
+    var name by remember { mutableStateOf(currentUser?.displayName ?: "") }
+    var email by remember { mutableStateOf(currentUser?.email ?: "") }
     var PassWord by remember { mutableStateOf("") }
     var promotionsEnabled by remember { mutableStateOf(false) }
     var newProductsEnabled by remember { mutableStateOf(false) }
@@ -121,241 +128,144 @@ fun LayoutSetting(navController: NavHostController) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 4.dp)
-        ) {
+        ) {// Tên (pre-filled from Firebase)
             OutlinedTextField(
-                value = Name,
-                onValueChange = { Name = it },
+                value = name,
+                onValueChange = { name = it },
                 label = { Text("Tên") },
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(Color.White, RoundedCornerShape(size = 8.dp))
-                    .border(
-                        width = 1.dp,
-                        color = Color(0xFF909191),
-                        shape = RoundedCornerShape(size = 8.dp)
-                    ),
+                    .border(1.dp, Color(0xFF909191), RoundedCornerShape(size = 8.dp)),
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     focusedBorderColor = Color.Transparent,
                     unfocusedBorderColor = Color.Transparent,
                     focusedLabelColor = Color.Black,
                     unfocusedLabelColor = Color.Gray,
                 ),
-                shape = RoundedCornerShape(size = 8.dp),
+                shape = RoundedCornerShape(8.dp),
                 textStyle = TextStyle(
                     fontFamily = FontFamily.Serif
                 )
             )
-        }
-        Spacer(modifier = Modifier.height(20.dp))
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 4.dp)
-        ) {
+            Spacer(modifier = Modifier.height(20.dp))
+
+            // Email (pre-filled from Firebase)
             OutlinedTextField(
-                value = Email,
-                onValueChange = { Email = it },
+                value = email,
+                onValueChange = { email = it },
                 label = { Text("Email") },
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(Color.White, RoundedCornerShape(size = 8.dp))
-                    .border(
-                        width = 1.dp,
-                        color = Color(0xFF909191),
-                        shape = RoundedCornerShape(size = 8.dp)
-                    ),
+                    .border(1.dp, Color(0xFF909191), RoundedCornerShape(size = 8.dp)),
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     focusedBorderColor = Color.Transparent,
                     unfocusedBorderColor = Color.Transparent,
                     focusedLabelColor = Color.Black,
                     unfocusedLabelColor = Color.Gray,
                 ),
-                shape = RoundedCornerShape(size = 8.dp),
+                shape = RoundedCornerShape(8.dp),
                 textStyle = TextStyle(
                     fontFamily = FontFamily.Serif
-                )
+                ),
+                enabled = false  // Disable this field so users cannot edit the email
             )
-        }
-        Spacer(modifier = Modifier.height(20.dp))
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
-        ) {
+            Spacer(modifier = Modifier.height(20.dp))
             Text(
-                text = "Mật khẩu",
+                text = "Thông báo",
                 style = TextStyle(
                     fontSize = 20.sp,
                     color = Color(0xFF909191)
                 )
             )
-            Image(
-                painter = painter2,
-                contentDescription = null,
-                modifier = Modifier
-                    .width(30.dp)
-                    .height(30.dp)
-                    .clip(CircleShape)
-            )
-        }
-        Spacer(modifier = Modifier.height(20.dp))
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 4.dp)
-        ) {
-            OutlinedTextField(
-                value = PassWord,
-                onValueChange = { PassWord = it },
-                label = { Text("Mật khẩu") },
+            Spacer(modifier = Modifier.height(20.dp))
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color.White, RoundedCornerShape(size = 8.dp))
-                    .border(
-                        width = 1.dp,
+                    .height(70.dp)
+                    .background(color = Color(0xFFe7e7e7))
+                    .padding(horizontal = 16.dp)
+            ) {
+                Text(
+                    text = "Khuyến mãi",
+                    style = TextStyle(
+                        fontSize = 20.sp,
                         color = Color(0xFF909191),
-                        shape = RoundedCornerShape(size = 8.dp)
                     ),
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = Color.Transparent,
-                    unfocusedBorderColor = Color.Transparent,
-                    focusedLabelColor = Color.Black,
-                    unfocusedLabelColor = Color.Gray,
-                ),
-                shape = RoundedCornerShape(size = 8.dp),
-                textStyle = TextStyle(
-                    fontFamily = FontFamily.Serif
+                    modifier = Modifier.weight(1f)
                 )
-            )
-        }
-
-        Spacer(modifier = Modifier.height(20.dp))
-        Text(
-            text = "Thông báo",
-            style = TextStyle(
-                fontSize = 20.sp,
-                color = Color(0xFF909191)
-            )
-        )
-        Spacer(modifier = Modifier.height(20.dp))
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(70.dp)
-                .background(color = Color(0xFFe7e7e7))
-                .padding(horizontal = 16.dp)
-        ) {
-            Text(
-                text = "Khuyến mãi",
-                style = TextStyle(
-                    fontSize = 20.sp,
-                    color = Color(0xFF909191),
-                ),
-                modifier = Modifier.weight(1f)
-            )
-            Switch(
-                checked = promotionsEnabled,
-                onCheckedChange = { isChecked ->
-                    promotionsEnabled = isChecked
-                },
+                Switch(
+                    checked = promotionsEnabled,
+                    onCheckedChange = { isChecked ->
+                        promotionsEnabled = isChecked
+                    },
+                    modifier = Modifier
+                        .width(60.dp)
+                        .height(30.dp)
+                )
+            }
+            Spacer(modifier = Modifier.height(20.dp))
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .width(60.dp)
-                    .height(30.dp)
-            )
-        }
-        Spacer(modifier = Modifier.height(20.dp))
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(70.dp)
-                .background(color = Color(0xFFe7e7e7))
-                .padding(horizontal = 16.dp)
-        ) {
-            Text(
-                text = "Sản phẩm mới",
-                style = TextStyle(
-                    fontSize = 20.sp,
-                    color = Color(0xFF909191),
-                ),
-                modifier = Modifier.weight(1f)
-            )
-            Switch(
-                checked = newProductsEnabled,
-                onCheckedChange = { isChecked ->
-                    newProductsEnabled = isChecked
-                },
+                    .fillMaxWidth()
+                    .height(70.dp)
+                    .background(color = Color(0xFFe7e7e7))
+                    .padding(horizontal = 16.dp)
+            ) {
+                Text(
+                    text = "Sản phẩm mới",
+                    style = TextStyle(
+                        fontSize = 20.sp,
+                        color = Color(0xFF909191),
+                    ),
+                    modifier = Modifier.weight(1f)
+                )
+                Switch(
+                    checked = newProductsEnabled,
+                    onCheckedChange = { isChecked ->
+                        newProductsEnabled = isChecked
+                    },
+                    modifier = Modifier
+                        .width(60.dp)
+                        .height(30.dp)
+                )
+            }
+            Spacer(modifier = Modifier.height(20.dp))
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .width(60.dp)
-                    .height(30.dp)
-            )
-        }
-        Spacer(modifier = Modifier.height(20.dp))
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(70.dp)
-                .background(color = Color(0xFFe7e7e7))
-                .padding(horizontal = 16.dp)
-        ) {
-            Text(
-                text = "Cập nhật nội dung",
-                style = TextStyle(
-                    fontSize = 20.sp,
-                    color = Color(0xFF909191),
-                ),
-                modifier = Modifier.weight(1f)
-            )
-            Switch(
-                checked = contentUpdatesEnabled,
-                onCheckedChange = { isChecked ->
-                    contentUpdatesEnabled = isChecked
-                },
-                modifier = Modifier
-                    .width(60.dp)
-                    .height(30.dp)
-            )
-        }
-        Spacer(modifier = Modifier.height(20.dp))
-        Text(
-            text = "Help Center",
-            style = TextStyle(
-                fontSize = 20.sp,
-                color = Color(0xFF909191)
-            )
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(70.dp)
-                .background(color = Color(0xFFe7e7e7))
-                .padding(horizontal = 16.dp)
-                .clickable {
-                    navController.navigate("HELP")
-                }
-        ) {
-            Text(
-                text = "FAQ",
-                style = TextStyle(
-                    fontSize = 20.sp,
-                    color = Color(0xFF909191),
-                ),
-                modifier = Modifier.weight(1f)
-            )
-            Image(
-                painter = painter3,
-                contentDescription = null,
-                modifier = Modifier
-                    .width(30.dp)
-                    .height(30.dp)
-                    .clip(CircleShape)
-
-            )
+                    .fillMaxWidth()
+                    .height(70.dp)
+                    .background(color = Color(0xFFe7e7e7))
+                    .padding(horizontal = 16.dp)
+            ) {
+                Text(
+                    text = "Cập nhật nội dung",
+                    style = TextStyle(
+                        fontSize = 20.sp,
+                        color = Color(0xFF909191),
+                    ),
+                    modifier = Modifier.weight(1f)
+                )
+                Switch(
+                    checked = contentUpdatesEnabled,
+                    onCheckedChange = { isChecked ->
+                        contentUpdatesEnabled = isChecked
+                    },
+                    modifier = Modifier
+                        .width(60.dp)
+                        .height(30.dp)
+                )
+            }
+            Spacer(modifier = Modifier.height(20.dp))
         }
     }
 }
+
+
+// ở màn hình này phúc đã bỏ phần hiển thị password do tính năng bảo mật của firebase
+// Ok Shop Nhé
 
