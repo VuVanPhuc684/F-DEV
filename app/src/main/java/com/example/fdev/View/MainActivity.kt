@@ -50,6 +50,8 @@ class MainActivity : ComponentActivity() {
         REVIEW,
         LANGUAGE,
         ACCOUNTS,
+        INVOICEDETAIL,
+
     }
 
     @Composable
@@ -123,6 +125,31 @@ class MainActivity : ComponentActivity() {
             composable(Router.ADDPAYMENTMETHOD.name) {
                 AddPaymentMethod(navController = navController)
             }
+            composable(Router.INVOICEDETAIL.name) {
+                val sampleProducts = listOf(
+                    Product(imageUrl = "https://via.placeholder.com/150", name = "Minimal Stand", price = "$15.0"),
+                    Product(imageUrl = "https://via.placeholder.com/150", name = "Franz fz", price = "$30.0"),
+                    Product(imageUrl = "https://via.placeholder.com/150", name = "Finlay Studio", price = "$20.0")
+                )
+
+                // Lấy tên người dùng từ Firebase
+                val userName = getUserName() ?: "Unknown User" // Nếu không có tên, hiển thị "Unknown User"
+
+                // Chuyển đến màn hình InvoiceDetailScreen với dữ liệu người dùng
+                InvoiceDetailScreen(
+                    navController = navController,
+                    userName = userName,
+                    products = sampleProducts,
+                    totalAmount = "$1200000.0"
+                )
+            }
+            composable(Router.REVIEW.name) {
+                ReviewScreen(navController = navController)
+            }
+            composable(Router.ACCOUNTS.name) {
+                LayoutAccounts(navController = navController)
+            }
+
             composable(Router.REVIEW.name) {
                 ReviewScreen(navController = navController)
             }
@@ -130,5 +157,10 @@ class MainActivity : ComponentActivity() {
                 LayoutAccounts(navController = navController)
             }
         }
+    }
+    // Hàm lấy tên người dùng từ Firebase Authentication
+    fun getUserName(): String? {
+        val user = FirebaseAuth.getInstance().currentUser
+        return user?.displayName
     }
 }
