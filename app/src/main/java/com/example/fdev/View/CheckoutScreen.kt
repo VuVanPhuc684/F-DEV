@@ -1,29 +1,75 @@
 package com.example.fdev.View
 
-
+import CartViewModel
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import android.util.Log
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.fdev.R
+import com.example.fdev.ViewModel.NetWork.PaymentData
+import com.example.fdev.ViewModel.NetWork.PaymentResponse
+import com.example.fdev.ViewModel.NetWork.RetrofitInstance
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CheckoutScreen(navController: NavHostController) {
+fun CheckoutScreen(navController: NavHostController,totalPrice: String) {
+    var paymentMethods by remember { mutableStateOf(listOf<PaymentData>()) }
+
+
+    // API Call to fetch payment methods
+    LaunchedEffect(Unit) {
+        val call = RetrofitInstance.api.getPayments("12345")  // Thay thế bằng userId thực tế
+        call.enqueue(object : Callback<PaymentResponse> {
+            override fun onResponse(
+                call: Call<PaymentResponse>,
+                response: Response<PaymentResponse>
+            ) {
+                if (response.isSuccessful) {
+                    val fetchedPayments = response.body()
+                    if (fetchedPayments != null && fetchedPayments.data.isNotEmpty()) {
+                        paymentMethods = fetchedPayments.data // Lưu danh sách thẻ vào biến
+                        Log.d("CheckoutScreen", "Fetched payment methods: $paymentMethods")
+                    } else {
+                        Log.e("CheckoutScreen", "No payment methods found")
+                    }
+                } else {
+                    Log.e("CheckoutScreen", "Failed to fetch payment methods: ${response.message()}")
+                }
+            }
+
+            override fun onFailure(call: Call<PaymentResponse>, t: Throwable) {
+                Log.e("CheckoutScreen", "API call failed: ${t.message}")
+            }
+        })
+    }
+
+    // Scaffold layout with TopBar and LazyColumn for payment methods
     Scaffold(
         topBar = {
             TopAppBar(
@@ -32,9 +78,7 @@ fun CheckoutScreen(navController: NavHostController) {
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        IconButton(onClick = {
-                            navController.popBackStack()
-                        }) {
+                        IconButton(onClick = { navController.popBackStack() }) {
                             Icon(
                                 imageVector = Icons.Default.ArrowBack,
                                 contentDescription = "Back"
@@ -61,15 +105,26 @@ fun CheckoutScreen(navController: NavHostController) {
                 .fillMaxSize()
                 .padding(innerPadding)
                 .padding(horizontal = 16.dp, vertical = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(20.dp) // Adjusted spacing for layout consistency
+            verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
             // Receiving Email Address Section
             SectionHeader("Receiving Email Address")
             EditableInfoCard(title = "Nguyen Minh Dang", subtitle = "ttwmobile@gmail.com")
 
             // Payment Method Section
-            SectionHeader("Payment")
-            PaymentMethodCard()
+            SectionHeader("Payment Methods")
+
+            // LazyColumn to display the list of payment methods
+            if (paymentMethods.isNotEmpty()) {
+                LazyColumn {
+                    items(paymentMethods) { paymentMethod ->
+                        PaymentMethodCard(paymentMethod)  // Truyền đối tượng PaymentData
+                    }
+                }
+            } else {
+                Text(text = "No payment methods available", color = Color.Gray) // Hiển thị thông báo nếu không có phương thức thanh toán
+            }
+
             AddPaymentMethodButton(navController = navController)
 
             // Note Section
@@ -87,7 +142,7 @@ fun CheckoutScreen(navController: NavHostController) {
             )
 
             // Order Summary Section
-            OrderSummary(total = 95.00, vat = 5.00)
+            OrderSummary(totalPrice = totalPrice)
 
             // Submit Order Button
             Spacer(modifier = Modifier.height(16.dp))
@@ -97,7 +152,7 @@ fun CheckoutScreen(navController: NavHostController) {
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(60.dp), // Increased height for better visual impact
+                    .height(60.dp),
                 shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
             ) {
@@ -115,18 +170,35 @@ fun SectionHeader(title: String) {
             fontSize = 16.sp,
             fontWeight = FontWeight.Bold
         ),
-        modifier = Modifier.padding(bottom = 8.dp) // Adjusted bottom padding to separate sections clearly
+        modifier = Modifier.padding(bottom = 8.dp)
     )
 }
 
 @Composable
 fun EditableInfoCard(title: String, subtitle: String) {
+    var showDialog by remember { mutableStateOf(false) }
+    var editableTitle by remember { mutableStateOf(title) }
+    var editableSubtitle by remember { mutableStateOf(subtitle) }
+
+    if (showDialog) {
+        CustomDialog(
+            title = editableTitle,
+            subtitle = editableSubtitle,
+            onDismiss = { showDialog = false },
+            onConfirm = { newTitle, newSubtitle ->
+                editableTitle = newTitle
+                editableSubtitle = newSubtitle
+                showDialog = false
+            }
+        )
+    }
+
     Surface(
         shape = RoundedCornerShape(12.dp),
         color = Color(0xFFF5F5F5),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(bottom = 8.dp) // Adjusted bottom padding for spacing
+            .padding(bottom = 8.dp)
     ) {
         Row(
             modifier = Modifier
@@ -136,13 +208,13 @@ fun EditableInfoCard(title: String, subtitle: String) {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Column {
-                Text(text = title, style = MaterialTheme.typography.bodyMedium)
+                Text(text = editableTitle, style = MaterialTheme.typography.bodyMedium)
                 Text(
-                    text = subtitle,
+                    text = editableSubtitle,
                     style = MaterialTheme.typography.bodySmall.copy(color = Color.Gray)
                 )
             }
-            IconButton(onClick = { /* Edit email address */ }) {
+            IconButton(onClick = { showDialog = true }) {
                 Icon(
                     imageVector = Icons.Default.Edit,
                     contentDescription = "Edit"
@@ -153,13 +225,53 @@ fun EditableInfoCard(title: String, subtitle: String) {
 }
 
 @Composable
-fun PaymentMethodCard() {
+fun CustomDialog(
+    title: String,
+    subtitle: String,
+    onDismiss: () -> Unit,
+    onConfirm: (String, String) -> Unit
+) {
+    var newTitle by remember { mutableStateOf(title) }
+    var newSubtitle by remember { mutableStateOf(subtitle) }
+
+    AlertDialog(
+        onDismissRequest = { onDismiss() },
+        title = { Text(text = "Edit Information") },
+        text = {
+            Column {
+                OutlinedTextField(
+                    value = newTitle,
+                    onValueChange = { newTitle = it },
+                    label = { Text("Title") }
+                )
+                OutlinedTextField(
+                    value = newSubtitle,
+                    onValueChange = { newSubtitle = it },
+                    label = { Text("Subtitle") }
+                )
+            }
+        },
+        confirmButton = {
+            Button(onClick = { onConfirm(newTitle, newSubtitle) }) {
+                Text("Confirm")
+            }
+        },
+        dismissButton = {
+            Button(onClick = { onDismiss() }) {
+                Text("Cancel")
+            }
+        }
+    )
+}
+
+@Composable
+fun PaymentMethodCard(paymentData: PaymentData) {
     Surface(
         shape = RoundedCornerShape(12.dp),
         color = Color(0xFFF5F5F5),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(bottom = 8.dp) // Adjusted bottom padding for spacing
+            .padding(bottom = 8.dp)
     ) {
         Row(
             modifier = Modifier
@@ -169,20 +281,40 @@ fun PaymentMethodCard() {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
+                // Box chứa logo thẻ
                 Box(
                     modifier = Modifier
                         .size(40.dp)
                         .background(Color.Gray, CircleShape)
                 ) {
-                    // Placeholder for payment icon
+                    // Placeholder cho logo thẻ
+                    val logo = when (paymentData.type) {
+                        "Visa" -> R.drawable.visa_logo
+                        "Mastercard" -> R.drawable.pain
+                        else -> R.drawable.visa_logo
+                    }
+                    Image(
+                        painter = painterResource(id = logo),
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxSize()
+                    )
                 }
+
                 Spacer(modifier = Modifier.width(8.dp))
-                Text(text = "**** **** **** 3947", style = MaterialTheme.typography.bodyMedium)
+
+                // Hiển thị số thẻ dạng ẩn
+                val maskedCardNumber = "**** **** **** ${paymentData.cardNumber.takeLast(4)}" // Hiển thị 4 số cuối từ API
+                Text(
+                    text = maskedCardNumber,
+                    style = MaterialTheme.typography.bodyMedium
+                )
             }
-            IconButton(onClick = { /* Edit payment method */ }) {
+
+            // Nút xóa thẻ
+            IconButton(onClick = { /* Xử lý chỉnh sửa hoặc xóa thẻ */ }) {
                 Icon(
-                    imageVector = Icons.Default.Edit,
-                    contentDescription = "Edit"
+                    imageVector = Icons.Default.Clear,
+                    contentDescription = "Remove"
                 )
             }
         }
@@ -197,7 +329,7 @@ fun AddPaymentMethodButton(navController: NavHostController) {
         },
         modifier = Modifier
             .fillMaxWidth()
-            .height(50.dp), // Adjusted height for visual consistency
+            .height(50.dp),
         shape = RoundedCornerShape(8.dp),
         colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
     ) {
@@ -206,28 +338,14 @@ fun AddPaymentMethodButton(navController: NavHostController) {
 }
 
 @Composable
-fun OrderSummary(total: Double, vat: Double) {
+fun OrderSummary(totalPrice: String) {
     Surface(
         shape = RoundedCornerShape(12.dp),
         color = Color(0xFFF5F5F5),
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text("Order:", style = MaterialTheme.typography.bodySmall)
-                Text("$${total}", style = MaterialTheme.typography.bodySmall)
-            }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text("Vat:", style = MaterialTheme.typography.bodySmall)
-                Text("$${vat}", style = MaterialTheme.typography.bodySmall)
-            }
-            Spacer(modifier = Modifier.height(8.dp))
+
             Divider(color = Color.Gray, thickness = 1.dp)
             Spacer(modifier = Modifier.height(8.dp))
             Row(
@@ -235,7 +353,7 @@ fun OrderSummary(total: Double, vat: Double) {
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text("Total:", style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold))
-                Text("$${total + vat}", style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold))
+                Text("$$totalPrice", style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold))
             }
         }
     }
@@ -244,5 +362,5 @@ fun OrderSummary(total: Double, vat: Double) {
 @Preview(showBackground = true)
 @Composable
 fun CheckoutScreenPreview() {
-    CheckoutScreen(navController = rememberNavController())
+    CheckoutScreen(navController = rememberNavController(), totalPrice = "100.00")
 }

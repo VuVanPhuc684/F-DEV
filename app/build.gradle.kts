@@ -64,6 +64,7 @@ dependencies {
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.firebase.auth)
+    implementation(libs.firebase.firestore.ktx)
     implementation(libs.places)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -74,7 +75,10 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.okhttp3:okhttp:4.9.1")
+    implementation("com.squareup.okhttp3:okhttp:4.9.1")
 
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
     // Gson Converter for Retrofit
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
@@ -87,4 +91,5 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     // firebase authen
     implementation("com.google.firebase:firebase-auth")
+
 }

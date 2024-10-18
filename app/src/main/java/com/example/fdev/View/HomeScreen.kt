@@ -44,8 +44,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberImagePainter
@@ -116,7 +114,9 @@ fun LayoutHomeScreen(navController: NavHostController, retrofitService: Retrofit
                 )
             }
 
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = {
+                navController.navigate("CART")
+            }) {
                 Icon(
                     painter = painterResource(id = R.drawable.shopping),
                     contentDescription = null,
@@ -233,7 +233,7 @@ fun ItemProduct(navController: NavHostController, model: Product) {
             color = Color(0xff606060)
         )
         Text(
-            text = model.price.toString(),
+            text = "$"+model.price.toString(),
             modifier = Modifier.padding(top = 5.dp),
             fontSize = 15.sp,
             fontFamily = FontFamily.Serif,

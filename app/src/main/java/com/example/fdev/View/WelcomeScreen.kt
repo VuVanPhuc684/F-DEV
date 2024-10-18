@@ -52,7 +52,7 @@ fun LayoutWelcome(navController: NavHostController) {
         modifier = Modifier.fillMaxSize(),
     ){
         Image(
-            painter = painterResource(id = R.drawable.backgroun_2),
+            painter = painterResource(id = R.drawable.nen),
             contentDescription = "",
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop)
@@ -72,7 +72,7 @@ fun LayoutWelcome(navController: NavHostController) {
             ) {
                 Text(text = "MAKE YOUR",
                     fontFamily = FontFamily.Serif,
-                    color = Color.Black,
+                    color = Color(0xffd86d42),
                     fontSize = 24.sp,
                     fontWeight = FontWeight(600)
                 )
@@ -81,7 +81,7 @@ fun LayoutWelcome(navController: NavHostController) {
 
                 Text(text = "HOME BEAUTYFUL",
                     fontFamily = FontFamily.Serif,
-                    color = Color(0xff303030),
+                    color = Color(0xffd86d42),
                     fontSize = 30.sp,
                     fontWeight = FontWeight(700)
                 )
@@ -90,7 +90,7 @@ fun LayoutWelcome(navController: NavHostController) {
 
                 Text(text = "The best simple place where you discover most wonderful furnitures and make your home beautiful",
                     fontFamily = FontFamily.Serif,
-                    color = Color(0xff303030),
+                    color = Color.Yellow,
                     fontSize = 14.sp,
                     lineHeight = 30.sp,
                     fontWeight = FontWeight(400),
@@ -110,7 +110,7 @@ fun LayoutWelcome(navController: NavHostController) {
                                  /*TODO*/ },
                     modifier = Modifier.size(160.dp,50.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xff242424)
+                        containerColor = Color(0xffd86d42)
                     ),
                     shape = RoundedCornerShape(8.dp)
                 ) {

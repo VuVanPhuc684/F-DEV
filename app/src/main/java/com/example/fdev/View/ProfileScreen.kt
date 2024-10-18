@@ -70,7 +70,7 @@ fun ProfileScreen(navController: NavController) {
                 contentDescription = null,
                 modifier = Modifier
                     .size(25.dp)
-                    .clickable { /* sự kiện onClick */ },
+                    .clickable { /* su kien onClick */ },
                 contentScale = ContentScale.FillBounds
             )
             Text(

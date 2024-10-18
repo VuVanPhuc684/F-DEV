@@ -1,6 +1,7 @@
 
 package com.example.fdev.View
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -23,6 +24,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.fdev.R
@@ -32,10 +34,12 @@ import com.google.firebase.auth.FirebaseAuth
 fun LayoutLoginScreen(navController: NavHostController) {
     val context = LocalContext.current
     val auth = FirebaseAuth.getInstance()
-
     var isShowPass by remember { mutableStateOf(false) }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+
+
+
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -54,10 +58,10 @@ fun LayoutLoginScreen(navController: NavHostController) {
                     modifier = Modifier
                         .weight(1f)
                         .height(1.dp)
-                        .background(color = Color(0xffBDBDBD))
+                        .background(color = Color(0xFFd86d42))
                 ) {}
                 Image(
-                    painter = painterResource(id = R.drawable.design),
+                    painter = painterResource(id = R.drawable.loogo),
                     contentDescription = "logo",
                     modifier = Modifier
                         .padding(start = 30.dp, end = 30.dp)
@@ -68,7 +72,7 @@ fun LayoutLoginScreen(navController: NavHostController) {
                     modifier = Modifier
                         .weight(1f)
                         .height(1.dp)
-                        .background(color = Color(0xffBDBDBD))
+                        .background(color = Color(0xFFd86d42))
                 ) {}
             }
             Column(
@@ -80,14 +84,14 @@ fun LayoutLoginScreen(navController: NavHostController) {
                     Text(
                         text = "Hello !",
                         fontFamily = FontFamily.Serif,
-                        color = Color(0xff909090),
+                        color = Color(0xFFC9AB9F),
                         fontWeight = FontWeight(500),
                         fontSize = 35.sp
                     )
                     Text(
                         text = "WELCOME BACK",
                         fontFamily = FontFamily.Serif,
-                        color = Color(0xff303030),
+                        color = Color(0xFFd86d42),
                         fontWeight = FontWeight(700),
                         fontSize = 35.sp
                     )
@@ -114,7 +118,7 @@ fun LayoutLoginScreen(navController: NavHostController) {
                         Column {
                             Text(
                                 text = "Email",
-                                color = Color(0xff909090),
+                                color = Color(0xFFd86d42),
                                 fontSize = 15.sp,
                                 fontFamily = FontFamily.Serif,
                                 modifier = Modifier.padding(bottom = 3.dp)
@@ -128,7 +132,7 @@ fun LayoutLoginScreen(navController: NavHostController) {
                                     unfocusedContainerColor = Color.Transparent,
                                     unfocusedIndicatorColor = Color(0xffE0E0E0),
                                     focusedIndicatorColor = Color(0xffE0E0E0),
-                                    cursorColor = Color.Black
+                                    cursorColor = Color(0xFFd86d42)
                                 ),
                                 textStyle = TextStyle(
                                     fontFamily = FontFamily.Serif
@@ -139,7 +143,7 @@ fun LayoutLoginScreen(navController: NavHostController) {
                         Column {
                             Text(
                                 text = "Password",
-                                color = Color(0xff909090),
+                                color = Color(0xFFd86d42),
                                 fontSize = 15.sp,
                                 fontFamily = FontFamily.Serif,
                                 modifier = Modifier.padding(bottom = 3.dp)
@@ -153,7 +157,7 @@ fun LayoutLoginScreen(navController: NavHostController) {
                                     unfocusedContainerColor = Color.Transparent,
                                     unfocusedIndicatorColor = Color(0xffE0E0E0),
                                     focusedIndicatorColor = Color(0xffE0E0E0),
-                                    cursorColor = Color.Black
+                                    cursorColor = Color(0xFFd86d42)
                                 ),
                                 trailingIcon = {
                                     IconButton(onClick = {
@@ -187,27 +191,29 @@ fun LayoutLoginScreen(navController: NavHostController) {
                                     } else if (password.isBlank()) {
                                         Toast.makeText(context, "Mật khẩu không được để trống", Toast.LENGTH_LONG).show()
                                     } else {
-                                        auth.signInWithEmailAndPassword(email, password)
-                                            .addOnCompleteListener { task ->
-                                                if (task.isSuccessful) {
-                                                    val user = auth.currentUser
-                                                    val name = user?.displayName
-                                                    Toast.makeText(context, "Chào mừng, $name!", Toast.LENGTH_LONG).show()
-                                                    navController.navigate("HOME")
-                                                } else {
-                                                    Toast.makeText(context, "Đăng nhập thất bại: ${task.exception?.message}", Toast.LENGTH_LONG).show()
+
+                                            // Nếu không phải admin, tiến hành đăng nhập với Firebase
+                                            auth.signInWithEmailAndPassword(email, password)
+                                                .addOnCompleteListener { task ->
+                                                    if (task.isSuccessful) {
+                                                        val user = auth.currentUser
+                                                        val name = user?.displayName ?: "Người dùng"
+                                                        Toast.makeText(context, "Chào mừng, $name!", Toast.LENGTH_LONG).show()
+                                                        navController.navigate("HOME") // Điều hướng đến màn hình của User
+                                                    } else {
+                                                        Toast.makeText(context, "Đăng nhập thất bại: ${task.exception?.message}", Toast.LENGTH_LONG).show()
+                                                    }
                                                 }
-                                            }
-                                    }
+                                        }
                                 },
                                 modifier = Modifier.size(290.dp, 50.dp),
                                 colors = ButtonDefaults.buttonColors(
-                                    containerColor = Color(0xff242424)
+                                    containerColor = Color(0xFFd86d42)
                                 ),
                                 shape = RoundedCornerShape(8.dp)
                             ) {
                                 Text(
-                                    text = "Đăng nhập",
+                                    text = "Login",
                                     fontFamily = FontFamily.Serif,
                                     fontWeight = FontWeight(600)
                                 )
@@ -224,7 +230,7 @@ fun LayoutLoginScreen(navController: NavHostController) {
                                     ),
                                 fontSize = 18.sp,
                                 fontFamily = FontFamily.Serif,
-                                color = Color(0xff303030)
+                                color = Color(0xFFd86d42)
                             )
                         }
                     }
