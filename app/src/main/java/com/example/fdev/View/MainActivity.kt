@@ -4,6 +4,7 @@ import CartScreen
 import CartViewModel
 import LayoutProductScreen
 import RetrofitService
+import ReviewScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -32,7 +33,6 @@ class MainActivity : ComponentActivity() {
         val retrofitService = RetrofitService() // Initialize RetrofitService
         val apiService: ApiService = retrofitService.fdevApiService // Get ApiService
         val cartViewModel = CartViewModel(apiService) // Initialize CartViewModel
-        val userEmail = FirebaseAuth.getInstance().currentUser?.email // Assuming FirebaseAuth is used
 
         NavHost(navController = navController, startDestination = Router.WELCOME.name) {
             composable(Router.WELCOME.name) {
@@ -86,9 +86,11 @@ class MainActivity : ComponentActivity() {
             composable(Router.ADDPAYMENTMETHOD.name) {
                 AddPaymentMethod(navController = navController)
             }
-            composable(Router.REVIEW.name) {
-                ReviewScreen(navController = navController)
+            composable(Router.REVIEW.name + "/{productId}") { backStackEntry ->
+                val productId = backStackEntry.arguments?.getString("productId") ?: ""
+                ReviewScreen(navController = navController,productId=productId, productName = String())
             }
+
             composable(Router.ACCOUNTS.name) {
                 LayoutAccounts(navController = navController)
             }
@@ -114,7 +116,6 @@ class MainActivity : ComponentActivity() {
         PAYMENTMETHODSCREEN,
         ADDPAYMENTMETHOD,
         REVIEW,
-        LANGUAGE,
         ACCOUNTS,
     }
 }

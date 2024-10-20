@@ -181,8 +181,7 @@ fun LayoutProductScreen(navController: NavHostController, cartViewModel: CartVie
                     fontSize = 17.sp,
                     modifier = Modifier
                         .padding(end = 1.dp)
-                        .clickable { navController.currentBackStackEntry?.savedStateHandle?.set("product", product)
-                            navController.navigate("REVIEW") }
+                        .clickable { navController.navigate("REVIEW/${product?.id}") }
                 )
                 Image(
                     painterResource(id = R.drawable.right_black),
