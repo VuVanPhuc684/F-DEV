@@ -60,7 +60,7 @@ fun MailScreen() {
 fun LayoutMail(navController: NavHostController, contactViewModel: ContactViewModel = viewModel()) {
 
     val painter0: Painter = painterResource(id = R.drawable.back)
-    val painter1: Painter = painterResource(id = R.drawable.user)
+    val painter1: Painter = painterResource(id = R.drawable.admin)
 
     // Firebase Authentication instance to get the current user
     val auth = FirebaseAuth.getInstance()

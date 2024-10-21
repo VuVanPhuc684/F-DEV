@@ -48,7 +48,7 @@ fun SettingScreen() {
 fun LayoutSetting(navController: NavHostController) {
 
     val painter0: Painter = painterResource(id = R.drawable.back)
-    val painter1: Painter = painterResource(id = R.drawable.user)
+    val painter1: Painter = painterResource(id = R.drawable.admin)
     val painter2: Painter = painterResource(id = R.drawable.edit)
     val painter3: Painter = painterResource(id = R.drawable.next)
 
@@ -255,44 +255,6 @@ fun LayoutSetting(navController: NavHostController) {
                     modifier = Modifier
                         .width(60.dp)
                         .height(30.dp)
-                )
-            }
-            Spacer(modifier = Modifier.height(20.dp))
-            Text(
-                text = "Help Center",
-                style = TextStyle(
-                    fontSize = 20.sp,
-                    color = Color(0xFF909191)
-                )
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(70.dp)
-                    .background(color = Color(0xFFe7e7e7))
-                    .padding(horizontal = 16.dp)
-                    .clickable {
-                        navController.navigate("HELP")
-                    }
-            ) {
-                Text(
-                    text = "FAQ",
-                    style = TextStyle(
-                        fontSize = 20.sp,
-                        color = Color(0xFF909191),
-                    ),
-                    modifier = Modifier.weight(1f)
-                )
-                Image(
-                    painter = painter3,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .width(30.dp)
-                        .height(30.dp)
-                        .clip(CircleShape)
-
                 )
             }
         }

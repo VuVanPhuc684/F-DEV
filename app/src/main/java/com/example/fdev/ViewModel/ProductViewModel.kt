@@ -12,15 +12,15 @@ import kotlinx.coroutines.launch
 
 import retrofit2.Response
 
-class ProductViewModel(private val retrofitService: RetrofitService) : ViewModel() {
-
+class ProductViewModel() : ViewModel() {
+    private val apiService = RetrofitService().fdevApiService
     var productList = mutableStateOf<List<Product>>(listOf())
         private set
 
     fun fetchProductList() {
         viewModelScope.launch {
             try {
-                val response: Response<List<ProductResponse>> = retrofitService.fdevApiService.getProductList()
+                val response: Response<List<ProductResponse>> = apiService.getProductList()
                 if (response.isSuccessful) {
                     response.body()?.let { productResponses ->
                         productList.value = productResponses.map { it.toProduct() }

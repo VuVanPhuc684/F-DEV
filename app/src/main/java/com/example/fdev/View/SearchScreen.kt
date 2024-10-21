@@ -34,12 +34,12 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchScreen(navController: NavHostController, retrofitService: RetrofitService) {
+fun SearchScreen(navController: NavHostController) {
     var searchQuery by remember { mutableStateOf(TextFieldValue("")) }
     var searchResults by remember { mutableStateOf(emptyList<Product>()) }
     var isLoading by remember { mutableStateOf(false) }
 
-    val productViewModel: ProductViewModel = remember { ProductViewModel(retrofitService) }
+    val productViewModel: ProductViewModel = remember { ProductViewModel() }
     val products by productViewModel.productList
 
     LaunchedEffect(Unit) {
@@ -174,5 +174,5 @@ fun SearchResultItem(item: Product) {
 @Preview(showBackground = true)
 @Composable
 fun SearchScreenPreview() {
-    SearchScreen(navController = rememberNavController(), retrofitService = RetrofitService())
+    SearchScreen(navController = rememberNavController())
 }

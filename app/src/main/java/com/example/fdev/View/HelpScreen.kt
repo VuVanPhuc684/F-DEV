@@ -47,10 +47,10 @@ fun HelpScreen() {
 fun LayoutHelp(navController: NavHostController) {
     val painter0: Painter = painterResource(id = R.drawable.banner)
     val painter1: Painter = painterResource(id = R.drawable.video)
-    val painter2: Painter = painterResource(id = R.drawable.user)
+    val painter2: Painter = painterResource(id = R.drawable.admin)
     val painter3: Painter = painterResource(id = R.drawable.chinhsua)
     val painter4: Painter = painterResource(id = R.drawable.dammay)
-    val painter5: Painter = painterResource(id = R.drawable.admin)
+    val painter5: Painter = painterResource(id = R.drawable.iconadmin)
     val painter6: Painter = painterResource(id = R.drawable.phattructiep)
     val painter7: Painter = painterResource(id = R.drawable.baomat)
     val painter8: Painter = painterResource(id = R.drawable.goi)
@@ -127,8 +127,6 @@ fun LayoutHelp(navController: NavHostController) {
                         shape = RoundedCornerShape(12.dp)
                     )
                     .clickable {
-                        Toast.makeText(context,"successfully moved to Myreview screen",Toast.LENGTH_SHORT).show()
-                        navController.navigate("MYREVIEW")
                     }
             ) {
                 Image(
