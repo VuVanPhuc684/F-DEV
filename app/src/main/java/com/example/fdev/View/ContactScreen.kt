@@ -51,7 +51,7 @@ fun ContactScreen() {
 fun LayoutContact(navController: NavHostController) {
 
     val painter0: Painter = painterResource(id = R.drawable.back)
-    val painter1: Painter = painterResource(id = R.drawable.admin)
+    val painter1: Painter = painterResource(id = R.drawable.iconadmin)
     val painter2: Painter = painterResource(id = R.drawable.phone)
     val painter3: Painter = painterResource(id = R.drawable.mail)
     val painter4: Painter = painterResource(id = R.drawable.hom)

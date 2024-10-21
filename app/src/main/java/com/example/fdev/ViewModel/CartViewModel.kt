@@ -113,4 +113,3 @@ class CartViewModel() : ViewModel() {
         return _cartItems.value.sumOf { it.price.toDouble() }
     }
 }
-

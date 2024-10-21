@@ -4,61 +4,35 @@ import CartScreen
 import CartViewModel
 import LayoutProductScreen
 import RetrofitService
+import ReviewScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.example.fdev.ViewModel.NetWork.ApiService
 import com.example.fdev.navigator.GetLayoutButtonBarNavigator
+import com.example.fdev.R
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            GetlayoutNavigation()
+            MainNavigation()
         }
     }
 
-    enum class Router {
-        WELCOME,
-        SETTING,
-        HOME,
-        LOGIN,
-        REGISTER,
-        PRODUCT,
-        HELP,
-        CONTACT,
-        MAIL,
-        MYREVIEW,
-        CART,
-        CHECKOUT,
-        FAVORITES,
-        SEARCH,
-        NOTIFICATIONS,
-        CONGRATSSCREEN,
-        PAYMENTMETHODSCREEN,
-        ADDPAYMENTMETHOD,
-        REVIEW,
-        LANGUAGE,
-        ACCOUNTS,
-        WRITEREVIEW
-    }
-
     @Composable
-    fun GetlayoutNavigation() {
+    fun MainNavigation() {
         val navController = rememberNavController()
-        val retrofitService = RetrofitService() // Khởi tạo RetrofitService
-        val apiService: ApiService = retrofitService.fdevApiService // Lấy ApiService
-        // Giả sử bạn có email và mật khẩu của người dùng khi đăng nhập
-
-        // Kiểm tra trạng thái người dùng khi MainScreen được khởi tạo
+        val retrofitService = RetrofitService() // Initialize RetrofitService
+        val apiService: ApiService = retrofitService.fdevApiService // Get ApiService
+        val cartViewModel = CartViewModel(apiService) // Initialize CartViewModel
 
         NavHost(navController = navController, startDestination = Router.WELCOME.name) {
             composable(Router.WELCOME.name) {
@@ -77,10 +51,9 @@ class MainActivity : ComponentActivity() {
                 LayoutRegisterScreen(navController = navController)
             }
             composable(Router.PRODUCT.name) {
-                // Truyền cartViewModel vào LayoutProductScreen
-                LayoutProductScreen(navController = navController)
+                LayoutProductScreen(navController = navController, cartViewModel = cartViewModel)
             }
-            composable(Router.HELP.name){
+            composable(Router.HELP.name) {
                 LayoutHelp(navController = navController)
             }
             composable(Router.CONTACT.name) {
@@ -89,26 +62,17 @@ class MainActivity : ComponentActivity() {
             composable(Router.MAIL.name) {
                 LayoutMail(navController = navController)
             }
-            composable(Router.MYREVIEW.name){
-                MyReviewScreen(navController = navController)
-            }
             composable(Router.CART.name) {
-                CartScreen(navController = navController)
+                CartScreen(navController = navController, cartViewModel = cartViewModel)
             }
-            composable(
-                route = "${Router.CHECKOUT.name}/{totalPrice}",
-                arguments = listOf(navArgument("totalPrice") { type = NavType.StringType })
-            ) { backStackEntry ->
-                val totalPrice = backStackEntry.arguments?.getString("totalPrice") ?: "0.0"
-                CheckoutScreen(navController = navController, totalPrice = totalPrice)
+            composable(Router.CHECKOUT.name) {
+                CheckoutScreen(navController = navController)
             }
-
             composable(Router.FAVORITES.name) {
                 FavoritesScreen(navController = navController)
             }
-
             composable(Router.SEARCH.name) {
-                SearchScreen(navController = navController, retrofitService = retrofitService)
+                SearchScreen(navController = navController)
             }
             composable(Router.NOTIFICATIONS.name) {
                 NotificationScreen(navController = navController)
@@ -122,16 +86,36 @@ class MainActivity : ComponentActivity() {
             composable(Router.ADDPAYMENTMETHOD.name) {
                 AddPaymentMethod(navController = navController)
             }
-            composable(Router.REVIEW.name) {
-                ReviewScreen(navController = navController)
+            composable(Router.REVIEW.name + "/{productId}") { backStackEntry ->
+                val productId = backStackEntry.arguments?.getString("productId") ?: ""
+                ReviewScreen(navController = navController,productId=productId, productName = String())
             }
+
             composable(Router.ACCOUNTS.name) {
                 LayoutAccounts(navController = navController)
             }
-            composable(Router.WRITEREVIEW.name) {
-                WriteReviewScreen(navController = navController)
-            }
         }
     }
-}
 
+    enum class Router {
+        WELCOME,
+        SETTING,
+        HOME,
+        LOGIN,
+        REGISTER,
+        PRODUCT,
+        HELP,
+        CONTACT,
+        MAIL,
+        CART,
+        CHECKOUT,
+        FAVORITES,
+        SEARCH,
+        NOTIFICATIONS,
+        CONGRATSSCREEN,
+        PAYMENTMETHODSCREEN,
+        ADDPAYMENTMETHOD,
+        REVIEW,
+        ACCOUNTS,
+    }
+}

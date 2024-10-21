@@ -1,7 +1,4 @@
 package com.example.fdev.View
-
-
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -41,6 +38,8 @@ import com.example.fdev.model.Profile
 import com.google.firebase.auth.FirebaseAuth
 
 
+
+
 @Composable
 fun ProfileScreen(navController: NavController) {
     var showLogoutDialog = remember { mutableStateOf(false) } // Trạng thái hiển thị hộp thoại
@@ -48,9 +47,13 @@ fun ProfileScreen(navController: NavController) {
     val currentUser = auth.currentUser
 
 
+
+
     // Auto-fill user's name and email from Firebase
     var name by remember { mutableStateOf(currentUser?.displayName ?: "Unknown") }
     var email by remember { mutableStateOf(currentUser?.email ?: "Unknown") }
+
+
 
 
     Column(
@@ -70,7 +73,7 @@ fun ProfileScreen(navController: NavController) {
                 contentDescription = null,
                 modifier = Modifier
                     .size(25.dp)
-                    .clickable { /* su kien onClick */ },
+                    .clickable { /* sự kiện onClick */ },
                 contentScale = ContentScale.FillBounds
             )
             Text(
@@ -92,7 +95,11 @@ fun ProfileScreen(navController: NavController) {
         Spacer(modifier = Modifier.height(15.dp))
 
 
+
+
         TopNotifi(name = name, email = email)
+
+
 
 
         LazyColumn {
@@ -100,6 +107,8 @@ fun ProfileScreen(navController: NavController) {
                 ItemSeting1(setingItem[index], navController)
             }
         }
+
+
 
 
         // Hiển thị hộp thoại đăng xuất
@@ -116,6 +125,8 @@ fun ProfileScreen(navController: NavController) {
         }
     }
 }
+
+
 
 
 @Composable
@@ -162,10 +173,14 @@ fun TopNotifi(name: String, email: String) {
 }
 
 
+
+
 @Composable
 fun ItemSeting1(item: Profile, navController: NavController) {
 
+
     var showDialog by remember { mutableStateOf(false) }
+
 
     Card(
         modifier = Modifier
@@ -225,6 +240,8 @@ fun ItemSeting1(item: Profile, navController: NavController) {
         )
     }
 }
+
+
 
 
 @Composable

@@ -1,20 +1,13 @@
-package com.example.fdev.View
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,32 +17,39 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.fdev.R
 import com.example.fdev.ViewModel.ReviewViewModel
-import com.example.fdev.model.ReviewRespone
+import com.example.fdev.model.Product
+import com.example.fdev.model.ReviewRequest
+import com.example.fdev.model.ReviewResponse
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
-fun ReviewScreen(
-    navController: NavController,
-    reviewViewModel: ReviewViewModel = androidx.lifecycle.viewmodel.compose.viewModel() // ViewModel
-) {
-    // Lấy danh sách review từ ViewModel
-    val reviewList by reviewViewModel.reviewList.collectAsState()
-    val errorMessage by reviewViewModel.errorMessage.collectAsState()
+fun ReviewScreen(navController: NavController, productId: String, productName: String) {
+    val viewModel: ReviewViewModel = viewModel()
+    val reviews by viewModel.reviews.collectAsState(initial = emptyList())
+    var rating by remember { mutableStateOf(0) }
+    var comment by remember { mutableStateOf("") }
+
+    // Get current user from Firebase
+    val currentUser = FirebaseAuth.getInstance().currentUser
+    val userName = currentUser?.displayName ?: "Ẩn danh"
+
+    // Fetch reviews
+    viewModel.fetchReviews(productId)
 
     Column(
         modifier = Modifier
-            .padding(20.dp, top = 50.dp, bottom = 10.dp, end = 20.dp)
-            .fillMaxWidth(),
-        verticalArrangement = Arrangement.Top,
+            .padding(20.dp)
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
-
     ) {
+        // Header
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -60,7 +60,7 @@ fun ReviewScreen(
                 contentDescription = null,
                 modifier = Modifier
                     .size(25.dp)
-                    .clickable {navController.navigate("PRODUCT") },
+                    .clickable { navController.popBackStack() }, // Back action
                 contentScale = ContentScale.FillBounds,
             )
             Text(
@@ -77,175 +77,144 @@ fun ReviewScreen(
             )
         }
 
-        ProductInfo()
+        // Form viết đánh giá
+        Column(
+            modifier = Modifier
+                .padding(vertical = 16.dp)
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            // Tên sản phẩm và người dùng
+            Text(text = "Người dùng: $userName", fontSize = 16.sp)
 
-        Spacer(modifier = Modifier.height(20.dp))
-
-        // Hiển thị danh sách review hoặc thông báo lỗi
-        if (errorMessage == null) {
-            if (reviewList.isNotEmpty()) {
-                LazyColumn(
-                    modifier = Modifier.weight(1f)
-                ) {
-                    items(reviewList.size) { index ->
-                        ReviewItem(itemReview = reviewList[index])
+            // Rating stars (1 to 5)
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                for (i in 1..5) {
+                    IconButton(onClick = { rating = i }) {
+                        Icon(
+                            imageVector = Icons.Default.Star,
+                            contentDescription = null,
+                            tint = if (i <= rating) Color.Yellow else Color.Gray,
+                            modifier = Modifier.size(24.dp)
+                        )
                     }
                 }
-            } else {
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Ô nhập bình luận
+            OutlinedTextField(
+                value = comment,
+                onValueChange = { comment = it },
+                label = { Text(text = "Nhập bình luận của bạn") },
+                modifier = Modifier.fillMaxWidth().padding(16.dp)
+            )
+
+            // Nút "Viết đánh giá"
+            Button(
+                onClick = {
+                    if (rating in 1..5 && comment.isNotBlank()) {
+                        val reviewRequest = ReviewRequest(
+                            productId = productId,
+                            userName = userName,
+                            comment = comment,
+                            rating = rating
+                        )
+                        viewModel.postReview(reviewRequest)
+                    }
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFFd86d42)
+                ),
+                modifier = Modifier.fillMaxWidth().padding(16.dp),
+                shape = RoundedCornerShape(8.dp)
+            ) {
                 Text(
-                    text = "Không có đánh giá nào",
-                    fontSize = 18.sp,
+                    text = "Viết đánh giá",
+                    textAlign = TextAlign.Center,
+                    fontSize = 20.sp,
+                    fontFamily = FontFamily.Default,
+                    color = Color.White
+                )
+            }
+        }
+
+        // Danh sách các đánh giá
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+        ) {
+            LazyColumn {
+                items(reviews.size) { index ->
+                    ReviewItem(reviews[index])
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun ReviewItem(review: ReviewResponse) {
+    Card(
+        modifier = Modifier
+            .padding(top = 20.dp, start = 10.dp, end = 10.dp)
+            .clip(RoundedCornerShape(10.dp))
+            .fillMaxWidth()
+            .background(Color.LightGray)
+            .clickable { /* Handle click action */ }
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(10.dp)
+                .clip(RoundedCornerShape(15.dp)),
+            horizontalAlignment = Alignment.Start,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.avatar_test), // Use a dynamic avatar based on user
+                contentDescription = "avatar",
+                modifier = Modifier
+                    .size(50.dp)
+                    .clip(RoundedCornerShape(50.dp))
+            )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = review.userName,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = review.createdAt, // Assuming createdAt is in a suitable format
+                    fontSize = 12.sp,
                     color = Color.Gray
                 )
             }
-        } else {
-            Text(
-                text = errorMessage ?: "",
-                fontSize = 18.sp,
-                color = Color.Red
-            )
-        }
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        // Nút viết review ở dưới cùng
-        Button(
-            onClick = {
-                navController.navigate("WRITEREVIEW")
-            },
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            shape = RoundedCornerShape(8.dp)
-        ) {
-            Text(
-                text = "Viết đánh giá",
-                textAlign = TextAlign.Center,
-                fontSize = 20.sp,
-                fontFamily = FontFamily.Default,
-                color = Color.White,
-                modifier = Modifier.padding(vertical = 8.dp)
-            )
-        }
-    }
-
-    // Gọi API lấy review khi màn hình được mở
-    androidx.compose.runtime.LaunchedEffect(Unit) {
-        reviewViewModel.fetchReviews()
-    }
-}
-
-@Composable
-fun ProductInfo() {
-    // Phần thông tin sản phẩm: ảnh sản phẩm, điểm đánh giá, số lượng review
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.avatar_test),  // Ảnh sản phẩm
-            contentDescription = null,
-            modifier = Modifier
-                .padding(top = 20.dp)
-                .clip(RoundedCornerShape(15.dp)),
-            contentScale = ContentScale.Crop
-        )
-        Column(
-            modifier = Modifier
-                .padding(start = 16.dp, top = 10.dp),
-            horizontalAlignment = Alignment.Start
-        ) {
-            Text(
-                text = "Minimal Stand", // Tên sản phẩm
-                fontSize = 20.sp,
-                color = Color.Gray
-            )
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.star1),
-                    contentDescription = null,
-                    tint = Color.Yellow,
-                    modifier = Modifier.size(24.dp)
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
-                    text = "4.5",  // Điểm đánh giá trung bình
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-            Text(
-                text = "10 reviews",  // Số lượng review
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold
-            )
-        }
-    }
-}
-
-@Composable
-fun ReviewItem(itemReview: ReviewRespone) {
-    Card(
-        modifier = Modifier
-            .padding(top = 16.dp)
-            .clip(RoundedCornerShape(10.dp))
-            .fillMaxWidth()
-            .background(Color.White),
-    ) {
-        Column(
-            modifier = Modifier.padding(16.dp)
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.avatar_test),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(50.dp)
-                        .clip(CircleShape)
-                )
-                Spacer(modifier = Modifier.width(10.dp))
-                Column {
-                    Text(
-                        text = itemReview.userId,  // Tên người dùng
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = itemReview.time ?: "",  // Thời gian đánh giá
-                        fontSize = 14.sp,
-                        color = Color.Gray
-                    )
-                }
-            }
-            Spacer(modifier = Modifier.height(10.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                repeat(itemReview.rate) {
+            Row {
+                repeat(review.rating) {
                     Icon(
-                        painter = painterResource(id = R.drawable.star1),
+                        painter = painterResource(id = R.drawable.star1), // Replace with your star icon
                         contentDescription = null,
                         tint = Color.Yellow,
-                        modifier = Modifier.size(18.dp)
+                        modifier = Modifier.size(24.dp)
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = itemReview.comment,  // Nội dung bình luận
+                text = review.comment,
                 fontSize = 14.sp,
                 textAlign = TextAlign.Justify
             )
         }
     }
-}
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun PreviewReview() {
-    val navController = rememberNavController()
-    ReviewScreen(navController)
 }

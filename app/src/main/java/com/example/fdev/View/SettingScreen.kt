@@ -1,6 +1,5 @@
 package com.example.fdev.View
 
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -38,13 +37,11 @@ import androidx.navigation.compose.rememberNavController
 import com.example.fdev.R
 import com.google.firebase.auth.FirebaseAuth
 
-
 @Composable
 @Preview(showBackground = true, showSystemUi = true)
 fun SettingScreen() {
     LayoutSetting(navController = rememberNavController())
 }
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -260,12 +257,8 @@ fun LayoutSetting(navController: NavHostController) {
                         .height(30.dp)
                 )
             }
-            Spacer(modifier = Modifier.height(20.dp))
         }
     }
 }
 
-
 // ở màn hình này phúc đã bỏ phần hiển thị password do tính năng bảo mật của firebase
-// Ok Shop Nhé
-
