@@ -1,5 +1,6 @@
 package com.example.fdev.View
 
+
 import RetrofitService
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -50,8 +51,10 @@ import com.example.fdev.R
 import com.example.fdev.ViewModel.ProductViewModel
 import com.example.fdev.model.Product
 
+
 @Composable
 fun LayoutHomeScreen(navController: NavHostController, retrofitService: RetrofitService) {
+
 
     val scrollSate = rememberScrollState()
     var statusType by remember { mutableStateOf("Popular") }
@@ -64,14 +67,17 @@ fun LayoutHomeScreen(navController: NavHostController, retrofitService: Retrofit
         TypeProduct("Author", R.drawable.writer),
     )
 
+
     // Sử dụng ProductViewModel và lấy sản phẩm từ API
-    val productViewModel: ProductViewModel = remember { ProductViewModel() }
+    val productViewModel: ProductViewModel = remember { ProductViewModel(retrofitService) }
     val products by productViewModel.productList
+
 
     // Gọi API khi màn hình vừa được hiển thị
     LaunchedEffect(Unit) {
         productViewModel.fetchProductList()
     }
+
 
     Column(
         modifier = Modifier
@@ -95,6 +101,7 @@ fun LayoutHomeScreen(navController: NavHostController, retrofitService: Retrofit
                 )
             }
 
+
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -113,6 +120,7 @@ fun LayoutHomeScreen(navController: NavHostController, retrofitService: Retrofit
                 )
             }
 
+
             IconButton(onClick = {
                 navController.navigate("CART")
             }) {
@@ -124,6 +132,7 @@ fun LayoutHomeScreen(navController: NavHostController, retrofitService: Retrofit
                 )
             }
         }
+
 
         // Type
         Row(
@@ -173,6 +182,7 @@ fun LayoutHomeScreen(navController: NavHostController, retrofitService: Retrofit
             }
         }
 
+
         // ListProduct: Thay đổi để hiển thị sản phẩm từ API
         Column(
             modifier = Modifier
@@ -188,7 +198,10 @@ fun LayoutHomeScreen(navController: NavHostController, retrofitService: Retrofit
     }
 }
 
+
 class TypeProduct(var type: String, var icon: Int)
+
+
 
 
 @Composable
@@ -224,6 +237,7 @@ fun ItemProduct(navController: NavHostController, model: Product) {
             )
         }
 
+
         Text(
             text = model.name,
             modifier = Modifier.padding(top = 10.dp),
@@ -242,8 +256,10 @@ fun ItemProduct(navController: NavHostController, model: Product) {
     }
 }
 
+
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun HomeScreen() {
     LayoutHomeScreen(navController = rememberNavController(), retrofitService = RetrofitService())
 }
+

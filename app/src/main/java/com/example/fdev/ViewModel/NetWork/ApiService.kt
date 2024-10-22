@@ -37,10 +37,10 @@ interface ApiService {
     @POST("/contact/post-list-Contact")
     suspend fun createContact(@Body contact: ContactMailRequest): Response<ContactMailResponse>
 
-    @DELETE("/cart/remove-from-cart")
-    suspend fun removeFromCart(@Query("userName") userName: String, @Query("productId") productId: String): Response<CartResponse>
+    @DELETE("/cart/remove-from-cart/{userName}/{productName}")
+    suspend fun removeFromCart(@Path("userName") userName: String, @Path("productName") productName: String): Response<CartResponse>
 
-// hiển thị comment
+    // hiển thị comment
     @GET("/review/get-reviews/{productId}")
     suspend fun getReviews(@Path("productId") productId: String): Response<List<ReviewResponse>>
 

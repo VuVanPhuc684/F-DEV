@@ -17,8 +17,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.fdev.ViewModel.NetWork.ApiService
 import com.example.fdev.navigator.GetLayoutButtonBarNavigator
-import com.example.fdev.R
-import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,7 +32,6 @@ class MainActivity : ComponentActivity() {
         val navController = rememberNavController()
         val retrofitService = RetrofitService() // Initialize RetrofitService
         val apiService: ApiService = retrofitService.fdevApiService // Get ApiService
-        val cartViewModel = CartViewModel(apiService) // Initialize CartViewModel
 
         NavHost(navController = navController, startDestination = Router.WELCOME.name) {
             composable(Router.WELCOME.name) {
@@ -53,7 +50,7 @@ class MainActivity : ComponentActivity() {
                 LayoutRegisterScreen(navController = navController)
             }
             composable(Router.PRODUCT.name) {
-                LayoutProductScreen(navController = navController, cartViewModel = cartViewModel)
+                LayoutProductScreen(navController = navController)
             }
             composable(Router.HELP.name) {
                 LayoutHelp(navController = navController)
@@ -78,7 +75,7 @@ class MainActivity : ComponentActivity() {
                 FavoritesScreen(navController = navController)
             }
             composable(Router.SEARCH.name) {
-                SearchScreen(navController = navController)
+                SearchScreen(navController = navController,retrofitService=retrofitService)
             }
             composable(Router.NOTIFICATIONS.name) {
                 NotificationScreen(navController = navController)

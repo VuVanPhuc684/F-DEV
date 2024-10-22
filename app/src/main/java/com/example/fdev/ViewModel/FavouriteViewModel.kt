@@ -9,15 +9,18 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import com.google.firebase.auth.FirebaseAuth
 
+
 class FavouriteViewModel : ViewModel() {
     private val apiService = RetrofitService().fdevApiService
     private val _favouriteItems = MutableStateFlow<List<FavouriteItem>>(emptyList())
     val favouriteItems: StateFlow<List<FavouriteItem>> = _favouriteItems
 
+
     // Hàm lấy danh sách yêu thích từ API
     fun getFavouriteItems() {
         val currentUser = FirebaseAuth.getInstance().currentUser
         val userName = currentUser?.displayName ?: ""  // Lấy tên người dùng từ Firebase
+
 
         if (userName.isNotBlank()) {
             viewModelScope.launch {
@@ -53,10 +56,12 @@ class FavouriteViewModel : ViewModel() {
         }
     }
 
+
     // Thêm sản phẩm vào danh sách yêu thích
     fun addToFavourite(product: Product, quantity: Int = 1) {
         val currentUser = FirebaseAuth.getInstance().currentUser
         val userName = currentUser?.displayName ?: ""
+
 
         if (userName.isNotBlank()) {
             viewModelScope.launch {
@@ -83,10 +88,12 @@ class FavouriteViewModel : ViewModel() {
         }
     }
 
+
     // Hàm xóa sản phẩm khỏi danh sách yêu thích
     fun removeFromFavourites(productId: String): Boolean {
         val currentUser = FirebaseAuth.getInstance().currentUser
         val userName = currentUser?.displayName ?: ""
+
 
         if (userName.isNotBlank()) {
             viewModelScope.launch {
@@ -112,3 +119,4 @@ class FavouriteViewModel : ViewModel() {
         return false
     }
 }
+

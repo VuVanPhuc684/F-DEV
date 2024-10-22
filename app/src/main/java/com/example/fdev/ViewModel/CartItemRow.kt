@@ -23,6 +23,7 @@ import coil.compose.rememberImagePainter
 import androidx.compose.ui.text.font.FontWeight
 import com.example.fdev.model.Product
 
+
 data class CartItem(
     val product: Product,
     val name: String,
@@ -30,9 +31,11 @@ data class CartItem(
     val image: String
 )
 
+
 @Composable
 fun CartItemRow(item: CartItem, onRemoveItem: (CartItem) -> Boolean) {
     var showDialog by remember { mutableStateOf(false) }  // Trạng thái để hiển thị Dialog
+
 
     val context = LocalContext.current
     Row(
@@ -51,7 +54,9 @@ fun CartItemRow(item: CartItem, onRemoveItem: (CartItem) -> Boolean) {
             contentScale = ContentScale.Crop  // Cắt ảnh theo kích thước
         )
 
+
         Spacer(modifier = Modifier.width(16.dp))
+
 
         // Hiển thị tên và giá sản phẩm
         Column(
@@ -75,6 +80,7 @@ fun CartItemRow(item: CartItem, onRemoveItem: (CartItem) -> Boolean) {
             )
         }
 
+
         // Nút xóa sản phẩm
         IconButton(
             onClick = { showDialog = true },  // Hiển thị dialog khi bấm nút xóa
@@ -82,6 +88,7 @@ fun CartItemRow(item: CartItem, onRemoveItem: (CartItem) -> Boolean) {
         ) {
             Icon(Icons.Default.Close, contentDescription = "Remove")  // Nút xóa
         }
+
 
         // Hiển thị thông báo xác nhận khi showDialog = true
         if (showDialog) {
@@ -120,3 +127,4 @@ fun CartItemRow(item: CartItem, onRemoveItem: (CartItem) -> Boolean) {
         }
     }
 }
+

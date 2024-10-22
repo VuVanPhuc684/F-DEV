@@ -1,5 +1,6 @@
 package com.example.fdev.View
 
+
 import RetrofitService
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -32,24 +33,29 @@ import com.example.fdev.ViewModel.ProductViewModel
 import com.example.fdev.model.Product
 import kotlinx.coroutines.launch
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchScreen(navController: NavHostController) {
+fun SearchScreen(navController: NavHostController, retrofitService: RetrofitService) {
     var searchQuery by remember { mutableStateOf(TextFieldValue("")) }
     var searchResults by remember { mutableStateOf(emptyList<Product>()) }
     var isLoading by remember { mutableStateOf(false) }
 
-    val productViewModel: ProductViewModel = remember { ProductViewModel() }
+
+    val productViewModel: ProductViewModel = remember { ProductViewModel(retrofitService) }
     val products by productViewModel.productList
+
 
     LaunchedEffect(Unit) {
         productViewModel.fetchProductList()
     }
 
+
     // Cập nhật searchResults khi danh sách sản phẩm được lấy từ API
     LaunchedEffect(products) {
         searchResults = products.filter { it.name.contains(searchQuery.text, ignoreCase = true) }
     }
+
 
     Scaffold(
         topBar = {
@@ -108,6 +114,7 @@ fun SearchScreen(navController: NavHostController) {
                 )
             )
 
+
             Text(
                 text = "Results for \"${searchQuery.text}\"",
                 style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
@@ -117,7 +124,9 @@ fun SearchScreen(navController: NavHostController) {
             )
             Divider(color = Color.Gray, thickness = 1.dp)
 
+
             Spacer(modifier = Modifier.height(16.dp))
+
 
             LazyColumn(
                 modifier = Modifier.fillMaxSize()
@@ -130,6 +139,7 @@ fun SearchScreen(navController: NavHostController) {
         }
     }
 }
+
 
 @Composable
 fun SearchResultItem(item: Product) {
@@ -148,7 +158,9 @@ fun SearchResultItem(item: Product) {
             contentScale = ContentScale.Crop
         )
 
+
         Spacer(modifier = Modifier.width(16.dp))
+
 
         Column(
             modifier = Modifier.weight(1f)
@@ -171,8 +183,10 @@ fun SearchResultItem(item: Product) {
     }
 }
 
+
 @Preview(showBackground = true)
 @Composable
 fun SearchScreenPreview() {
-    SearchScreen(navController = rememberNavController())
+    SearchScreen(navController = rememberNavController(), retrofitService = RetrofitService())
 }
+

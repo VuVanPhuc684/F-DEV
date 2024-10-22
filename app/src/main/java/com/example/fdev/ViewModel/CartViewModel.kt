@@ -11,15 +11,18 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import com.google.firebase.auth.FirebaseAuth
 
+
 class CartViewModel : ViewModel() {
     private val apiService = RetrofitService().fdevApiService
     private val _cartItems = MutableStateFlow<List<CartItem>>(emptyList())
     val cartItems: StateFlow<List<CartItem>> = _cartItems
 
+
     // Hàm lấy giỏ hàng từ MongoDB qua API
     fun getCartItems() {
         val currentUser = FirebaseAuth.getInstance().currentUser
         val userName = currentUser?.displayName ?: ""  // Lấy tên người dùng từ Firebase
+
 
         if (userName.isNotBlank()) {
             viewModelScope.launch {
@@ -48,10 +51,12 @@ class CartViewModel : ViewModel() {
         }
     }
 
+
     // Thêm sản phẩm vào giỏ hàng và cập nhật UI
     fun addToCart(product: Product, quantity: Int = 1) {
         val currentUser = FirebaseAuth.getInstance().currentUser
         val userName = currentUser?.displayName ?: ""
+
 
         if (userName.isNotBlank()) {
             // Kiểm tra ID sản phẩm trước khi thêm
@@ -82,10 +87,12 @@ class CartViewModel : ViewModel() {
         }
     }
 
+
     // Xóa sản phẩm khỏi giỏ hàng và cập nhật UI
     fun removeFromCart(productName: String): Boolean {
         val currentUser = FirebaseAuth.getInstance().currentUser
         val userName = currentUser?.displayName ?: ""
+
 
         if (userName.isNotBlank()) {
             var isRemoved = false  // Biến để kiểm tra xem sản phẩm có được xóa hay không
@@ -107,11 +114,14 @@ class CartViewModel : ViewModel() {
         return false
     }
 
+
     // Tính tổng giá trị giỏ hàng
     private val _totalPrice = MutableLiveData<Double>()
     val totalPrice: LiveData<Double> = _totalPrice
+
 
     fun getTotalPrice(): Double {
         return _cartItems.value.sumOf { it.price.toDouble() }
     }
 }
+

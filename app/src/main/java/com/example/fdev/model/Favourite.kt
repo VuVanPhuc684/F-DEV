@@ -1,6 +1,8 @@
 package com.example.fdev.model
 
+
 import com.google.gson.annotations.SerializedName
+
 
 // Data class cho request để thêm sản phẩm vào danh sách yêu thích
 data class AddToFavouriteRequest(
@@ -9,12 +11,14 @@ data class AddToFavouriteRequest(
     val quantity: Int
 )
 
+
 // Data class cho phản hồi danh sách yêu thích
 data class FavouriteResponse(
     val status: Int,
     val msg: String,
     val data: Favourite
 )
+
 
 data class Favourite(
     val userName: String,
@@ -29,6 +33,7 @@ data class FavouriteProductResponse(
     @SerializedName("image") val image: String
 )
 
+
 // Data class cho phản hồi danh sách yêu thích của người dùng
 data class UserFavouriteResponse(
     @SerializedName("_id") val id: String,
@@ -36,10 +41,12 @@ data class UserFavouriteResponse(
     @SerializedName("favourites") val favourites: List<FavouriteProductResponse>
 )
 
+
 // Chuyển đổi từ UserFavouriteResponse thành List<FavouriteProduct>
 fun UserFavouriteResponse.toFavouriteList(): List<FavouriteProduct> {
     return this.favourites.map { it.toFavouriteProduct() }
 }
+
 
 // Chuyển đổi từ FavouriteProductResponse thành FavouriteProduct
 fun FavouriteProductResponse.toFavouriteProduct(): FavouriteProduct {
@@ -52,6 +59,7 @@ fun FavouriteProductResponse.toFavouriteProduct(): FavouriteProduct {
         else -> throw IllegalArgumentException("Unknown product type")
     }
 
+
     return FavouriteProduct(
         product = productObject,
         name = this.name,
@@ -60,6 +68,7 @@ fun FavouriteProductResponse.toFavouriteProduct(): FavouriteProduct {
     )
 }
 
+
 // Data class cho sản phẩm yêu thích
 data class FavouriteProduct(
     val product: Product,
@@ -67,3 +76,4 @@ data class FavouriteProduct(
     val price: Double,
     val image: String
 )
+

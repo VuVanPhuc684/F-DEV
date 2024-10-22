@@ -1,6 +1,8 @@
 package com.example.fdev.View
 
 
+
+
 import CartViewModel
 import FavouriteViewModel
 import android.widget.Toast
@@ -42,12 +44,16 @@ import coil.compose.rememberImagePainter
 import com.example.fdev.model.Product
 
 
+
+
 data class FavouriteItem(
     val product: Product,
     val name: String,
     val price: Number,
     val image: String
 )
+
+
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -70,8 +76,8 @@ fun FavoritesScreen(navController: NavHostController,favouriteViewModel:Favourit
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         IconButton(onClick = {
-                        navController.navigate("SEARCH")
-                        /* Do something */ }) {
+                            navController.navigate("SEARCH")
+                            /* Do something */ }) {
                             Icon(Icons.Default.Search, contentDescription = "Search")
                         }
                         Text(
@@ -93,6 +99,7 @@ fun FavoritesScreen(navController: NavHostController,favouriteViewModel:Favourit
         },
         floatingActionButton = {
 
+
         },
         floatingActionButtonPosition = FabPosition.Center
     ) { innerPadding ->
@@ -109,6 +116,7 @@ fun FavoritesScreen(navController: NavHostController,favouriteViewModel:Favourit
         }
     }
 }
+
 
 @Composable
 fun FavoriteItemRow(item: FavouriteItem, onRemoveItem: (FavouriteItem) -> Boolean) {
@@ -132,7 +140,9 @@ fun FavoriteItemRow(item: FavouriteItem, onRemoveItem: (FavouriteItem) -> Boolea
             contentScale = ContentScale.Crop
         )
 
+
         Spacer(modifier = Modifier.width(16.dp))
+
 
         Column(
             modifier = Modifier
@@ -156,6 +166,7 @@ fun FavoriteItemRow(item: FavouriteItem, onRemoveItem: (FavouriteItem) -> Boolea
             )
         }
 
+
         IconButton(
             onClick = { showDialog = true/* Xóa mục này */ },
             modifier = Modifier
@@ -165,6 +176,7 @@ fun FavoriteItemRow(item: FavouriteItem, onRemoveItem: (FavouriteItem) -> Boolea
         ) {
             Icon(Icons.Default.Close, contentDescription = "Remove")
         }
+
 
         // Hiển thị thông báo xác nhận khi showDialog = true
         if (showDialog) {
@@ -181,8 +193,9 @@ fun FavoriteItemRow(item: FavouriteItem, onRemoveItem: (FavouriteItem) -> Boolea
                 confirmButton = {
                     Button(
                         onClick = {
-                           onRemoveItem(item)
+                            onRemoveItem(item)
                             showDialog = false  // Ẩn Dialog sau khi xóa
+
 
                         }
                     ) {
@@ -199,15 +212,17 @@ fun FavoriteItemRow(item: FavouriteItem, onRemoveItem: (FavouriteItem) -> Boolea
             )
         }
 
+
         Spacer(modifier = Modifier.width(8.dp))
+
 
         IconButton(
             onClick = {
-                   product?.let {
-                       cartViewModel.addToCart(item.product, 1)
-                       Toast.makeText(context, "Thêm thành công", Toast.LENGTH_LONG).show()
-                   }
-                    /* Thêm vào giỏ hàng */ },
+                product?.let {
+                    cartViewModel.addToCart(item.product, 1)
+                    Toast.makeText(context, "Thêm thành công", Toast.LENGTH_LONG).show()
+                }
+                /* Thêm vào giỏ hàng */ },
             modifier = Modifier
                 .size(40.dp)
                 .clip(CircleShape)
@@ -218,8 +233,10 @@ fun FavoriteItemRow(item: FavouriteItem, onRemoveItem: (FavouriteItem) -> Boolea
     }
 }
 
+
 @Preview(showBackground = true)
 @Composable
 fun FavoritesScreenPreview() {
     FavoritesScreen(navController = rememberNavController())
 }
+

@@ -22,6 +22,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CartScreen(
@@ -31,10 +32,12 @@ fun CartScreen(
     val cartItems by cartViewModel.cartItems.collectAsState()  // Lấy danh sách sản phẩm trong giỏ hàng
     val totalPrice = cartViewModel.getTotalPrice()  // Tính tổng giá
 
+
     LaunchedEffect(Unit) {
         // Lấy giỏ hàng của người dùng khi màn hình được hiển thị
         cartViewModel.getCartItems()
     }
+
 
     Scaffold(
         topBar = {
@@ -77,7 +80,9 @@ fun CartScreen(
                     Text("$ $totalPrice", fontWeight = FontWeight.Bold)
                 }
 
+
                 Spacer(modifier = Modifier.height(8.dp))
+
 
                 Button(
                     onClick = { navController.navigate("CHECKOUT/$totalPrice") },  // Điều hướng đến màn hình thanh toán
@@ -119,8 +124,11 @@ fun CartScreen(
 }
 
 
+
+
 @Preview(showBackground = true)
 @Composable
 fun CartScreenPreview() {
     CartScreen(navController = rememberNavController())
 }
+
