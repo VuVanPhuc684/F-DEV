@@ -21,9 +21,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import androidx.compose.ui.text.font.FontWeight
+import com.example.fdev.model.Product
 
 data class CartItem(
-    val product: String,
+    val product: Product,
     val name: String,
     val price: Number,
     val image: String

@@ -37,7 +37,7 @@ data class Product(
 fun ProductResponse.toProduct(): Product {
     require(id.isNotEmpty()) { "Product ID cannot be empty" }
     return Product(
-        id = this.id,
+        id = this.id ?: "default_id", // Sử dụng giá trị mặc định nếu null
         name = this.name,
         price = this.price,
         description = this.description,

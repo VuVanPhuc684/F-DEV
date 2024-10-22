@@ -1,6 +1,7 @@
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -28,8 +29,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberImagePainter
 import com.example.fdev.R
+import com.example.fdev.View.NotificationScreen
 import com.example.fdev.model.Product
 import com.google.android.play.integrity.internal.q
 
@@ -111,12 +114,34 @@ fun LayoutProductScreen(navController: NavHostController) {
                         fontWeight = FontWeight(700),
                         modifier = Modifier.padding(start = 7.dp)
                     )
-                    Text(
-                        text = "(50 reviews)",
-                        fontSize = 14.sp,
-                        color = Color(0xff808080),
-                        modifier = Modifier.padding(start = 10.dp)
-                    )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp) // Thêm padding cho toàn bộ Row
+                            .background(Color(0xFFEFEFEF), shape = RoundedCornerShape(8.dp)) // Thêm nền với bo tròn
+                            .border(1.dp, Color(0xFFCCCCCC), shape = RoundedCornerShape(8.dp)) // Thêm viền
+                            .padding(12.dp) // Padding cho nội dung bên trong Row
+                    ) {
+                        Text(
+                            text = "(50 reviews)",
+                            fontSize = 14.sp,
+                            color = Color(0xff808080),
+                            modifier = Modifier.padding(start = 10.dp)
+                        )
+
+                        Spacer(modifier = Modifier.width(8.dp)) // Thêm khoảng cách giữa các Text
+
+                        Text(
+                            text = "Xem đánh giá",
+                            fontSize = 14.sp,
+                            color = Color(0xFF007BFF), // Màu xanh cho chữ "Xem đánh giá"
+                            modifier = Modifier
+                                .clickable { navController.navigate("REVIEW/${product?.id}") // Thay đổi điều hướng đến màn hình đánh giá
+                                    /* Hành động khi nhấn vào "Xem đánh giá" */ }
+                                .padding(vertical = 4.dp)
+                        )
+                    }
+
                 }
 
                 // Mô tả sản phẩm
@@ -209,4 +234,10 @@ fun CustomRadioButton(
             )
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ProductScreen() {
+    LayoutProductScreen(navController = rememberNavController())
 }

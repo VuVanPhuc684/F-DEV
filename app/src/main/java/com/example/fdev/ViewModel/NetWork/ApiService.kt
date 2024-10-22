@@ -40,6 +40,10 @@ interface ApiService {
     @POST("/contact/post-list-Contact")
     suspend fun createContact(@Body contact: ContactMailRequest): Response<ContactMailResponse>
 
+    // Lấy danh sách đánh giá dựa trên productId
+    @GET("/review/get-reviews/{productId}")
+    suspend fun getReviews(@Path("productId") productId: String): Response<List<ReviewResponse>>
+
     //===========DELETE===========
     // Xóa sản phẩm khỏi giỏ hàng
     @DELETE("/cart/remove-from-cart/{userName}/{productName}")

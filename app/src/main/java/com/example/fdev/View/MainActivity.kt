@@ -121,9 +121,11 @@ class MainActivity : ComponentActivity() {
             composable(Router.ADDPAYMENTMETHOD.name) {
                 AddPaymentMethod(navController = navController)
             }
-            composable(Router.REVIEW.name) {
-                ReviewScreen(navController = navController)
+            composable(Router.REVIEW.name + "/{productId}") { backStackEntry ->
+                val productId = backStackEntry.arguments?.getString("productId") ?: ""
+                ReviewScreen(navController = navController, productId = productId)
             }
+
             composable(Router.ACCOUNTS.name) {
                 LayoutAccounts(navController = navController)
             }

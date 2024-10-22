@@ -3,17 +3,7 @@ package com.example.fdev.View
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -22,6 +12,8 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,14 +26,22 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.fdev.R
-import com.example.fdev.ViewModel.data.itemReview
-import com.example.fdev.model.Review
+import com.example.fdev.ViewModel.ReviewViewModel
+import com.example.fdev.model.ReviewResponse
 
 @Composable
-fun ReviewScreen(navController: NavController) {
+fun ReviewScreen(navController: NavController, productId: String) {
+    val viewModel: ReviewViewModel = viewModel()
+    val reviews by viewModel.reviews.collectAsState(initial = emptyList())
+    val errorMessage by viewModel.errorMessage.collectAsState(initial = "")
+
+    // Fetch reviews
+    viewModel.fetchReviews(productId)
+
     Column(
         modifier = Modifier
             .padding(20.dp)
@@ -49,6 +49,7 @@ fun ReviewScreen(navController: NavController) {
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        // Header
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -59,7 +60,7 @@ fun ReviewScreen(navController: NavController) {
                 contentDescription = null,
                 modifier = Modifier
                     .size(25.dp)
-                    .clickable { },
+                    .clickable { /* Handle back action */ },
                 contentScale = ContentScale.FillBounds,
             )
             Text(
@@ -75,68 +76,23 @@ fun ReviewScreen(navController: NavController) {
                 fontWeight = FontWeight.Medium
             )
         }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 20.dp, start = 10.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.avatar_test),
-                contentDescription = null,
-                modifier = Modifier
-                    .size(100.dp)
-                    .clip(RoundedCornerShape(15.dp)),
-                contentScale = ContentScale.Crop
-            )
-            Column(
-                horizontalAlignment = Alignment.Start
-            ) {
-                Text(
-                    text = "Minimal Stand",
-                    fontSize = 20.sp,
-                    color = Color.Gray
-                )
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.star1),
-                        contentDescription = null,
-                        tint = Color.Yellow,
-                        modifier = Modifier.size(24.dp)
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(
-                        text = "4.5",
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier
-                            .padding(10.dp)
-                    )
-                }
-                Text(
-                    text = "10 reviews",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-            Spacer(modifier = Modifier.size(80.dp))
-        }
+
+        // Reviews List
         Box(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth()
         ) {
             LazyColumn {
-                items(itemReview.size) { index ->
-                    ReviewScreen(itemReview[index])
+                items(reviews.size) { index ->
+                    ReviewItem(reviews[index])
                 }
             }
         }
+
+        // Write a Review Button
         Button(
-            onClick = { /* su kien onClick */ },
+            onClick = { /* Handle write review action */ },
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFFd86d42),
             ),
@@ -146,7 +102,7 @@ fun ReviewScreen(navController: NavController) {
             shape = RoundedCornerShape(8.dp)
         ) {
             Text(
-                text = "Write a review",
+                text = "Viết đánh giá",
                 textAlign = TextAlign.Center,
                 fontSize = 20.sp,
                 fontFamily = FontFamily.Default,
@@ -155,30 +111,30 @@ fun ReviewScreen(navController: NavController) {
                     .padding(vertical = 8.dp)
             )
         }
+
+        // Error Message Display
     }
 }
 
-
 @Composable
-fun ReviewScreen(itemReview: Review) {
+fun ReviewItem(review: ReviewResponse) {
     Card(
         modifier = Modifier
             .padding(top = 20.dp, start = 10.dp, end = 10.dp)
             .clip(RoundedCornerShape(10.dp))
             .fillMaxWidth()
-            .height(200.dp)
             .background(Color.LightGray)
-            .clickable { /* su kien onClick */ }
+            .clickable { /* Handle click action */ }
     ) {
         Column(
             modifier = Modifier
                 .padding(10.dp)
                 .clip(RoundedCornerShape(15.dp)),
-            horizontalAlignment = Alignment.CenterHorizontally,
+            horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Center
         ) {
             Image(
-                painter = painterResource(id = R.drawable.avatar_test),
+                painter = painterResource(id = R.drawable.avatar_test), // Use a dynamic avatar based on user
                 contentDescription = "avatar",
                 modifier = Modifier
                     .size(50.dp)
@@ -192,22 +148,29 @@ fun ReviewScreen(itemReview: Review) {
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = itemReview.reviewerName,
+                    text = review.userName,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = itemReview.reviewDate,
+                    text = review.createdAt, // Assuming createdAt is in a suitable format
                     fontSize = 12.sp,
                     color = Color.Gray
                 )
             }
-            Image(
-                painter = painterResource(id = itemReview.rating),
-                contentDescription = null,
-            )
+            // Here you can replace this with your custom rating icon rendering
+            Row {
+                repeat(review.rating) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.star1), // Replace with your star icon
+                        contentDescription = null,
+                        tint = Color.Yellow,
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
+            }
             Text(
-                text = itemReview.reviewText,
+                text = review.comment,
                 fontSize = 14.sp,
                 textAlign = TextAlign.Justify
             )
@@ -215,10 +178,9 @@ fun ReviewScreen(itemReview: Review) {
     }
 }
 
-
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun PreviewReview() {
     val navController = rememberNavController()
-    ReviewScreen(navController)
+    ReviewScreen(navController, productId = "sampleProductId")
 }

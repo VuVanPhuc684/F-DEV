@@ -1,7 +1,9 @@
 package com.example.fdev.View
 
 
+import CartViewModel
 import FavouriteViewModel
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -11,12 +13,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.ShoppingCart
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -24,12 +22,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextAlign
@@ -40,11 +39,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberImagePainter
-import com.example.fdev.R
+import com.example.fdev.model.Product
 
 
 data class FavouriteItem(
-    val product: String,
+    val product: Product,
     val name: String,
     val price: Number,
     val image: String
@@ -57,7 +56,6 @@ fun FavoritesScreen(navController: NavHostController,favouriteViewModel:Favourit
     // Dữ liệu mẫu
     val favouriteItems by favouriteViewModel.favouriteItems.collectAsState()  // Lấy danh sách sản phẩm trong giỏ hàng
     val selectedIndex = remember { mutableStateOf(1) } // Khởi tạo trạng thái cho NavigationBar
-
     LaunchedEffect(Unit) {
         // Lấy giỏ hàng của người dùng khi màn hình được hiển thị
         favouriteViewModel.getFavouriteItems()
@@ -94,17 +92,7 @@ fun FavoritesScreen(navController: NavHostController,favouriteViewModel:Favourit
             )
         },
         floatingActionButton = {
-            Button(
-                onClick = { /* Thêm tất cả vào giỏ hàng */ },
-                shape = RoundedCornerShape(16.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
-                modifier = Modifier
-                    .fillMaxWidth(0.8f)
-                    .height(56.dp) // Chiều cao nút
-                    .clip(RoundedCornerShape(16.dp))
-            ) {
-                Text("Add all to my cart", color = Color.White)
-            }
+
         },
         floatingActionButtonPosition = FabPosition.Center
     ) { innerPadding ->
@@ -114,14 +102,21 @@ fun FavoritesScreen(navController: NavHostController,favouriteViewModel:Favourit
                 .padding(horizontal = 16.dp)
         ) {
             items(favouriteItems) { item ->
-                FavoriteItemRow(item)
+                FavoriteItemRow(item, onRemoveItem = {
+                    favouriteViewModel.removeFromFavourites(item.name)  // Sử dụng tên sản phẩm để xóa
+                })
             }
         }
     }
 }
 
 @Composable
-fun FavoriteItemRow(item: FavouriteItem) {
+fun FavoriteItemRow(item: FavouriteItem, onRemoveItem: (FavouriteItem) -> Boolean) {
+    val cartViewModel : CartViewModel = viewModel()
+    val navController: NavHostController = rememberNavController()
+    val product = navController.previousBackStackEntry?.savedStateHandle?.get<Product>("product")
+    var showDialog by remember { mutableStateOf(false) }  // Trạng thái để hiển thị Dialog
+    val context = LocalContext.current
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -162,7 +157,7 @@ fun FavoriteItemRow(item: FavouriteItem) {
         }
 
         IconButton(
-            onClick = { /* Xóa mục này */ },
+            onClick = { showDialog = true/* Xóa mục này */ },
             modifier = Modifier
                 .size(40.dp)
                 .clip(CircleShape)
@@ -171,10 +166,48 @@ fun FavoriteItemRow(item: FavouriteItem) {
             Icon(Icons.Default.Close, contentDescription = "Remove")
         }
 
+        // Hiển thị thông báo xác nhận khi showDialog = true
+        if (showDialog) {
+            AlertDialog(
+                onDismissRequest = {
+                    showDialog = false  // Ẩn Dialog khi người dùng click ra ngoài
+                },
+                title = {
+                    Text(text = "Xác nhận xóa")
+                },
+                text = {
+                    Text("Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?")
+                },
+                confirmButton = {
+                    Button(
+                        onClick = {
+                           onRemoveItem(item)
+                            showDialog = false  // Ẩn Dialog sau khi xóa
+
+                        }
+                    ) {
+                        Text("Đồng ý")
+                    }
+                },
+                dismissButton = {
+                    Button(
+                        onClick = { showDialog = false }  // Ẩn Dialog nếu người dùng hủy
+                    ) {
+                        Text("Hủy")
+                    }
+                }
+            )
+        }
+
         Spacer(modifier = Modifier.width(8.dp))
 
         IconButton(
-            onClick = { /* Thêm vào giỏ hàng */ },
+            onClick = {
+                   product?.let {
+                       cartViewModel.addToCart(item.product, 1)
+                       Toast.makeText(context, "Thêm thành công", Toast.LENGTH_LONG).show()
+                   }
+                    /* Thêm vào giỏ hàng */ },
             modifier = Modifier
                 .size(40.dp)
                 .clip(CircleShape)
