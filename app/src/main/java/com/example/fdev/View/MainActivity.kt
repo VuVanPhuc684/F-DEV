@@ -10,9 +10,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.fdev.ViewModel.NetWork.ApiService
 import com.example.fdev.navigator.GetLayoutButtonBarNavigator
 import com.example.fdev.R
@@ -63,10 +65,14 @@ class MainActivity : ComponentActivity() {
                 LayoutMail(navController = navController)
             }
             composable(Router.CART.name) {
-                CartScreen(navController = navController, cartViewModel = cartViewModel)
+                CartScreen(navController = navController)
             }
-            composable(Router.CHECKOUT.name) {
-                CheckoutScreen(navController = navController)
+            composable(
+                route = "${Router.CHECKOUT.name}/{totalPrice}",
+                arguments = listOf(navArgument("totalPrice") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val totalPrice = backStackEntry.arguments?.getString("totalPrice") ?: "0.0"
+                CheckoutScreen(navController = navController, totalPrice = totalPrice)
             }
             composable(Router.FAVORITES.name) {
                 FavoritesScreen(navController = navController)

@@ -23,9 +23,13 @@ class ProductViewModel() : ViewModel() {
                 val response: Response<List<ProductResponse>> = apiService.getProductList()
                 if (response.isSuccessful) {
                     response.body()?.let { productResponses ->
-                        productList.value = productResponses.map { it.toProduct() }
+                        productList.value = productResponses.map {
+                            val product = it.toProduct()
+                            Log.d("ProductViewModel", "Fetched Product ID: ${product.id}") // In ra ID
+                            product
+                        }
                     }
-                } else {
+                }else {
                     if (!response.isSuccessful) {
                         Log.e("ProductViewModel", "Lỗi từ server: ${response.code()} - ${response.message()}")
                     }

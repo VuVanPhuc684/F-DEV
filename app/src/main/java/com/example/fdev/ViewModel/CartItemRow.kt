@@ -1,3 +1,4 @@
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -9,31 +10,31 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import androidx.compose.ui.text.font.FontWeight
+import com.example.fdev.model.Product
 
 data class CartItem(
-    val product: String,
+    val product: Product,
     val name: String,
     val price: Number,
     val image: String
 )
+
 @Composable
-fun CartItemRow(item: CartItem, onRemoveItem: () -> Unit) {
+fun CartItemRow(item: CartItem, onRemoveItem: (CartItem) -> Boolean) {
     var showDialog by remember { mutableStateOf(false) }  // Trạng thái để hiển thị Dialog
 
+    val context = LocalContext.current
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -97,7 +98,11 @@ fun CartItemRow(item: CartItem, onRemoveItem: () -> Unit) {
                 confirmButton = {
                     Button(
                         onClick = {
-                            onRemoveItem()  // Gọi hàm xóa sản phẩm
+                            if (onRemoveItem(item)) {  // Gọi hàm xóa sản phẩm với item
+                                Toast.makeText(context, "Xóa thành công!", Toast.LENGTH_LONG).show()
+                            } else {
+                                Toast.makeText(context, "Xóa thất bại!", Toast.LENGTH_LONG).show()
+                            }
                             showDialog = false  // Ẩn Dialog sau khi xóa
                         }
                     ) {
