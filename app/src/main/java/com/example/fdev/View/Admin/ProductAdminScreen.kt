@@ -61,7 +61,7 @@ import java.time.format.TextStyle
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ProductDetails(navController: NavController) {
+fun ProductDetailsAdmin(navController: NavController) {
     var value by remember {
         mutableIntStateOf(1)
     }
@@ -235,7 +235,7 @@ fun FooterDetails(isFavorite: Boolean, onMarkPress: () -> Unit, onAddToCartPress
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "Add to cart",
+                text = "Update to cart",
                 color = Color.White,
                 fontSize = 20.sp
             )
@@ -382,5 +382,5 @@ fun ViewPagerDotsIndicator(
 @Composable
 fun PreviewPro() {
     var navController = rememberNavController()
-    ProductDetails(navController)
+    ProductDetailsAdmin(navController)
 }

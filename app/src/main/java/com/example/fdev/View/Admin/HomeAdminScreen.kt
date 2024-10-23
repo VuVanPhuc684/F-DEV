@@ -1,7 +1,6 @@
 package com.example.fdev.View
 
 import RetrofitService
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -36,7 +35,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -44,8 +42,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberImagePainter
@@ -68,7 +64,7 @@ fun LayoutHomeAdminScreen(navController: NavHostController, retrofitService: Ret
     )
 
     // Sử dụng ProductViewModel và lấy sản phẩm từ API
-    val productViewModel: ProductViewModel = remember { ProductViewModel(retrofitService) }
+    val productViewModel: ProductViewModel = remember { ProductViewModel() }
     val products by productViewModel.productList
 
     // Gọi API khi màn hình vừa được hiển thị
@@ -206,8 +202,8 @@ fun ItemProductAdmin(navController: NavHostController, model: Product) {
                     .height(250.dp) // Thay đổi chiều cao
                     .clip(shape = RoundedCornerShape(8.dp))
                     .clickable {
-                        navController.currentBackStackEntry?.savedStateHandle?.set("product", model)
-                        navController.navigate("PRODUCT")
+//                        navController.currentBackStackEntry?.savedStateHandle?.set("product", model)
+                        navController.navigate("PRODUCTADMIN")
                     },
                 painter = rememberImagePainter(
                     data = model.image,

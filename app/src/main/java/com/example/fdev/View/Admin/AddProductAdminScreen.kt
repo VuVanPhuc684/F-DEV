@@ -28,10 +28,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.fdev.R
 
 @Composable
-fun AddProductScreen() {
+fun AddProductScreen(navController: NavController) {
     var productName by remember { mutableStateOf("") }
     var productPrice by remember { mutableStateOf("") }
     var productDescription by remember { mutableStateOf("") }
@@ -118,7 +120,7 @@ fun AddProductScreen() {
         // Save Button
         Button(
             onClick = {
-                // Xử lý khi bấm nút Save, có thể gửi dữ liệu lên server
+                navController.navigate("CONGRATSADMIN")
                 println("Product Saved: $productName, $productPrice, $productDescription, $productImageUrl")
             },
             modifier = Modifier.size(290.dp, 50.dp),
@@ -138,5 +140,6 @@ fun AddProductScreen() {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun AddProductScreenPreview() {
-    AddProductScreen()
+    val navController = rememberNavController()
+    AddProductScreen(navController)
 }

@@ -72,7 +72,7 @@ fun btnSingUpAdmin(navController: NavController) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Button(
-            onClick = {/* Su kien OnClick*/ },
+            onClick = { navController.navigate("home")},
             colors = ButtonDefaults.buttonColors(
                 Color.Black,
             ),
