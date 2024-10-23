@@ -1,6 +1,6 @@
 package com.example.fdev.View
 
-import CartViewModel
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -27,7 +27,6 @@ import android.util.Log
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.fdev.R
 import com.example.fdev.ViewModel.NetWork.PaymentData
 import com.example.fdev.ViewModel.NetWork.PaymentResponse
@@ -36,10 +35,12 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CheckoutScreen(navController: NavHostController, totalPrice: String) {
+fun CheckoutScreen(navController: NavHostController) {
     var paymentMethods by remember { mutableStateOf(listOf<PaymentData>()) }
+
 
     // API Call to fetch payment methods
     LaunchedEffect(Unit) {
@@ -52,15 +53,25 @@ fun CheckoutScreen(navController: NavHostController, totalPrice: String) {
                 if (response.isSuccessful) {
                     val fetchedPayments = response.body()
                     if (fetchedPayments != null && fetchedPayments.data.isNotEmpty()) {
-                        paymentMethods = fetchedPayments.data
+                        paymentMethods = fetchedPayments.data // Lưu danh sách thẻ vào biến
+                        Log.d("CheckoutScreen", "Fetched payment methods: $paymentMethods")
+                    } else {
+                        Log.e("CheckoutScreen", "No payment methods found")
                     }
+                } else {
+                    Log.e("CheckoutScreen", "Failed to fetch payment methods: ${response.message()}")
                 }
             }
 
-            override fun onFailure(call: Call<PaymentResponse>, t: Throwable) {}
+
+            override fun onFailure(call: Call<PaymentResponse>, t: Throwable) {
+                Log.e("CheckoutScreen", "API call failed: ${t.message}")
+            }
         })
     }
 
+
+    // Scaffold layout with TopBar and LazyColumn for payment methods
     Scaffold(
         topBar = {
             TopAppBar(
@@ -91,73 +102,74 @@ fun CheckoutScreen(navController: NavHostController, totalPrice: String) {
             )
         }
     ) { innerPadding ->
-        LazyColumn(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .padding(horizontal = 16.dp, vertical = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-            // Phần tiêu đề và thông tin email
-            item {
-                SectionHeader("Receiving Email Address")
-                EditableInfoCard(title = "Nguyen Minh Dang", subtitle = "ttwmobile@gmail.com")
-            }
+            // Receiving Email Address Section
+            SectionHeader("Receiving Email Address")
+            EditableInfoCard(title = "Nguyen Minh Dang", subtitle = "ttwmobile@gmail.com")
 
-            // Phần phương thức thanh toán
-            item {
-                SectionHeader("Payment Methods")
-            }
 
-            // Danh sách các phương thức thanh toán
-            items(paymentMethods) { paymentMethod ->
-                PaymentMethodCard(paymentMethod)
-            }
+            // Payment Method Section
+            SectionHeader("Payment Methods")
 
-            // Nút thêm phương thức thanh toán
-            item {
-                AddPaymentMethodButton(navController = navController)
-            }
 
-            // Phần ghi chú
-            item {
-                Text(
-                    text = "Note",
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                )
-                Text(
-                    text = "After purchasing, the product will be sent to your email address, please check your email to receive the goods",
-                    style = MaterialTheme.typography.bodySmall.copy(color = Color.Gray),
-                    modifier = Modifier.padding(vertical = 4.dp)
-                )
-            }
-
-            // Phần tổng kết đơn hàng
-            item {
-                OrderSummary(totalPrice = totalPrice)
-            }
-
-            // Nút submit order
-            item {
-                Spacer(modifier = Modifier.height(16.dp))
-                Button(
-                    onClick = {
-                        navController.navigate("CONGRATSSCREEN")
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(60.dp),
-                    shape = RoundedCornerShape(12.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
-                ) {
-                    Text("SUBMIT ORDER", color = Color.White, style = MaterialTheme.typography.bodyLarge)
+            // LazyColumn to display the list of payment methods
+            if (paymentMethods.isNotEmpty()) {
+                LazyColumn {
+                    items(paymentMethods) { paymentMethod ->
+                        PaymentMethodCard(paymentMethod)  // Truyền đối tượng PaymentData
+                    }
                 }
+            } else {
+                Text(text = "No payment methods available", color = Color.Gray) // Hiển thị thông báo nếu không có phương thức thanh toán
+            }
+
+
+            AddPaymentMethodButton(navController = navController)
+
+
+            // Note Section
+            Text(
+                text = "Note",
+                style = MaterialTheme.typography.bodyMedium.copy(
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            )
+            Text(
+                text = "After purchasing, the product will be sent to your email address, please check your email to receive the goods",
+                style = MaterialTheme.typography.bodySmall.copy(color = Color.Gray),
+                modifier = Modifier.padding(vertical = 4.dp)
+            )
+
+
+            // Order Summary Section
+            OrderSummary(total = 95.00, vat = 5.00)
+
+
+            // Submit Order Button
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(
+                onClick = {
+                    navController.navigate("CONGRATSSCREEN")
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(60.dp),
+                shape = RoundedCornerShape(12.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
+            ) {
+                Text("SUBMIT ORDER", color = Color.White, style = MaterialTheme.typography.bodyLarge)
             }
         }
     }
 }
+
 
 @Composable
 fun SectionHeader(title: String) {
@@ -171,11 +183,13 @@ fun SectionHeader(title: String) {
     )
 }
 
+
 @Composable
 fun EditableInfoCard(title: String, subtitle: String) {
     var showDialog by remember { mutableStateOf(false) }
     var editableTitle by remember { mutableStateOf(title) }
     var editableSubtitle by remember { mutableStateOf(subtitle) }
+
 
     if (showDialog) {
         CustomDialog(
@@ -189,6 +203,7 @@ fun EditableInfoCard(title: String, subtitle: String) {
             }
         )
     }
+
 
     Surface(
         shape = RoundedCornerShape(12.dp),
@@ -205,7 +220,7 @@ fun EditableInfoCard(title: String, subtitle: String) {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Column {
-                    Text(text = editableTitle, style = MaterialTheme.typography.bodyMedium)
+                Text(text = editableTitle, style = MaterialTheme.typography.bodyMedium)
                 Text(
                     text = editableSubtitle,
                     style = MaterialTheme.typography.bodySmall.copy(color = Color.Gray)
@@ -221,6 +236,7 @@ fun EditableInfoCard(title: String, subtitle: String) {
     }
 }
 
+
 @Composable
 fun CustomDialog(
     title: String,
@@ -230,6 +246,7 @@ fun CustomDialog(
 ) {
     var newTitle by remember { mutableStateOf(title) }
     var newSubtitle by remember { mutableStateOf(subtitle) }
+
 
     AlertDialog(
         onDismissRequest = { onDismiss() },
@@ -260,6 +277,7 @@ fun CustomDialog(
         }
     )
 }
+
 
 @Composable
 fun PaymentMethodCard(paymentData: PaymentData) {
@@ -297,15 +315,18 @@ fun PaymentMethodCard(paymentData: PaymentData) {
                     )
                 }
 
+
                 Spacer(modifier = Modifier.width(8.dp))
 
+
                 // Hiển thị số thẻ dạng ẩn
-                val maskedCardNumber = "**** **** **** ${paymentData.cardNumber.takeLast(4)}"
+                val maskedCardNumber = "**** **** **** ${paymentData.cardNumber.takeLast(4)}" // Hiển thị 4 số cuối từ API
                 Text(
                     text = maskedCardNumber,
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
+
 
             // Nút xóa thẻ
             IconButton(onClick = { /* Xử lý chỉnh sửa hoặc xóa thẻ */ }) {
@@ -317,6 +338,7 @@ fun PaymentMethodCard(paymentData: PaymentData) {
         }
     }
 }
+
 
 @Composable
 fun AddPaymentMethodButton(navController: NavHostController) {
@@ -334,15 +356,30 @@ fun AddPaymentMethodButton(navController: NavHostController) {
     }
 }
 
+
 @Composable
-fun OrderSummary(totalPrice: String) {
+fun OrderSummary(total: Double, vat: Double) {
     Surface(
         shape = RoundedCornerShape(12.dp),
         color = Color(0xFFF5F5F5),
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text("Order:", style = MaterialTheme.typography.bodySmall)
+                Text("$${total}", style = MaterialTheme.typography.bodySmall)
+            }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text("Vat:", style = MaterialTheme.typography.bodySmall)
+                Text("$${vat}", style = MaterialTheme.typography.bodySmall)
+            }
+            Spacer(modifier = Modifier.height(8.dp))
             Divider(color = Color.Gray, thickness = 1.dp)
             Spacer(modifier = Modifier.height(8.dp))
             Row(
@@ -350,14 +387,16 @@ fun OrderSummary(totalPrice: String) {
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text("Total:", style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold))
-                Text("$$totalPrice", style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold))
+                Text("$${total + vat}", style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold))
             }
         }
     }
 }
 
+
 @Preview(showBackground = true)
 @Composable
 fun CheckoutScreenPreview() {
-    CheckoutScreen(navController = rememberNavController(), totalPrice = "100.00")
+    CheckoutScreen(navController = rememberNavController())
 }
+

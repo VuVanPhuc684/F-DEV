@@ -1,5 +1,6 @@
 package com.example.fdev.View
 
+
 import CartScreen
 import CartViewModel
 import LayoutProductScreen
@@ -15,8 +16,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.fdev.ViewModel.NetWork.ApiService
 import com.example.fdev.navigator.GetLayoutButtonBarNavigator
-import com.example.fdev.R
-import com.google.firebase.auth.FirebaseAuth
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,12 +27,14 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+
     @Composable
     fun MainNavigation() {
         val navController = rememberNavController()
         val retrofitService = RetrofitService() // Initialize RetrofitService
         val apiService: ApiService = retrofitService.fdevApiService // Get ApiService
         val cartViewModel = CartViewModel(apiService) // Initialize CartViewModel
+
 
         NavHost(navController = navController, startDestination = Router.WELCOME.name) {
             composable(Router.WELCOME.name) {
@@ -91,11 +93,13 @@ class MainActivity : ComponentActivity() {
                 ReviewScreen(navController = navController,productId=productId, productName = String())
             }
 
+
             composable(Router.ACCOUNTS.name) {
                 LayoutAccounts(navController = navController)
             }
         }
     }
+
 
     enum class Router {
         WELCOME,
@@ -119,3 +123,4 @@ class MainActivity : ComponentActivity() {
         ACCOUNTS,
     }
 }
+
