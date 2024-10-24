@@ -29,28 +29,23 @@ import androidx.navigation.compose.rememberNavController
 import com.example.fdev.R
 import com.google.firebase.auth.FirebaseAuth
 
-
 @Composable
 fun LayoutLoginScreen(navController: NavHostController) {
     val context = LocalContext.current
     val auth = FirebaseAuth.getInstance()
 
-
     // Trạng thái cho checkbox lưu tài khoản
     var rememberMe by remember { mutableStateOf(false) }
-
 
     // Đọc SharedPreferences để biết người dùng có chọn lưu tài khoản hay không
     val sharedPreferences = context.getSharedPreferences("login_prefs", Context.MODE_PRIVATE)
     val savedEmail = sharedPreferences.getString("email", "")
     val savedPassword = sharedPreferences.getString("password", "")
 
-
     // Khởi tạo email và mật khẩu nếu đã lưu
     var email by remember { mutableStateOf(savedEmail ?: "") }
     var password by remember { mutableStateOf(savedPassword ?: "") }
     var isShowPass by remember { mutableStateOf(false) }
-
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -191,7 +186,6 @@ fun LayoutLoginScreen(navController: NavHostController) {
                         }
                         Spacer(modifier = Modifier.height(15.dp))
 
-
                         // Checkbox để lưu tài khoản
                         Row(
                             verticalAlignment = Alignment.CenterVertically
@@ -211,9 +205,7 @@ fun LayoutLoginScreen(navController: NavHostController) {
                             )
                         }
 
-
                         Spacer(modifier = Modifier.height(15.dp))
-
 
                         Column(
                             modifier = Modifier.fillMaxSize(),
@@ -233,7 +225,6 @@ fun LayoutLoginScreen(navController: NavHostController) {
                                                     val user = auth.currentUser
                                                     val name = user?.displayName
 
-
                                                     // Lưu trạng thái đăng nhập nếu checkbox được chọn
                                                     if (rememberMe) {
                                                         sharedPreferences.edit().apply {
@@ -242,7 +233,6 @@ fun LayoutLoginScreen(navController: NavHostController) {
                                                             apply()
                                                         }
                                                     }
-
 
                                                     Toast.makeText(context, "Chào mừng, $name!", Toast.LENGTH_LONG).show()
                                                     navController.navigate("HOME")
@@ -286,10 +276,8 @@ fun LayoutLoginScreen(navController: NavHostController) {
     }
 }
 
-
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun LoginScreen() {
     LayoutLoginScreen(navController = rememberNavController())
 }
-

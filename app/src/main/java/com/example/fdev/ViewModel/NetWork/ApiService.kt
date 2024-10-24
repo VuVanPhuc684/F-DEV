@@ -31,10 +31,8 @@ interface ApiService {
     @POST("/cart/add-to-cart")
     suspend fun addToCart(@Body request: AddToCartRequest): Response<CartResponse>
 
-
     @POST("/contact/post-list-Contact")
     suspend fun createContact(@Body contact: ContactMailRequest): Response<ContactMailResponse>
-
 
     @DELETE("/cart/remove-from-cart")
     suspend fun removeFromCart(@Query("userName") userName: String, @Query("productId") productId: String): Response<CartResponse>
@@ -44,8 +42,6 @@ interface ApiService {
     @GET("/review/get-reviews/{productId}")
     suspend fun getReviews(@Path("productId") productId: String): Response<List<ReviewResponse>>
 
-
     @POST("/review/add-review")
     suspend fun addReview(@Body reviewRequest: ReviewRequest): Response<ReviewResponse>
 }
-

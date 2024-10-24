@@ -2,6 +2,8 @@ package com.example.fdev.navigator
 
 
 import RetrofitService
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -26,8 +28,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.fdev.R
+import com.example.fdev.View.Admin.AddProductScreen
+import com.example.fdev.View.Admin.ProductDetailsAdmin
 import com.example.fdev.View.FavoritesScreen
-import com.example.fdev.View.LayoutAddProduct
+import com.example.fdev.View.LayoutHomeAdminScreen
 import com.example.fdev.View.LayoutHomeScreen
 import com.example.fdev.View.NotificationScreen
 import com.example.fdev.View.ProfileScreen
@@ -42,9 +46,11 @@ enum class ROUTER {
     search,
     person,
     ADDPRODUCT,
+    PRODUCTADMIN,
+    CONGRATSADMIN
 }
 
-
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GetLayoutButtonBarNavigator(navHostController: NavHostController) {
@@ -52,10 +58,8 @@ fun GetLayoutButtonBarNavigator(navHostController: NavHostController) {
     val navController = rememberNavController()
     val auth = FirebaseAuth.getInstance()
 
-
     val user = auth.currentUser
     val isAdmin = user?.displayName == "AdminFdev"
-
 
     Scaffold(
         bottomBar = {
@@ -78,7 +82,6 @@ fun GetLayoutButtonBarNavigator(navHostController: NavHostController) {
                         indicatorColor = Color.White
                     )
                 )
-
 
                 // Nếu là admin
                 if (isAdmin) {
@@ -131,7 +134,6 @@ fun GetLayoutButtonBarNavigator(navHostController: NavHostController) {
                     )
                 }
 
-
                 // Các mục luôn hiển thị: Search và Person
                 NavigationBarItem(
                     selected = isSelected == ROUTER.search.name,
@@ -173,7 +175,6 @@ fun GetLayoutButtonBarNavigator(navHostController: NavHostController) {
                 .padding(it)
         ) {
             Spacer(modifier = Modifier.height(1.dp))
-
 
             // NavHost để quản lý các màn hình
             NavHost(

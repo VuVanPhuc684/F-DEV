@@ -1,5 +1,6 @@
 package com.example.fdev.ViewModel
 
+
 import RetrofitService
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
@@ -10,12 +11,15 @@ import com.example.fdev.model.ProductResponse
 import com.example.fdev.model.toProduct
 import kotlinx.coroutines.launch
 
+
 import retrofit2.Response
+
 
 class ProductViewModel() : ViewModel() {
     private val apiService = RetrofitService().fdevApiService
     var productList = mutableStateOf<List<Product>>(listOf())
         private set
+
 
     fun fetchProductList() {
         viewModelScope.launch {
@@ -36,3 +40,4 @@ class ProductViewModel() : ViewModel() {
         }
     }
 }
+

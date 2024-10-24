@@ -50,7 +50,7 @@ import com.example.fdev.ViewModel.ProductViewModel
 import com.example.fdev.model.Product
 
 @Composable
-fun LayoutHomeScreen(navController: NavHostController, retrofitService: RetrofitService) {
+fun LayoutHomeAdminScreen(navController: NavHostController, retrofitService: RetrofitService) {
 
     val scrollSate = rememberScrollState()
     var statusType by remember { mutableStateOf("Popular") }
@@ -112,9 +112,7 @@ fun LayoutHomeScreen(navController: NavHostController, retrofitService: Retrofit
                 )
             }
 
-            IconButton(onClick = {
-                navController.navigate("CART")
-            }) {
+            IconButton(onClick = { /*TODO*/ }) {
                 Icon(
                     painter = painterResource(id = R.drawable.shopping),
                     contentDescription = null,
@@ -180,18 +178,15 @@ fun LayoutHomeScreen(navController: NavHostController, retrofitService: Retrofit
         ) {
             LazyVerticalGrid(columns = GridCells.Fixed(2)) {
                 items(products) { item ->
-                    ItemProduct(model = item, navController = navController)
+                    ItemProductAdmin(model = item, navController = navController)
                 }
             }
         }
     }
 }
 
-class TypeProduct(var type: String, var icon: Int)
-
-
 @Composable
-fun ItemProduct(navController: NavHostController, model: Product) {
+fun ItemProductAdmin(navController: NavHostController, model: Product) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -207,8 +202,8 @@ fun ItemProduct(navController: NavHostController, model: Product) {
                     .height(250.dp) // Thay đổi chiều cao
                     .clip(shape = RoundedCornerShape(8.dp))
                     .clickable {
-                        navController.currentBackStackEntry?.savedStateHandle?.set("product", model)
-                        navController.navigate("PRODUCT")
+//                        navController.currentBackStackEntry?.savedStateHandle?.set("product", model)
+                        navController.navigate("PRODUCTADMIN")
                     },
                 painter = rememberImagePainter(
                     data = model.image,
@@ -231,7 +226,7 @@ fun ItemProduct(navController: NavHostController, model: Product) {
             color = Color(0xff606060)
         )
         Text(
-            text = "$"+model.price.toString(),
+            text = model.price.toString(),
             modifier = Modifier.padding(top = 5.dp),
             fontSize = 15.sp,
             fontFamily = FontFamily.Serif,
@@ -243,6 +238,6 @@ fun ItemProduct(navController: NavHostController, model: Product) {
 
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
-fun HomeScreen() {
-    LayoutHomeScreen(navController = rememberNavController(), retrofitService = RetrofitService())
+fun HomeAdminScreen() {
+    LayoutHomeAdminScreen(navController = rememberNavController(), retrofitService = RetrofitService())
 }

@@ -6,17 +6,21 @@ import CartViewModel
 import LayoutProductScreen
 import RetrofitService
 import ReviewScreen
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.fdev.View.Admin.ProductDetailsAdmin
 import com.example.fdev.ViewModel.NetWork.ApiService
 import com.example.fdev.navigator.GetLayoutButtonBarNavigator
-
+import com.example.fdev.R
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,6 +32,7 @@ class MainActivity : ComponentActivity() {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @Composable
     fun MainNavigation() {
         val navController = rememberNavController()
@@ -97,8 +102,15 @@ class MainActivity : ComponentActivity() {
             composable(Router.ACCOUNTS.name) {
                 LayoutAccounts(navController = navController)
             }
+            composable(ROUTER.PRODUCTADMIN.name) {
+                ProductDetailsAdmin(navController)
+            }
+            composable(ROUTER.CONGRATSADMIN.name) {
+                CongratsAdminScreen(navController)
+            }
         }
     }
+
 
 
     enum class Router {
@@ -121,6 +133,7 @@ class MainActivity : ComponentActivity() {
         ADDPAYMENTMETHOD,
         REVIEW,
         ACCOUNTS,
+        PRODUCTADMIN
     }
 }
 
