@@ -23,6 +23,7 @@ import com.example.fdev.R
 import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -102,10 +103,10 @@ class MainActivity : ComponentActivity() {
             composable(Router.ACCOUNTS.name) {
                 LayoutAccounts(navController = navController)
             }
-            composable(ROUTER.PRODUCTADMIN.name) {
+            composable(Router.PRODUCTADMIN.name) {
                 ProductDetailsAdmin(navController)
             }
-            composable(ROUTER.CONGRATSADMIN.name) {
+            composable(Router.CONGRATSADMIN.name) {
                 CongratsAdminScreen(navController)
             }
         }
@@ -133,7 +134,8 @@ class MainActivity : ComponentActivity() {
         ADDPAYMENTMETHOD,
         REVIEW,
         ACCOUNTS,
-        PRODUCTADMIN
+        PRODUCTADMIN,
+        CONGRATSADMIN
     }
 }
 

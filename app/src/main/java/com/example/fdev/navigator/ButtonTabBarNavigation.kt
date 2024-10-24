@@ -186,8 +186,13 @@ fun GetLayoutButtonBarNavigator(navHostController: NavHostController) {
                 }
                 if (isAdmin) {
                     composable(ROUTER.ADDPRODUCT.name) {
-                        LayoutAddProduct(navHostController, RetrofitService())
+                        AddProductScreen(navHostController)
                     }
+                    composable(ROUTER.PRODUCTADMIN.name) {
+                        ProductDetailsAdmin(navHostController)
+                    }
+
+
                 } else {
                     composable(ROUTER.favourite.name) {
                         FavoritesScreen(navHostController)

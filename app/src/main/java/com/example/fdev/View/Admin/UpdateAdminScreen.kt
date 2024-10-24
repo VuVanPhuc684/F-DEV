@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.sp
 import com.example.fdev.R
 
 @Composable
-fun AddProductScreen() {
+fun UpdateProductScreenAdmin() {
     var productName by remember { mutableStateOf("") }
     var productPrice by remember { mutableStateOf("") }
     var productDescription by remember { mutableStateOf("") }
@@ -137,6 +137,6 @@ fun AddProductScreen() {
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun AddProductScreenPreview() {
-    AddProductScreen()
+fun UpdateProductScreenPreview() {
+    UpdateProductScreenAdmin()
 }

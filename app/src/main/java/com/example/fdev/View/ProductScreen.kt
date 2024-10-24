@@ -1,3 +1,4 @@
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -25,7 +26,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
 import com.example.fdev.R
+
 import com.example.fdev.model.Product
+import com.example.fdev.view.downloadImage
 
 @Composable
 fun LayoutProductScreen(navController: NavHostController, cartViewModel: CartViewModel) {
@@ -233,9 +236,20 @@ fun LayoutProductScreen(navController: NavHostController, cartViewModel: CartVie
                 Button(
                     onClick = {
                         product?.let {
-                            cartViewModel.addToCart(it)
-                            Toast.makeText(context, "Product added to cart successfully ", Toast.LENGTH_LONG).show()
-                            navController.navigate("CART")
+                            if (it.price.toDouble() == 0.0) {
+                                // In ra URL hình ảnh trong Logcat
+                                Log.d("Download", "Downloading image from URL: ${it.image}")
+                                if (checkAndRequestPermissions(context)) {
+                                    downloadImage(context, it.image)
+                                } else {
+                                    Toast.makeText(context, "Permission denied", Toast.LENGTH_LONG).show()
+                                }
+                            } else {
+                                // Logic thêm vào giỏ hàng
+                                cartViewModel.addToCart(it)
+                                Toast.makeText(context, "Product added to cart successfully", Toast.LENGTH_LONG).show()
+                                navController.navigate("CART")
+                            }
                         }
                     },
                     shape = RoundedCornerShape(10.dp),
@@ -251,7 +265,7 @@ fun LayoutProductScreen(navController: NavHostController, cartViewModel: CartVie
                     )
                 ) {
                     Text(
-                        text = "Add to cart",
+                        text = if (product?.price?.toDouble() == 0.0) "Download" else "Add to cart",
                         fontFamily = FontFamily.Serif
                     )
                 }
